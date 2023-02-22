@@ -1,0 +1,38 @@
+{
+    "id": "mattermost-plugin-wellsite-witsml",
+    "name": "Mattermost Wellsite WITSML plugin",
+    "description": "Mattermost plugin for integration with Wellsite WITSML",
+    "icon_path": "assets/starter-template-icon.svg",
+    "version": "0.1.0",
+    "min_server_version": "5.37.0",
+    "server": {
+        "executables": {
+            "linux-amd64": "server/dist/plugin-linux-amd64",
+            "linux-arm64": "server/dist/plugin-linux-arm64",
+            "darwin-amd64": "server/dist/plugin-darwin-amd64",
+            "darwin-arm64": "server/dist/plugin-darwin-arm64",
+            "windows-amd64": "server/dist/plugin-windows-amd64.exe"
+        }
+    },
+    "webapp": {
+        "bundle_path": "webapp/dist/main.js"
+    },
+    "settings_schema": {
+        "header": "",
+        "footer": "",
+        "settings": [
+            {
+                "key": "webhookSecret",
+                "display_name": "Webhook Secret",
+                "type": "text",
+                "help_text": "Enter Webhook Secret"
+            },
+            {
+                "key": "wellsiteAPIBaseURL",
+                "display_name": "Base URL of the Wellsite API",
+                "type": "text",
+                "help_text": "Enter base URL of the Wellsite API"
+            }
+        ]
+    }
+}
