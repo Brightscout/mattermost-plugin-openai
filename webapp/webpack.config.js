@@ -21,30 +21,28 @@ if (NPM_TARGET === 'build:watch' || NPM_TARGET === 'debug:watch') {
                 console.log('Change detected. Rebuilding webapp.');
             });
             compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
-                exec('cd .. && make deploy-from-watch', (err, stdout, stderr) => {
-                    if (stdout) {
-                        process.stdout.write(stdout);
-                    }
-                    if (stderr) {
-                        process.stderr.write(stderr);
-                    }
-                });
+                exec(
+                    'cd .. && make deploy-from-watch',
+                    (err, stdout, stderr) => {
+                        if (stdout) {
+                            process.stdout.write(stdout);
+                        }
+                        if (stderr) {
+                            process.stderr.write(stderr);
+                        }
+                    },
+                );
             });
         },
     });
 }
 
 module.exports = {
-    entry: [
-        './src/index.tsx',
-    ],
+    entry: ['./src/index.tsx'],
     resolve: {
-        modules: [
-            'src',
-            'node_modules',
-            path.resolve(__dirname),
-        ],
+        modules: ['src', 'node_modules', path.resolve(__dirname)],
         extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
+        plugins: [],
     },
     module: {
         rules: [
@@ -71,7 +69,10 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: ['node_modules/compass-mixins/lib', 'sass'],
+                                includePaths: [
+                                    'node_modules/compass-mixins/lib',
+                                    'sass',
+                                ],
                             },
                         },
                     },
