@@ -22,16 +22,10 @@
     "footer": "",
     "settings": [
       {
-        "key": "webhookSecret",
-        "display_name": "Webhook Secret",
+        "key": "openAIApiKey",
+        "display_name": "Open AI API key",
         "type": "text",
-        "help_text": "Enter Webhook Secret"
-      },
-      {
-        "key": "wellsiteAPIBaseURL",
-        "display_name": "Base URL of the Wellsite API",
-        "type": "text",
-        "help_text": "Enter base URL of the Wellsite API"
+        "help_text": "Enter the Open AI Api key"
       }
     ]
   }

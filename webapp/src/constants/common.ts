@@ -5,4 +5,3 @@ export const channelButtonTooltip = 'Open-ai';
 
 /** plugin header tile */
 export const rightSidebarHeaderTitle = 'Open-ai';
-

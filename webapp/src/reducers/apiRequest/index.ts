@@ -8,24 +8,19 @@ export const apiRequestCompletionSlice = createSlice({
     name: 'globalApiRequestSlice',
     initialState,
     reducers: {
-        setApiRequestCompletionState: (
-            state: ApiRequestCompletionState,
-            action: PayloadAction<ApiServiceName>,
-        ) => {
+
+        /**
+         * Holds the state of all the completed api calls
+         */
+        setApiRequestCompletionState: (state: ApiRequestCompletionState, action: PayloadAction<ApiServiceName>) => {
             state.requests = [...state.requests, action.payload];
         },
-        resetApiRequestCompletionState: (
-            state: ApiRequestCompletionState,
-            action: PayloadAction<ApiServiceName>,
-        ) => {
-            state.requests = state.requests.filter(
-                (request) => request !== action.payload,
-            );
+        resetApiRequestCompletionState: (state: ApiRequestCompletionState, action: PayloadAction<ApiServiceName>) => {
+            state.requests = state.requests.filter((request) => request !== action.payload);
         },
     },
 });
 
-export const {setApiRequestCompletionState, resetApiRequestCompletionState} =
-    apiRequestCompletionSlice.actions;
+export const {setApiRequestCompletionState, resetApiRequestCompletionState} = apiRequestCompletionSlice.actions;
 
 export default apiRequestCompletionSlice.reducer;
