@@ -1,0 +1,48 @@
+@import 'abstract/cssVariables';
+
+// export scss variable to use in js file
+:export {
+  iconColor: var(--default-icon-color);
+  primary: var(--button-bg);
+  primary_4: var(--button-bg-04);
+  primary_8: var(--button-bg-08);
+  primary_12:rgba(var(--button-bg-rgb),0.12);
+  primary_16: var(--button-bg-16);
+  primary_32: var(--button-bg-32);
+  primaryText:var(--button-color);
+  centerChannelBg: var(--center-channel-bg);
+  centerChannel: var(--center-channel-color);
+  centerChannelRgb: var(--center-channel-color-rgb);
+  centerChannel_72: var(--center-channel-color-72);
+  centerChannel_64: var(--center-channel-color-64);
+  centerChannel_48: var(--center-channel-color-48);
+  centerChannel_40: var(--center-channel-color-40);
+  centerChannel_32: var(--center-channel-color-32);
+  centerChannel_24: var(--center-channel-color-24);
+  centerChannel_16: var(--center-channel-color-16);
+  centerChannel_8: var(--center-channel-color-08);
+  centerChannel_4: var(--center-channel-color-04);
+  error: var(--error-text);
+  error_8: var(--error-text-08);
+  success: var(--online-indicator);
+  mentionHighlightBg: var(--mention-highlight-bg);
+  mentionHighlightLink: var(--mention-highlight-link);
+  
+  buttonPrimaryHover:var(--button-primary-hover);
+  buttonPrimaryActive:var(--button-primary-active);
+  buttonFocusBorder:var(--sidebar-text-active-border);
+  checkboxBorderColor:rgba(var(--center-channel-text-rgb),0.24);
+  checkboxHoverBorderColor:rgba(var(--center-channel-text-rgb),0.6);
+  checkboxErrorBorderColor:var(--error-text);
+  nodataIconBackground: var(--nodata-icon-background);
+
+  white: var(--white);
+  overlayBg:var(--overlay-color);
+  tooltipBg:var(--tooltip-bg);
+  tooltipHint: var(--tooltip-hint-text);
+  menuSecondaryText: var(--menu-secondary-text);
+  tabsHeaderBorder: var(--tabs-header-border);
+  elevation2: var(--elevation-2);
+  elevation1: var(--elevation-1);
+  noDataIcon:var(--no-data-icon);
+}

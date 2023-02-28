@@ -28,3 +28,8 @@ interface ReduxState extends GlobalState {
 type ApiRequestCompletionState = {
     requests: ApiServiceName[];
 };
+
+type PromptChatState = {
+    title?: string,
+    chats: string[]
+}
