@@ -4,17 +4,11 @@ interface ReduxState extends GlobalState {
             isSidebarOpen: boolean;
         };
     };
-    'mattermost-plugin-open-ai': RootState<
+    'plugins-mattermost-plugin-open-ai': RootState<
     {
         [x: string]: QueryDefinition<
         void,
-        BaseQueryFn<
-        string | FetchArgs,
-        unknown,
-        FetchBaseQueryError,
-        {},
-        FetchBaseQueryMeta
-        >,
+        BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>,
         never,
         void,
         'openAiPluginApi'
@@ -30,6 +24,5 @@ type ApiRequestCompletionState = {
 };
 
 type PromptChatState = {
-    title?: string,
-    chats: string[]
-}
+    chats: string[];
+};

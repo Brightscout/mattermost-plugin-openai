@@ -6,4 +6,11 @@ type PluginApiService = {
     serviceName: ApiServiceName;
 };
 
+type ApiErrorResponse = {
+    data: {
+        Error: string;
+    };
+    status: number;
+};
+
 type APIRequestPayload = GetCompletionPayload | void;

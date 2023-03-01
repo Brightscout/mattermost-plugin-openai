@@ -1,11 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState: PromptChatState = {
-    title: '',
     chats: [],
 };
 
-export const promptChatReducer = createSlice({
+const promptChatSlice = createSlice({
     name: 'promptChatSlice',
     initialState,
     reducers: {
@@ -14,3 +13,7 @@ export const promptChatReducer = createSlice({
         },
     },
 });
+
+export const {addChats} = promptChatSlice.actions;
+
+export default promptChatSlice.reducer;

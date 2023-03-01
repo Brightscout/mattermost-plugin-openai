@@ -17,7 +17,7 @@ const pluginApi = createApi({
             query: (payload) => ({
                 headers: {
                     Authorization: `Bearer ${ENV.OPEN_AI_API_KEY}`,
-                    'OpenAI-Organization': 'org-OuPqTe4jcYuJ9na7hwYC4ERs',
+                    'OpenAI-Organization': 'org-K9bFSK6VCu23XIX7QFTln59v',
                 },
                 url: API_SERVICE_CONFIG.getCompletion.path,
                 method: API_SERVICE_CONFIG.getCompletion.method,
