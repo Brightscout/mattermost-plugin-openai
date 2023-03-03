@@ -5,7 +5,7 @@ import (
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/config"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/config"
 )
 
 // Invoked when configuration changes may have been made.

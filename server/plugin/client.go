@@ -11,30 +11,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/constants"
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/serializers"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 )
 
 type Client interface {
-	GetWellList() ([]*serializers.WellList, error)
 }
 
 type client struct {
 	plugin     *Plugin
 	HTTPClient *http.Client
-}
-
-func (c *client) GetWellList() ([]*serializers.WellList, error) {
-	var wells []*serializers.WellList
-	requestPayload := serializers.GetRequestPayload(constants.GetWells)
-	res, err := c.callJSON(c.plugin.getConfiguration().WellsiteAPIBaseURL, constants.PathCommonAPI, http.MethodPost, requestPayload, &wells)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get Well list")
-	}
-
-	// TODO: refactor below
-	fmt.Println("response value", string(res))
-	return wells, nil
 }
 
 // Wrapper to make REST API requests with "application/json" type content
