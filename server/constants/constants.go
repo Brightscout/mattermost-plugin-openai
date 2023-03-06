@@ -1,6 +1,9 @@
 package constants
 
 const (
+	HeaderMattermostUserID = "Mattermost-User-ID"
+	ErrorNotAuthorized     = "Not authorized"
+
 	// Bot configs
 	BotUsername    = "wellsite"
 	BotDisplayName = "Wellsite WITSML Plugin"
@@ -10,10 +13,6 @@ const (
 	CommandTriggerName = "witsml"
 	HelpText           = "###### Mattermost WITSML Plugin - Slash Command Help\n"
 	InvalidCommand     = "Invalid command parameters. Please use `/witsml help` for more information."
-
-	// Plugin API Routes
-	APIPrefix = "/api/v1"
-	WildRoute = "{anything:.*}"
 
 	// Wellsite API Routes
 	PathCommonAPI = "post"

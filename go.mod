@@ -1,4 +1,4 @@
-module github.com/mattermost/mattermost-plugin-wellsite-witsml
+module github.com/mattermost/mattermost-plugin-open-ai
 
 go 1.16
 

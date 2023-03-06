@@ -17,9 +17,7 @@ import (
 // If you add non-reference types to your configuration struct, be sure to rewrite Clone as a deep
 // copy appropriate for your types.
 type Configuration struct {
-	// TODO: Below configs are not final they are used as placeholder here
-	WebhookSecret      string `json:"webhookSecret"`
-	WellsiteAPIBaseURL string `json:"wellsiteAPIBaseURL"`
+	OpenAIAPIKey string `json:"openAIAPIKey"`
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
@@ -31,20 +29,15 @@ func (c *Configuration) Clone() *Configuration {
 
 // Used for post-processing on the configuration.
 func (c *Configuration) ProcessConfiguration() error {
-	c.WebhookSecret = strings.TrimSpace(c.WebhookSecret)
-	c.WellsiteAPIBaseURL = strings.TrimRight(strings.TrimSpace(c.WellsiteAPIBaseURL), "/")
+	c.OpenAIAPIKey = strings.TrimSpace(c.OpenAIAPIKey)
 
 	return nil
 }
 
 // Used for config validations.
 func (c *Configuration) IsValid() error {
-	if c.WebhookSecret == "" {
-		return fmt.Errorf("webhookSecret should not be empty")
-	}
-
-	if c.WellsiteAPIBaseURL == "" {
-		return fmt.Errorf("base URL of the Wellsite API should not be empty")
+	if c.OpenAIAPIKey == "" {
+		return fmt.Errorf("OpenAIAPIKey should not be empty")
 	}
 
 	return nil

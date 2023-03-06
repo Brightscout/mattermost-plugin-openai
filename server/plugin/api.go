@@ -1,14 +1,14 @@
 package plugin
 
 import (
-	"encoding/json"
 	"net/http"
 	"path/filepath"
 	"runtime/debug"
 
 	"github.com/gorilla/mux"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/constants"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
 )
 
 // Initializes the plugin REST API
@@ -27,8 +27,7 @@ func (p *Plugin) InitRoutes() {
 
 	s := p.router.PathPrefix(constants.APIPrefix).Subrouter()
 
-	// TODO: for testing purpose, remove later
-	s.HandleFunc("/test", p.testAPI).Methods(http.MethodGet)
+	s.HandleFunc(constants.PathAPIKey, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)
 }
 
 func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
@@ -46,21 +45,6 @@ func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
 	})
 }
 
-// TODO: for testing purpose, remove later
-func (p *Plugin) testAPI(w http.ResponseWriter, r *http.Request) {
-	// TODO: remove later
-	wells, err := p.Client.GetWellList()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	res, _ := json.Marshal(wells)
-	w.Header().Add("Content-Type", "application/json")
-	if _, err := w.Write(res); err != nil {
-		p.API.LogError("Error while writing response", "Error", err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
 // Handles the static files under the assets directory.
 func (p *Plugin) HandleStaticFiles() {
 	bundlePath, err := p.API.GetBundlePath()
@@ -71,4 +55,20 @@ func (p *Plugin) HandleStaticFiles() {
 
 	// This will serve static files from the 'assets' directory under '/static/<filename>'
 	p.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(bundlePath, "assets")))))
+}
+
+func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, r *http.Request) {
+	p.writeJSON(w, 0, p.configuration)
+}
+
+func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		userID := r.Header.Get(constants.HeaderMattermostUserID)
+		if userID == "" {
+			p.handleAPIError(w, &serializer.APIErrorResponse{StatusCode: http.StatusUnauthorized, Message: constants.ErrorNotAuthorized})
+			return
+		}
+
+		handler(w, r)
+	}
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/constants"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 )
 
 type HandlerFunc func(p *Plugin, c *plugin.Context, header *model.CommandArgs, args ...string) (*model.CommandResponse, *model.AppError)

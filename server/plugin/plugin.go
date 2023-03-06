@@ -13,8 +13,8 @@ import (
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/config"
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/constants"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/config"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
