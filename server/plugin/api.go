@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"encoding/json"
 	"net/http"
 	"path/filepath"
 	"runtime/debug"
@@ -17,9 +16,6 @@ func (p *Plugin) InitAPI() *mux.Router {
 	r := mux.NewRouter()
 	r.Use(p.WithRecovery)
 
-	apiRouter := r.PathPrefix(constants.APIPrefix).Subrouter()
-	apiRouter.HandleFunc(constants.PathAPIKey, p.checkAuth(p.handleGetAPIKey)).Methods(http.MethodGet)
-
 	// 404 handler
 	r.Handle(constants.WildRoute, http.NotFoundHandler())
 	return r
@@ -29,8 +25,9 @@ func (p *Plugin) InitAPI() *mux.Router {
 func (p *Plugin) InitRoutes() {
 	p.Client = InitClient(p)
 
-	_ = p.router.PathPrefix(constants.APIPrefix).Subrouter()
+	s := p.router.PathPrefix(constants.APIPrefix).Subrouter()
 
+	s.HandleFunc(constants.PathAPIKey, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)
 }
 
 func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
@@ -60,22 +57,8 @@ func (p *Plugin) HandleStaticFiles() {
 	p.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(bundlePath, "assets")))))
 }
 
-func (p *Plugin) handleGetAPIKey(w http.ResponseWriter, r *http.Request) {
-	p.writeJSON(w, p.configuration.OpenAIApiKey)
-}
-
-func (p *Plugin) writeJSON(w http.ResponseWriter, v interface{}) {
-	b, err := json.Marshal(v)
-	if err != nil {
-		p.API.LogWarn("Failed to marshal JSON response", "error", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	if _, err = w.Write(b); err != nil {
-		p.API.LogWarn("Failed to write JSON response", "error", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, r *http.Request) {
+	p.writeJSON(w, 0, p.configuration.OpenAIApiKey)
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {

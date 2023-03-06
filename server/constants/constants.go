@@ -14,11 +14,6 @@ const (
 	HelpText           = "###### Mattermost WITSML Plugin - Slash Command Help\n"
 	InvalidCommand     = "Invalid command parameters. Please use `/witsml help` for more information."
 
-	// Plugin API Routes
-	APIPrefix  = "/api/v1"
-	PathAPIKey = "/api-key"
-	WildRoute  = "{anything:.*}"
-
 	// Wellsite API Routes
 	PathCommonAPI = "post"
 

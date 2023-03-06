@@ -36,3 +36,25 @@ func (p *Plugin) handleAPIError(w http.ResponseWriter, apiErr *serializer.APIErr
 		return
 	}
 }
+
+func (p *Plugin) writeJSON(w http.ResponseWriter, statusCode int, v interface{}) {
+	if statusCode == 0 {
+		statusCode = http.StatusOK
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	b, err := json.Marshal(v)
+	if err != nil {
+		p.API.LogError("Failed to marshal JSON response", "Error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		p.API.LogError("Failed to write JSON response", "Error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(statusCode)
+}
