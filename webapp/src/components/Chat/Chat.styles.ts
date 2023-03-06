@@ -14,9 +14,13 @@ export const StyledCard = styled(Card)<Pick<ChatProps, 'isUser'>>(({isUser}) => 
     color: isUser ? Colors.white : Colors.centerChannel,
 }));
 
-export const StyledText = styled.p(() => ({
+export const StyledText = styled.pre({
+    font: 'unset',
+    border: 'none',
+    whiteSpace: 'pre-wrap',
     fontWeight: 500,
     display: 'inline-block',
     padding: 0,
     margin: 0,
-}));
+    background: 'transparent !important',
+});

@@ -2,7 +2,7 @@
 
 type CompletionResponseShape = {
     id: string;
-    object: string;
+    object: 'text_completion';
     created: number;
     model: string;
     choices?: [
@@ -14,6 +14,25 @@ type CompletionResponseShape = {
         },
     ];
     usage?: {
+        prompt_tokens: number;
+        completion_tokens: number;
+        total_tokens: number;
+    };
+};
+
+type ChatCompletionResponseShape = {
+    id: string;
+    object: 'chat.completion';
+    created: number;
+    choices: {
+        index: number;
+        message: {
+            role: 'system' | 'user' | 'assistant';
+            content: string;
+        };
+        finish_reason: string;
+    }[];
+    usage: {
         prompt_tokens: number;
         completion_tokens: number;
         total_tokens: number;

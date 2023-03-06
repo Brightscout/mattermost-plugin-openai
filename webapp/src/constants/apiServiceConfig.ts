@@ -4,4 +4,9 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'POST',
         serviceName: 'getCompletion',
     },
+    getChatCompletion: {
+        path: '/chat/completions',
+        method: 'POST',
+        serviceName: 'getChatCompletion',
+    },
 };

@@ -10,10 +10,7 @@ const pluginApi = createApi({
     reducerPath: 'openAiPluginApi',
     baseQuery: fetchBaseQuery({baseUrl: BaseUrlOpenAi}),
     endpoints: (builder) => ({
-        [API_SERVICE_CONFIG.getCompletion.serviceName]: builder.query<
-        CompletionResponseShape,
-        APIRequestPayload
-        >({
+        [API_SERVICE_CONFIG.getCompletion.serviceName]: builder.query<CompletionResponseShape, APIRequestPayload>({
             query: (payload) => ({
                 headers: {
                     Authorization: `Bearer ${ENV.OPEN_AI_API_KEY}`,
@@ -21,6 +18,18 @@ const pluginApi = createApi({
                 },
                 url: API_SERVICE_CONFIG.getCompletion.path,
                 method: API_SERVICE_CONFIG.getCompletion.method,
+                body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getChatCompletion.serviceName]: builder.query<ChatCompletionResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                headers: {
+                    Authorization: `Bearer ${ENV.OPEN_AI_API_KEY}`,
+                    'OpenAI-Organization': 'org-K9bFSK6VCu23XIX7QFTln59v',
+                },
+                url: API_SERVICE_CONFIG.getChatCompletion.path,
+                method: API_SERVICE_CONFIG.getChatCompletion.method,
                 body: payload,
             }),
         }),
