@@ -17,8 +17,17 @@ import {ChatInputProps} from './ChatSummary.d';
 // Styled Components
 import {Container, Header, Title, StyledContent, CloseButton, ClearContextConfirmation} from './ChatSummary.styles';
 
+/**
+ * ChatSummary Component
+ * @param chat - chat summary to be displayed in the component.
+ *
+ * @example Correct usage
+ * ```tsx
+ * <ChatSummary chat={chat} />
+ * ```
+ */
 export const ChatSummary = ({
-    chat = 'Lorem Ipsum Testing 1234Lorem Ipsum Testing 1234Lorem Ipsum Testing 1234Lorem Ipsum Testing 1234',
+    chat,
 }: ChatInputProps) => {
     const dispatch = useDispatch();
 
