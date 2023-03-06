@@ -17,7 +17,7 @@ import (
 // If you add non-reference types to your configuration struct, be sure to rewrite Clone as a deep
 // copy appropriate for your types.
 type Configuration struct {
-	OpenAIApiKey string `json:"openAIApiKey"`
+	OpenAIAPIKey string `json:"openAIAPIKey"`
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
@@ -29,15 +29,15 @@ func (c *Configuration) Clone() *Configuration {
 
 // Used for post-processing on the configuration.
 func (c *Configuration) ProcessConfiguration() error {
-	c.OpenAIApiKey = strings.TrimSpace(c.OpenAIApiKey)
+	c.OpenAIAPIKey = strings.TrimSpace(c.OpenAIAPIKey)
 
 	return nil
 }
 
 // Used for config validations.
 func (c *Configuration) IsValid() error {
-	if c.OpenAIApiKey == "" {
-		return fmt.Errorf("OpenAIApiKey should not be empty")
+	if c.OpenAIAPIKey == "" {
+		return fmt.Errorf("OpenAIAPIKey should not be empty")
 	}
 
 	return nil

@@ -58,7 +58,7 @@ func (p *Plugin) HandleStaticFiles() {
 }
 
 func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, r *http.Request) {
-	p.writeJSON(w, 0, p.configuration.OpenAIApiKey)
+	p.writeJSON(w, 0, p.configuration)
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {
