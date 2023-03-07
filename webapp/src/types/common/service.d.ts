@@ -1,4 +1,4 @@
-type ApiServiceName = 'getCompletion';
+type ApiServiceName = 'getCompletion' | 'getChatCompletion';
 
 type PluginApiService = {
     path: string;
@@ -13,4 +13,4 @@ type ApiErrorResponse = {
     status: number;
 };
 
-type APIRequestPayload = GetCompletionPayload | void;
+type APIRequestPayload = GetCompletionPayload | GetChatCompletionPayload | void;
