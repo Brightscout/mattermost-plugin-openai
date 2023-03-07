@@ -35,7 +35,7 @@ func (c *client) callJSON(url, path, method string, in, out interface{}) (respon
 
 // Makes HTTP request to REST APIs
 func (c *client) call(basePath, method, path, contentType string, inBody io.Reader, out interface{}) (responseData []byte, err error) {
-	errContext := fmt.Sprintf("Wellsite WITSML: Call failed: method:%s, path:%s", method, path)
+	errContext := fmt.Sprintf("Open-AI: Call failed: method:%s, path:%s", method, path)
 	pathURL, err := url.Parse(path)
 	if err != nil {
 		return nil, errors.WithMessage(err, errContext)
@@ -93,17 +93,6 @@ func (c *client) call(basePath, method, path, contentType string, inBody io.Read
 		return nil, errors.Errorf("not found")
 	}
 
-	// TODO: Refactor the below code when proper error handling is done on the Wellsite APIs
-	// for now we are sending a generic error message in case of any error
-
-	// type ErrorResponse struct {
-	// 	Message string `json:"message"`
-	// }
-	// errResp := ErrorResponse{}
-	// err = json.Unmarshal(responseData, &errResp)
-	// if err != nil {
-	// 	return nil, errors.New(constants.GenericErrorMessage)
-	// }
 	return responseData, errors.New(constants.GenericErrorMessage)
 }
 
