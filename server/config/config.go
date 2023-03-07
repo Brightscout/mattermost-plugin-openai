@@ -37,7 +37,7 @@ func (c *Configuration) ProcessConfiguration() error {
 // Used for config validations.
 func (c *Configuration) IsValid() error {
 	if c.OpenAIAPIKey == "" {
-		return fmt.Errorf("OpenAIAPIKey should not be empty")
+		return fmt.Errorf("openAIAPIKey should not be empty")
 	}
 
 	return nil
