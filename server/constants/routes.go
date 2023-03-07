@@ -1,7 +1,7 @@
 package constants
 
 const (
-	APIPrefix  = "/api/v1"
-	PathAPIKey = "/api-key"
-	WildRoute  = "{anything:.*}"
+	APIPrefix     = "/api/v1"
+	PathGetConfig = "/config"
+	WildRoute     = "{anything:.*}"
 )
