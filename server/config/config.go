@@ -18,6 +18,7 @@ import (
 // copy appropriate for your types.
 type Configuration struct {
 	OpenAIAPIKey string `json:"openAIAPIKey"`
+	OpenAIOrganizationId string `json:"openAIOrganizationId"`
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
@@ -30,6 +31,7 @@ func (c *Configuration) Clone() *Configuration {
 // Used for post-processing on the configuration.
 func (c *Configuration) ProcessConfiguration() error {
 	c.OpenAIAPIKey = strings.TrimSpace(c.OpenAIAPIKey)
+	c.OpenAIOrganizationId = strings.TrimSpace(c.OpenAIOrganizationId)
 
 	return nil
 }
@@ -38,6 +40,10 @@ func (c *Configuration) ProcessConfiguration() error {
 func (c *Configuration) IsValid() error {
 	if c.OpenAIAPIKey == "" {
 		return fmt.Errorf("openAIAPIKey should not be empty")
+	}
+
+	if c.OpenAIOrganizationId == "" {
+		return fmt.Errorf("openAIOrganizationId should not be empty")
 	}
 
 	return nil

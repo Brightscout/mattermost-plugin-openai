@@ -1,6 +1,6 @@
 // Export Utils functions here
 
-import {ChatCompletionApi} from 'constants/common';
+import {ChatCompletionApi, pluginId} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
 /**
@@ -32,4 +32,12 @@ export const parseChatCompletionPayload = ({
         max_tokens: ChatCompletionApiConfigs.maxTokens,
         messages: [...prevChats, {role: isSummarizing ? 'system' : 'user', content: isSummarizing ? ChatCompletionApi.summarizationContent : prompt}],
     };
+};
+
+export const getPluginApi = () => {
+    const url = new URL(window.location.href);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const pluginUrl = `${baseUrl}/plugins/${pluginId}`;
+    const pluginApiBaseUrl = `${pluginUrl}/api/v1`;
+    return {pluginApiBaseUrl};
 };

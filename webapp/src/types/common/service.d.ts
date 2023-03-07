@@ -1,4 +1,4 @@
-type ApiServiceName = 'getCompletion' | 'getChatCompletion';
+type ApiServiceName = 'getCompletion' | 'getChatCompletion' | 'getOpenAIApiKeyFromWebapp';
 
 type PluginApiService = {
     path: string;
@@ -9,6 +9,9 @@ type PluginApiService = {
 type ApiErrorResponse = {
     data: {
         Error: string;
+        error?: {
+            code: string,
+        }
     };
     status: number;
 };
