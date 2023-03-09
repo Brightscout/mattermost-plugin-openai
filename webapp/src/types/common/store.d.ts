@@ -8,7 +8,13 @@ interface ReduxState extends GlobalState {
     {
         [x: string]: QueryDefinition<
         void,
-        BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>,
+        BaseQueryFn<
+        string | FetchArgs,
+        unknown,
+        FetchBaseQueryError,
+        Record<string, never>,
+        FetchBaseQueryMeta
+        >,
         never,
         void,
         'openAiPluginApi'
@@ -24,7 +30,12 @@ type ApiRequestCompletionState = {
 };
 
 type PromptChatState = {
-    chats: {role: 'user' | 'system' | 'assistant'; content: string; id: string; isSummary?: boolean}[];
+    chats: {
+        role: 'user' | 'system' | 'assistant';
+        content: string;
+        id: string;
+        isSummary?: boolean;
+    }[];
 };
 
 type ConfigCredentialState = {

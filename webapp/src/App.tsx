@@ -13,12 +13,12 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
  * <App />
  * ```
  */
-export const App = (): JSX.Element => {
+export const App = () => {
     const dispatch = useDispatch();
 
     useMemo(() => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);
 
-    return <></>;
+    return <div />;
 };
