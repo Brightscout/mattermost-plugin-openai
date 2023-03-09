@@ -8,17 +8,17 @@ import {ENV} from 'constants/env.constants';
 // Service to make plugin API requests
 const pluginApi = createApi({
     reducerPath: 'openAiPluginApi',
-    baseQuery: fetchBaseQuery({baseUrl: BaseUrlOpenAi}),
+    baseQuery: fetchBaseQuery({
+        baseUrl: BaseUrlOpenAi,
+        prepareHeaders: (headers) => {
+            headers.set('Authorization', `Bearer ${ENV.OPEN_AI_API_KEY}`);
+            headers.set('OpenAI-Organization', 'org-OuPqTe4jcYuJ9na7hwYC4ERs');
+            return headers;
+        },
+    }),
     endpoints: (builder) => ({
-        [API_SERVICE_CONFIG.getCompletion.serviceName]: builder.query<
-        CompletionResponseShape,
-        APIRequestPayload
-        >({
+        [API_SERVICE_CONFIG.getCompletion.serviceName]: builder.query<CompletionResponseShape, APIRequestPayload>({
             query: (payload) => ({
-                headers: {
-                    Authorization: `Bearer ${ENV.OPEN_AI_API_KEY}`,
-                    'OpenAI-Organization': 'org-OuPqTe4jcYuJ9na7hwYC4ERs',
-                },
                 url: API_SERVICE_CONFIG.getCompletion.path,
                 method: API_SERVICE_CONFIG.getCompletion.method,
                 body: payload,
