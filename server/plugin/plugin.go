@@ -18,8 +18,6 @@ type Plugin struct {
 	plugin.MattermostPlugin
 	client *pluginapi.Client
 
-	Client Client
-
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex
 
