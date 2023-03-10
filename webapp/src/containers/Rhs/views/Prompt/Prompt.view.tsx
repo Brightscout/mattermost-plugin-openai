@@ -93,6 +93,11 @@ export const Prompt = () => {
             setPromptValue('');
             setErrorMessage('');
 
+            /**
+             * Since data is a union type, here we are narrowing the type to get the response data of the chat completion api.
+             * If `isChatSummarize` is true, we are adding it to the `chats` state, with isSummary flag to `true`
+             * else we are adding the transformed response data to the `chats` state
+             */
             if (data?.object === ChatCompletionApi.responseObject) {
                 if (isChatSummarize) {
                     dispatch(
