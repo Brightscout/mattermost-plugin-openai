@@ -20,5 +20,6 @@ export const App = () => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);
 
-    return <div />;
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
 };
