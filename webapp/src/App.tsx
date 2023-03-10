@@ -16,6 +16,9 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
 export const App = (): JSX.Element => {
     const dispatch = useDispatch();
 
+    /**
+     * Before the first render we are fetching the configuration settings from the mattermost webapp.
+     */
     useMemo(() => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);

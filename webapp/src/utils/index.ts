@@ -34,6 +34,10 @@ export const parseChatCompletionPayload = ({
     };
 };
 
+/**
+ * Helper util function which returns the plugin api base url for the plugin.
+ * @returns pluginApiBaseUrl
+ */
 export const getPluginApi = () => {
     const url = new URL(window.location.href);
     const baseUrl = `${url.protocol}//${url.host}`;
