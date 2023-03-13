@@ -6,7 +6,7 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
 
 /**
  * App Component
- * This is main App component for plugin.
+ * This is the main App component for the plugin.
  *
  * @example Correct usage
  * ```tsx

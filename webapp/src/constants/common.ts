@@ -17,10 +17,10 @@ export const ErrorMessages = {
  * Constants used in clear context confirmation dialog in ChatSummary component.
  */
 export const ClearContextConfirmationDialog = {
-    title: 'Do you really want to clear the context',
+    title: 'Do you really want to clear the context?',
     description: 'Clearing the context would create a new chat context',
     primaryActionText: 'Clear',
-    secondaryActionText: 'Close',
+    secondaryActionText: 'Cancel',
 } as const;
 
 /**

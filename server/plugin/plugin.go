@@ -2,27 +2,21 @@ package plugin
 
 import (
 	"net/http"
-	"path/filepath"
 	"reflect"
 	"sync"
 
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
-	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
 	"github.com/mattermost/mattermost-plugin-open-ai/server/config"
-	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
 type Plugin struct {
 	plugin.MattermostPlugin
 	client *pluginapi.Client
-
-	Client Client
 
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex
@@ -75,22 +69,6 @@ func (p *Plugin) setConfiguration(configuration *config.Configuration) {
 	}
 
 	p.configuration = configuration
-}
-
-// Initializes a bot user
-func (p *Plugin) initBotUser() error {
-	botID, err := p.client.Bot.EnsureBot(&model.Bot{
-		Username:    constants.BotUsername,
-		DisplayName: constants.BotDisplayName,
-		Description: constants.BotDescription,
-	}, pluginapi.ProfileImagePath(filepath.Join("assets", "wellsite.png")))
-
-	if err != nil {
-		return errors.Wrap(err, "cannot create bot")
-	}
-
-	p.botUserID = botID
-	return nil
 }
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests.

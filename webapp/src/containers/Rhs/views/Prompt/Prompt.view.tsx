@@ -41,8 +41,8 @@ export const Prompt = () => {
     const dispatch = useDispatch();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = usePluginApi();
     const [promptValue, setPromptValue] = useState('');
-    const [isChatSummarize, setIsChatSummarize] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isChatSummarized, setIsChatSummarized] = useState(false);
 
     // Selectors
     const {chats} = getAllChats(state);
@@ -76,11 +76,7 @@ export const Prompt = () => {
      * Triggers on changing the value in the text area,
      * in `loading` state the user wont be able to change the content in the text area.
      */
-    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if (!isLoading) {
-            setPromptValue(value);
-        }
-    };
+    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) => !isLoading && setPromptValue(value);
 
     /**
      * On getting the success response from the api, we are resetting the text area,
@@ -95,11 +91,11 @@ export const Prompt = () => {
 
             /**
              * Since data is a union type, here we are narrowing the type to get the response data of the chat completion api.
-             * If `isChatSummarize` is true, we are adding it to the `chats` state, with isSummary flag to `true`
+             * If `isChatSummarized` is true, we are adding it to the `chats` state, with isSummary flag to `true`
              * else we are adding the transformed response data to the `chats` state
              */
             if (data?.object === ChatCompletionApi.responseObject) {
-                if (isChatSummarize) {
+                if (isChatSummarized) {
                     dispatch(
                         addSummary({
                             id: data?.id,
@@ -108,7 +104,7 @@ export const Prompt = () => {
                             isSummary: true,
                         }),
                     );
-                    setIsChatSummarize(false);
+                    setIsChatSummarized(false);
                     return;
                 }
 
@@ -125,7 +121,7 @@ export const Prompt = () => {
                  */
                 if (data.usage.total_tokens > ChatCompletionApiConfigs.maxTokenLimitToSummarize) {
                     setPromptValue(ChatCompletionApi.summarizationPrompt);
-                    setIsChatSummarize(true);
+                    setIsChatSummarized(true);
                 }
             }
         },
@@ -145,13 +141,13 @@ export const Prompt = () => {
     });
 
     /**
-     * When isChatSummarize is `true`, hit the chat api to get the summary.
+     * When isChatSummarized is `true`, hit the chat api to get the summary.
      */
     useEffect(() => {
-        if (isChatSummarize && promptValue === ChatCompletionApi.summarizationPrompt) {
+        if (isChatSummarized && promptValue === ChatCompletionApi.summarizationPrompt) {
             makeApiRequestWithCompletionStatus(API_SERVICE_CONFIG.getChatCompletion.serviceName, payload);
         }
-    }, [isChatSummarize, promptValue]);
+    }, [isChatSummarized, promptValue]);
 
     const RenderChatsAndError = () => {
         if (errorMessage) {
