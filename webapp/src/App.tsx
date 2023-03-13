@@ -6,7 +6,7 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
 
 /**
  * App Component
- * This is main App component for plugin.
+ * This is the main App component for the plugin.
  *
  * @example Correct usage
  * ```tsx
@@ -16,6 +16,9 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
 export const App = () => {
     const dispatch = useDispatch();
 
+    /**
+     * Before the first render we are fetching the configuration settings from the mattermost webapp.
+     */
     useMemo(() => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);

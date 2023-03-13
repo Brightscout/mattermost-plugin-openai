@@ -40,20 +40,6 @@ func (p *Plugin) OnActivate() error {
 		return err
 	}
 
-	if err := p.initBotUser(); err != nil {
-		return err
-	}
-
-	command, err := p.getCommand()
-	if err != nil {
-		return errors.Wrap(err, "failed to get command")
-	}
-
-	err = p.API.RegisterCommand(command)
-	if err != nil {
-		return errors.Wrap(err, "failed to register command")
-	}
-
 	p.router = p.InitAPI()
 	p.InitRoutes()
 	p.HandleStaticFiles()

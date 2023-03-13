@@ -23,8 +23,6 @@ func (p *Plugin) InitAPI() *mux.Router {
 
 // Add custom routes and corresponding handlers here
 func (p *Plugin) InitRoutes() {
-	p.Client = InitClient(p)
-
 	s := p.router.PathPrefix(constants.APIPrefix).Subrouter()
 
 	s.HandleFunc(constants.PathGetConfig, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)

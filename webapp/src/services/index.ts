@@ -6,7 +6,7 @@ import {BaseUrlOpenAi} from 'constants/common';
 import {getConfigCredentials} from 'selectors';
 
 // Utils
-import {getPluginApi} from 'utils';
+import {getPluginApiBaseUrl} from 'utils';
 
 // Service to make plugin API requests
 const pluginApi = createApi({
@@ -46,7 +46,7 @@ const pluginApi = createApi({
 
         [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<OpenAIApiKeyFromWebappShape, APIRequestPayload>({
             query: () => ({
-                url: `${getPluginApi().pluginApiBaseUrl}/${API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path}`,
+                url: `${getPluginApiBaseUrl().pluginApiBaseUrl}/${API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path}`,
                 method: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.method,
             }),
         }),

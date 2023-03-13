@@ -1,8 +1,7 @@
-export const getConfigCredentials = (state: ReduxState): ConfigCredentialState =>
-    state['plugins-mattermost-plugin-open-ai'].credentialSlice;
+const getPluginState = (state: ReduxState) => state['plugins-mattermost-plugin-open-ai'];
 
-export const getAllChats = (state: ReduxState): PromptChatState =>
-    state['plugins-mattermost-plugin-open-ai'].promptChatSlice;
+export const getConfigCredentials = (state:ReduxState): ConfigCredentialState => getPluginState(state).credentialSlice;
 
-export const getApiRequestCompletionState = (state: ReduxState): ApiRequestCompletionState =>
-    state['plugins-mattermost-plugin-open-ai'].apiRequestCompletionSlice;
+export const getAllChats = (state: ReduxState): PromptChatState => getPluginState(state).promptChatSlice;
+
+export const getApiRequestCompletionState = (state: ReduxState): ApiRequestCompletionState => getPluginState(state).apiRequestCompletionSlice;
