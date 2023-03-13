@@ -3,16 +3,27 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 // Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {BaseUrlOpenAi} from 'constants/common';
-import {ENV} from 'constants/env.constants';
+import {getConfigCredentials} from 'selectors';
+
+// Utils
+import {getPluginApiBaseUrl} from 'utils';
 
 // Service to make plugin API requests
 const pluginApi = createApi({
     reducerPath: 'openAiPluginApi',
     baseQuery: fetchBaseQuery({
         baseUrl: BaseUrlOpenAi,
-        prepareHeaders: (headers) => {
-            headers.set('Authorization', `Bearer ${ENV.OPEN_AI_API_KEY}`);
-            headers.set('OpenAI-Organization', 'org-K9bFSK6VCu23XIX7QFTln59v');
+        prepareHeaders: (headers, {getState}) => {
+            const {openAIApiKey, openAIOrganizationId} = getConfigCredentials(getState() as ReduxState);
+
+            if (openAIApiKey) {
+                headers.set('Authorization', `Bearer ${openAIApiKey}`);
+            }
+
+            if (openAIOrganizationId) {
+                headers.set('OpenAI-Organization', openAIOrganizationId);
+            }
+
             return headers;
         },
     }),
@@ -30,6 +41,13 @@ const pluginApi = createApi({
                 url: API_SERVICE_CONFIG.getChatCompletion.path,
                 method: API_SERVICE_CONFIG.getChatCompletion.method,
                 body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<OpenAIApiKeyFromWebappShape, APIRequestPayload>({
+            query: () => ({
+                url: `${getPluginApiBaseUrl().pluginApiBaseUrl}/${API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path}`,
+                method: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.method,
             }),
         }),
     }),

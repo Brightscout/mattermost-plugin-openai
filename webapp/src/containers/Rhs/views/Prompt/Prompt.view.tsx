@@ -5,13 +5,14 @@ import {useDispatch} from 'react-redux';
 import {Chat} from 'components/Chat';
 import {ChatInput} from 'components/ChatInput';
 import {ChatSummary} from 'components/ChatSummary ';
+import {DisplayMessage} from 'components/DisplayMessage';
 
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Actions
-import {addChats, addSummary} from 'reducers/PromptChat.reducer';
+import {addChats, addSummary, popLastChat} from 'reducers/PromptChat.reducer';
 
 // Selectors
 import {getAllChats} from 'selectors';
@@ -21,7 +22,7 @@ import {parseChatCompletionPayload} from 'utils';
 
 // Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {ChatCompletionApi} from 'constants/common';
+import {ChatCompletionApi, ErrorMessages} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
 // Styles
@@ -40,6 +41,7 @@ export const Prompt = () => {
     const dispatch = useDispatch();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = usePluginApi();
     const [promptValue, setPromptValue] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isChatSummarized, setIsChatSummarized] = useState(false);
 
     // Selectors
@@ -85,6 +87,7 @@ export const Prompt = () => {
         payload,
         handleSuccess: () => {
             setPromptValue('');
+            setErrorMessage('');
 
             /**
              * Since data is a union type, here we are narrowing the type to get the response data of the chat completion api.
@@ -122,6 +125,19 @@ export const Prompt = () => {
                 }
             }
         },
+        handleError: (error) => {
+            setPromptValue('');
+            dispatch(popLastChat());
+
+            switch (error.data.error?.code) {
+            case ChatCompletionApi.invalidApiCode:
+                setErrorMessage(ErrorMessages.invalidApiKey);
+                break;
+            case ChatCompletionApi.invalidOrganizationCode:
+                setErrorMessage(ErrorMessages.invalidOrganizationId);
+                break;
+            }
+        },
     });
 
     /**
@@ -133,22 +149,33 @@ export const Prompt = () => {
         }
     }, [isChatSummarized, promptValue]);
 
+    const RenderChatsAndError = () => {
+        if (errorMessage) {
+            return (
+                <DisplayMessage
+                    message={errorMessage}
+                    isError={true}
+                />);
+        }
+
+        return (<>
+            {chats.
+                map(({id, content, isSummary, role}) => (
+                    <React.Fragment key={id}>
+                        {isSummary ? <ChatSummary chat={content} /> : (
+                            <Chat
+                                chat={content}
+                                isUser={role === 'user'}
+                            />)}
+                    </React.Fragment>
+                )).
+                reverse()}
+        </>);
+    };
+
     return (
         <Container>
-            <ChatArea>
-                {chats.
-                    map(({id, content, isSummary, role}) => (
-                        <React.Fragment key={id}>
-                            {
-                                isSummary ? <ChatSummary chat={content} /> : <Chat
-                                    chat={content}
-                                    isUser={role === 'user'}
-                                />
-                            }
-                        </React.Fragment>
-                    )).
-                    reverse()}
-            </ChatArea>
+            <ChatArea><RenderChatsAndError /></ChatArea>
             <ChatInput
                 value={promptValue}
                 isLoading={isLoading}

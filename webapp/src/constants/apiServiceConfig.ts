@@ -9,4 +9,9 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'POST',
         serviceName: 'getChatCompletion',
     },
+    getOpenAIApiKeyFromWebapp: {
+        path: 'config',
+        method: 'GET',
+        serviceName: 'getOpenAIApiKeyFromWebapp',
+    },
 };

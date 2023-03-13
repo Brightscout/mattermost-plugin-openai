@@ -11,6 +11,9 @@ const promptChatSlice = createSlice({
         addChats: (state: PromptChatState, action: PayloadAction<{role: 'user' | 'assistant' | 'system'; content: string; id: string}>) => {
             state.chats.push(action.payload);
         },
+        popLastChat: (state:PromptChatState) => {
+            state.chats.pop();
+        },
         addSummary: (state: PromptChatState, action: PayloadAction<{role: 'assistant'; content: string; id: string; isSummary?: boolean}>) => {
             state.chats = state.chats.filter(({isSummary}) => !isSummary);
             state.chats.push(action.payload);
@@ -21,6 +24,6 @@ const promptChatSlice = createSlice({
     },
 });
 
-export const {addChats, addSummary, resetChat} = promptChatSlice.actions;
+export const {addChats, addSummary, resetChat, popLastChat} = promptChatSlice.actions;
 
 export default promptChatSlice.reducer;

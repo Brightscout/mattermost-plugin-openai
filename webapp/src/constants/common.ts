@@ -1,10 +1,17 @@
 export const BaseUrlOpenAi = 'https://api.openai.com/v1';
 
+export const pluginId = 'mattermost-plugin-open-ai';
+
 /** channel button tooltip text */
 export const channelButtonTooltip = 'Open-ai';
 
 /** plugin header tile */
 export const rightSidebarHeaderTitle = 'Open-ai';
+
+export const ErrorMessages = {
+    invalidApiKey: 'The Api key provided is not valid',
+    invalidOrganizationId: 'No organization found with the given Id',
+} as const;
 
 /**
  * Constants used in clear context confirmation dialog in ChatSummary component.
@@ -23,4 +30,7 @@ export const ChatCompletionApi = {
     responseObject: 'chat.completion',
     summarizationPrompt: 'Summarization...',
     summarizationContent: 'Summarize the chat precisely',
+    invalidApiCode: 'invalid_api_key',
+    invalidOrganizationCode: 'invalid_organization',
 } as const;
+

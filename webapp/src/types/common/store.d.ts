@@ -26,3 +26,8 @@ type ApiRequestCompletionState = {
 type PromptChatState = {
     chats: {role: 'user' | 'system' | 'assistant'; content: string; id: string; isSummary?: boolean}[];
 };
+
+type ConfigCredentialState = {
+    openAIApiKey: string;
+    openAIOrganizationId: string;
+};

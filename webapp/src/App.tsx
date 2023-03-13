@@ -1,4 +1,8 @@
-import React from 'react';
+import React, {useMemo} from 'react';
+import {useDispatch} from 'react-redux';
+
+// reducers
+import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
 
 /**
  * App Component
@@ -9,4 +13,15 @@ import React from 'react';
  * <App />
  * ```
  */
-export const App = (): JSX.Element => <></>;
+export const App = (): JSX.Element => {
+    const dispatch = useDispatch();
+
+    /**
+     * Before the first render we are fetching the configuration settings from the mattermost webapp.
+     */
+    useMemo(() => {
+        dispatch(fetchConfigCredentialsFromSettings());
+    }, []);
+
+    return <></>;
+};

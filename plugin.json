@@ -26,6 +26,12 @@
         "display_name": "Open AI API key",
         "type": "text",
         "help_text": "Enter the Open AI Api key"
+      },
+      {
+        "key": "openAIOrganizationId",
+        "display_name": "Open AI organization Id",
+        "type": "text",
+        "help_text": "Enter the Open AI organization Id"
       }
     ]
   }
