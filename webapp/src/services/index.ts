@@ -12,7 +12,7 @@ const pluginApi = createApi({
         baseUrl: BaseUrlOpenAi,
         prepareHeaders: (headers) => {
             headers.set('Authorization', `Bearer ${ENV.OPEN_AI_API_KEY}`);
-            headers.set('OpenAI-Organization', 'org-OuPqTe4jcYuJ9na7hwYC4ERs');
+            headers.set('OpenAI-Organization', 'org-K9bFSK6VCu23XIX7QFTln59v');
             return headers;
         },
     }),
@@ -21,6 +21,14 @@ const pluginApi = createApi({
             query: (payload) => ({
                 url: API_SERVICE_CONFIG.getCompletion.path,
                 method: API_SERVICE_CONFIG.getCompletion.method,
+                body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getChatCompletion.serviceName]: builder.query<ChatCompletionResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                url: API_SERVICE_CONFIG.getChatCompletion.path,
+                method: API_SERVICE_CONFIG.getChatCompletion.method,
                 body: payload,
             }),
         }),
