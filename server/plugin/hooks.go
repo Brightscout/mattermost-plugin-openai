@@ -5,7 +5,7 @@ import (
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 
-	"github.com/mattermost/mattermost-plugin-wellsite-witsml/server/config"
+	"github.com/mattermost/mattermost-plugin-open-ai/server/config"
 )
 
 // Invoked when configuration changes may have been made.
@@ -38,20 +38,6 @@ func (p *Plugin) OnActivate() error {
 
 	if err := p.OnConfigurationChange(); err != nil {
 		return err
-	}
-
-	if err := p.initBotUser(); err != nil {
-		return err
-	}
-
-	command, err := p.getCommand()
-	if err != nil {
-		return errors.Wrap(err, "failed to get command")
-	}
-
-	err = p.API.RegisterCommand(command)
-	if err != nil {
-		return errors.Wrap(err, "failed to register command")
 	}
 
 	p.router = p.InitAPI()

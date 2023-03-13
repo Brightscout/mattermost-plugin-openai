@@ -1,0 +1,4 @@
+{
+    ".webapp/src/**/*.{ts,tsx,js,jsx}": "eslint --max-warnings=0",
+    "*.html": "eslint --max-warnings=0"
+}
