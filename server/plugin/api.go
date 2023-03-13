@@ -23,11 +23,9 @@ func (p *Plugin) InitAPI() *mux.Router {
 
 // Add custom routes and corresponding handlers here
 func (p *Plugin) InitRoutes() {
-	p.Client = InitClient(p)
-
 	s := p.router.PathPrefix(constants.APIPrefix).Subrouter()
 
-	s.HandleFunc(constants.PathAPIKey, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)
+	s.HandleFunc(constants.PathGetConfig, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)
 }
 
 func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
@@ -58,7 +56,7 @@ func (p *Plugin) HandleStaticFiles() {
 }
 
 func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, r *http.Request) {
-	p.writeJSON(w, 0, p.configuration)
+	p.writeJSON(w, 0, p.getConfiguration())
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {
