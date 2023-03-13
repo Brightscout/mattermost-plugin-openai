@@ -43,7 +43,7 @@ export const ChatInput = ({value, handleOnChange, isLoading, handleOnSend}: Chat
                 disabled={isLoading || Boolean(!value)}
                 onClick={handleOnSend}
             >
-                {'Send'}
+                Send
             </StyledButton>
         </Container>
     );

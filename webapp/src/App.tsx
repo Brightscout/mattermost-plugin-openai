@@ -13,7 +13,7 @@ import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
  * <App />
  * ```
  */
-export const App = (): JSX.Element => {
+export const App = () => {
     const dispatch = useDispatch();
 
     /**
@@ -23,5 +23,6 @@ export const App = (): JSX.Element => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);
 
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
 };

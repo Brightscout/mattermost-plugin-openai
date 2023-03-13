@@ -44,7 +44,7 @@ export const ChatSummary = ({
                 onClick={() => setIsSummaryExpanded((prevState) => !prevState)}
             >
                 <Header>
-                    <Title>{'SUMMARY'}</Title>
+                    <Title>SUMMARY</Title>
                     <CloseButton
                         onMouseEnter={() => isSummaryExpanded && setIsCloseIconHovered(true)}
                         onMouseLeave={() => setIsCloseIconHovered(false)}
@@ -66,7 +66,7 @@ export const ChatSummary = ({
             </Container>
             <ClearContextConfirmation
                 show={isClearConfirmationModalOpen}
-                destructive={true}
+                destructive
                 title={ClearContextConfirmationDialog.title}
                 description={ClearContextConfirmationDialog.description}
                 primaryActionText={ClearContextConfirmationDialog.primaryActionText}

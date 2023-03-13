@@ -13,12 +13,10 @@ import {Container} from './styles';
  * <Rhs />
  * ```
  */
-const Rhs = (): JSX.Element => {
-    return (
-        <Container className='rhs-container'>
-            <Prompt />
-        </Container>
-    );
-};
+const Rhs = (): JSX.Element => (
+    <Container className='rhs-container'>
+        <Prompt />
+    </Container>
+);
 
 export default Rhs;

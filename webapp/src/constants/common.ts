@@ -9,8 +9,9 @@ export const channelButtonTooltip = 'Open-ai';
 export const rightSidebarHeaderTitle = 'Open-ai';
 
 export const ErrorMessages = {
-    invalidApiKey: 'The Api key provided is not valid',
-    invalidOrganizationId: 'No organization found with the given Id',
+    internalServerError: 'Something went wrong, please try again',
+    invalidApiKey: 'The API key provided is not valid',
+    invalidOrganizationId: 'No organization found with the given ID',
 } as const;
 
 /**
@@ -33,4 +34,3 @@ export const ChatCompletionApi = {
     invalidApiCode: 'invalid_api_key',
     invalidOrganizationCode: 'invalid_organization',
 } as const;
-

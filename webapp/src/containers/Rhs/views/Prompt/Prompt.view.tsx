@@ -2,10 +2,8 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 // Components
-import {Chat} from 'components/Chat';
 import {ChatInput} from 'components/ChatInput';
-import {ChatSummary} from 'components/ChatSummary ';
-import {DisplayMessage} from 'components/DisplayMessage';
+import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
@@ -53,16 +51,25 @@ export const Prompt = () => {
      * We want the payload to change only when the prompt value changes.
      */
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const payload = useMemo(() => parseChatCompletionPayload({prompt: promptValue, chatHistory: chats}), [promptValue]);
+    const payload = useMemo(
+        () => parseChatCompletionPayload({prompt: promptValue, chatHistory: chats}),
+        [promptValue],
+    );
 
-    const {data, isLoading} = getApiState(API_SERVICE_CONFIG.getChatCompletion.serviceName, payload);
+    const {data, isLoading} = getApiState(
+        API_SERVICE_CONFIG.getChatCompletion.serviceName,
+        payload,
+    );
 
     /**
      * On Clicking the send button we are adding the user entered prompt to a state array,
      * and sending request to the open ai servers for the response.
      */
     const handleSend = async () => {
-        makeApiRequestWithCompletionStatus(API_SERVICE_CONFIG.getChatCompletion.serviceName, payload);
+        makeApiRequestWithCompletionStatus(
+            API_SERVICE_CONFIG.getChatCompletion.serviceName,
+            payload,
+        );
         dispatch(
             addChats({
                 role: 'user',
@@ -130,12 +137,14 @@ export const Prompt = () => {
             dispatch(popLastChat());
 
             switch (error.data.error?.code) {
-            case ChatCompletionApi.invalidApiCode:
-                setErrorMessage(ErrorMessages.invalidApiKey);
-                break;
-            case ChatCompletionApi.invalidOrganizationCode:
-                setErrorMessage(ErrorMessages.invalidOrganizationId);
-                break;
+                case ChatCompletionApi.invalidApiCode:
+                    setErrorMessage(ErrorMessages.invalidApiKey);
+                    break;
+                case ChatCompletionApi.invalidOrganizationCode:
+                    setErrorMessage(ErrorMessages.invalidOrganizationId);
+                    break;
+                default:
+                    setErrorMessage(ErrorMessages.internalServerError);
             }
         },
     });
@@ -149,33 +158,11 @@ export const Prompt = () => {
         }
     }, [isChatSummarized, promptValue]);
 
-    const RenderChatsAndError = () => {
-        if (errorMessage) {
-            return (
-                <DisplayMessage
-                    message={errorMessage}
-                    isError={true}
-                />);
-        }
-
-        return (<>
-            {chats.
-                map(({id, content, isSummary, role}) => (
-                    <React.Fragment key={id}>
-                        {isSummary ? <ChatSummary chat={content} /> : (
-                            <Chat
-                                chat={content}
-                                isUser={role === 'user'}
-                            />)}
-                    </React.Fragment>
-                )).
-                reverse()}
-        </>);
-    };
-
     return (
         <Container>
-            <ChatArea><RenderChatsAndError /></ChatArea>
+            <ChatArea>
+                <RenderChatsAndError chats={chats} errorMessage={errorMessage} />
+            </ChatArea>
             <ChatInput
                 value={promptValue}
                 isLoading={isLoading}
