@@ -22,7 +22,7 @@
     "footer": "",
     "settings": [
       {
-        "key": "openAIApiKey",
+        "key": "openAIAPIKey",
         "display_name": "Open AI API key",
         "type": "text",
         "help_text": "Enter the Open AI Api key"
