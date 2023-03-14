@@ -3,8 +3,9 @@ import {Store, Action} from 'redux';
 import {GlobalState} from 'mattermost-redux/types/store';
 
 // Components
-import {ChannelHeaderButton} from 'components/ChannelHeaderButton';
 import {App} from 'App';
+import {PostMenuItem} from 'components/PostMenuItem';
+import {ChannelHeaderButton} from 'components/ChannelHeaderButton';
 
 // Containers
 import Rhs from 'containers/Rhs';
@@ -25,6 +26,7 @@ export default class Plugin {
         registry.registerReducer(reducers);
         const {showRHSPlugin} = registry.registerRightHandSidebarComponent(Rhs, rightSidebarHeaderTitle);
         registry.registerChannelHeaderButtonAction(<ChannelHeaderButton />, () => store.dispatch(showRHSPlugin), null, channelButtonTooltip);
+        registry.registerPostDropdownMenuComponent(PostMenuItem);
 
         // @see https://developers.mattermost.com/extend/plugins/webapp/reference/
     }

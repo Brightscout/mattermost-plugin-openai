@@ -42,3 +42,8 @@ type ConfigCredentialState = {
     openAIApiKey: string;
     openAIOrganizationId: string;
 };
+
+type PostSummarizationState = {
+    post: string;
+    isDialogOpen: boolean;
+};

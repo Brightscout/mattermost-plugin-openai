@@ -50,7 +50,6 @@ export const Prompt = () => {
      * The payload needs to be constant till the request cycle to be completed for our custom api to work.
      * We want the payload to change only when the prompt value changes.
      */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const payload = useMemo(
         () => parseChatCompletionPayload({prompt: promptValue, chatHistory: chats}),
         [promptValue],

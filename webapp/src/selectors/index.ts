@@ -6,3 +6,5 @@ export const getAllChats = (state: ReduxState): PromptChatState =>
 
 export const getApiRequestCompletionState = (state: ReduxState): ApiRequestCompletionState =>
     state['plugins-mattermost-plugin-open-ai'].apiRequestCompletionSlice;
+
+export const getPostSummarizationState = (state: ReduxState): PostSummarizationState => state['plugins-mattermost-plugin-open-ai'].postSummarizationSlice;

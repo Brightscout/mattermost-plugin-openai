@@ -25,6 +25,17 @@ export const ClearContextConfirmationDialog = {
 } as const;
 
 /**
+ * Constants used in the post summary modal.
+ */
+export const PostSummaryModal = {
+    title: 'Summarize Post',
+    subtitle: 'Create summary for the post',
+    primaryActionText: ({isSummarized}:{isSummarized: boolean}) => (isSummarized ? 'Close' : 'Summarize'),
+    secondaryActionText: ({isSummarized}: {isSummarized: boolean}) => (isSummarized ? 'Go Back' : 'Close'),
+    textAreaPlaceHolder: 'Enter content to summarize',
+};
+
+/**
  * Constants used with chat completion api
  */
 export const ChatCompletionApi = {

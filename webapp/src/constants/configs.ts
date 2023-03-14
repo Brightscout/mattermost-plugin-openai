@@ -3,6 +3,6 @@ export const ChatCompletionApiConfigs = {
     maxTokens: 3000,
 
     /** Reduce this to get the summary quicker */
-    maxTokenLimitToSummarize: 2000,
+    maxTokenLimitToSummarize: 200,
 } as const;
 

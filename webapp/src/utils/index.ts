@@ -34,6 +34,17 @@ export const parseChatCompletionPayload = ({
     };
 };
 
+/**
+ * Parses the payload required for the completion API to give summary of a given post.
+ * @param post - The post which is to be summarized.
+ */
+export const parsePostSummaryPayload = ({post}:{post: string}):GetCompletionPayload => ({
+    prompt: 'Summarize this prompt in detail\n' + post.trim(),
+    max_tokens: 3000,
+    model: 'text-davinci-003',
+    temperature: 0.5,
+});
+
 export const getPluginApi = () => {
     const url = new URL(window.location.href);
     const baseUrl = `${url.protocol}//${url.host}`;

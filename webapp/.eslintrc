@@ -39,6 +39,14 @@
         "import/resolver": "webpack"
     },
     "rules": {
+        "react/require-default-props": [
+            2,
+            {
+                "forbidDefaultForRequired": true,
+                "classes": "ignore",
+                "functions": "defaultArguments"
+            }
+        ],
         "import/no-extraneous-dependencies": 0,
         "max-len": [0, {"ignoreComments": true}],
         "no-unused-vars": [0, {"ignoreRestSiblings": true}],
