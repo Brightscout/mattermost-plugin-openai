@@ -18,7 +18,7 @@ import reducers from 'reducers';
 
 // eslint-disable-next-line import/no-unresolved
 import {PluginRegistry} from './types/mattermost-webapp';
-import manifest from './manifest';
+import {id} from './manifest';
 
 export default class Plugin {
     public async initialize(registry: PluginRegistry, store: Store<GlobalState, Action<Record<string, unknown>>>) {
@@ -38,4 +38,4 @@ declare global {
     }
 }
 
-window.registerPlugin(manifest.id, new Plugin());
+window.registerPlugin(id, new Plugin());
