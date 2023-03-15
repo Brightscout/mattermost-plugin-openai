@@ -34,6 +34,7 @@ export default class Plugin {
 
 declare global {
     interface Window {
+        // eslint-disable-next-line no-shadow
         registerPlugin(id: string, plugin: Plugin): void;
     }
 }
