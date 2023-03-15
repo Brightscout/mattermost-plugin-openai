@@ -27,6 +27,7 @@ export const StyledSummarizedText = styled('pre')({
     padding: 0,
     margin: 0,
     background: 'transparent !important',
+    wordBreak: 'break-word',
 });
 
 export const StyledSummarizationDialog = styled(Modal)({
