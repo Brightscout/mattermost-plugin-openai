@@ -10,18 +10,18 @@ export const rightSidebarHeaderTitle = 'Open-ai';
 
 export const ErrorMessages = {
     internalServerError: 'Something went wrong, please try again',
-    invalidApiKey: 'The Api key provided is not valid',
-    invalidOrganizationId: 'No organization found with the given Id',
+    invalidApiKey: 'The API key provided is not valid',
+    invalidOrganizationId: 'No organization found with the given ID',
 } as const;
 
 /**
  * Constants used in clear context confirmation dialog in ChatSummary component.
  */
 export const ClearContextConfirmationDialog = {
-    title: 'Do you really want to clear the context',
+    title: 'Do you really want to clear the context?',
     description: 'Clearing the context would create a new chat context',
     primaryActionText: 'Clear',
-    secondaryActionText: 'Close',
+    secondaryActionText: 'Cancel',
 } as const;
 
 /**

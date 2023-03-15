@@ -6,7 +6,7 @@ import {Container} from './styles';
 
 /**
  * Rhs Component
- * This is Rhs component for plugin.
+ * This is the Rhs component for the plugin.
  *
  * @example Correct usage
  * ```tsx

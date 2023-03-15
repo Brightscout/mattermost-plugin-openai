@@ -93,7 +93,6 @@
         "consistent-return": 2,
         "consistent-this": [2, "self"],
         "curly": [2, "all"],
-        "dot-location": [2, "object"],
         "dot-notation": 2,
         "eqeqeq": [2, "smart"],
         "func-call-spacing": [2, "never"],
