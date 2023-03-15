@@ -40,7 +40,7 @@ export const PostSummaryDialog = () => {
     const [isSummarized, setIsSummarized] = useState(false);
 
     /**
-     * We want the payload to change only when the prompt value changes.
+     * We want the payload to change only when the post content changes.
      */
     const payload = useMemo(() => parsePostSummaryPayload({post: postContent}), [postContent]);
 
