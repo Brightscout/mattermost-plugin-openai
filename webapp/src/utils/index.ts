@@ -1,6 +1,6 @@
 // Export Utils functions here
 
-import {ChatCompletionApi, pluginId} from 'constants/common';
+import {ChatCompletionApi, ErrorMessages, pluginId} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
 /**
@@ -68,4 +68,19 @@ export const getPluginApiBaseUrl = () => {
     const pluginUrl = `${baseUrl}/plugins/${pluginId}`;
     const pluginApiBaseUrl = `${pluginUrl}/api/v1`;
     return {pluginApiBaseUrl};
+};
+
+/**
+ * Maps the error coming from the open ai server to a user friendly feedback
+ * @param error - api error response
+ */
+export const mapErrorMessageFromOpenAI = (error: ApiErrorResponse) => {
+    switch (error.data.error?.code) {
+        case ChatCompletionApi.invalidApiCode:
+            return ErrorMessages.invalidApiKey;
+        case ChatCompletionApi.invalidOrganizationCode:
+            return ErrorMessages.invalidOrganizationId;
+        default:
+            return ErrorMessages.internalServerError;
+    }
 };

@@ -1,6 +1,9 @@
 import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 
+// Components
+import {DisplayMessage} from 'components/DisplayMessage';
+
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
@@ -18,7 +21,7 @@ import {PostSummaryModal} from 'constants/common';
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 
 // Utils
-import {parsePostSummaryPayload} from 'utils';
+import {mapErrorMessageFromOpenAI, parsePostSummaryPayload} from 'utils';
 
 import {
     StyledNativeTextArea,
@@ -38,6 +41,7 @@ export const PostSummaryDialog = () => {
     const {post, isDialogOpen} = getPostSummarizationState(state);
     const [postContent, setPostContent] = useState(post);
     const [isSummarized, setIsSummarized] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     /**
      * We want the payload to change only when the post content changes.
@@ -60,7 +64,12 @@ export const PostSummaryDialog = () => {
         serviceName: API_SERVICE_CONFIG.getCompletion.serviceName,
         payload,
         handleSuccess: () => {
+            setErrorMessage('');
             setIsSummarized((prevState) => !prevState);
+        },
+
+        handleError: (error) => {
+            setErrorMessage(mapErrorMessageFromOpenAI(error));
         },
     });
 
@@ -86,34 +95,33 @@ export const PostSummaryDialog = () => {
     }, [post]);
 
     return (
-            <StyledSummarizationDialog
-                show={isDialogOpen}
-                title={PostSummaryModal.title}
-                subtitle={PostSummaryModal.subtitle}
-                primaryActionText={PostSummaryModal.primaryActionText({isSummarized})}
-                secondaryActionText={PostSummaryModal.secondaryActionText({isSummarized})}
-                onSubmitHandler={() =>
-                    (isSummarized ? dispatch(closeAndResetState()) : handleSummarize())
-                }
-                onCloseHandler={() =>
-                    (isSummarized ? setIsSummarized((prevState) => !prevState) : dispatch(closeAndResetState()))
-                }
-                className={`${isLoading ? 'isLoading' : ''}`}
-            >
-                {isLoading && <StyledLinearProgress />}
-                    {isSummarized ? (
-                        <StyledSummarizedText>
-                            {data.choices[0].text.trim()}
-                        </StyledSummarizedText>
-                    ) : (
-                        <StyledNativeTextArea
-                            disabled={isLoading}
-                            placeholder={PostSummaryModal.textAreaPlaceHolder}
-                            value={postContent}
-                            onChange={({target: {value}}) => setPostContent(value)}
-                            ref={textareaRef}
-                        />
-                    )}
-            </StyledSummarizationDialog>
+        <StyledSummarizationDialog
+            show={isDialogOpen}
+            title={PostSummaryModal.title}
+            subtitle={PostSummaryModal.subtitle}
+            primaryActionText={PostSummaryModal.primaryActionText({isSummarized})}
+            secondaryActionText={PostSummaryModal.secondaryActionText({isSummarized})}
+            onSubmitHandler={() =>
+                (isSummarized ? dispatch(closeAndResetState()) : handleSummarize())
+            }
+            onCloseHandler={() =>
+                (isSummarized ? setIsSummarized((prevState) => !prevState) : dispatch(closeAndResetState()))
+            }
+            className={`${isLoading ? 'isLoading' : ''}`}
+        >
+            {isLoading && <StyledLinearProgress />}
+            {errorMessage && <DisplayMessage isError marginBottom={10} message={errorMessage} />}
+            {isSummarized ? (
+                <StyledSummarizedText>{data.choices[0].text.trim()}</StyledSummarizedText>
+            ) : (
+                <StyledNativeTextArea
+                    disabled={isLoading}
+                    placeholder={PostSummaryModal.textAreaPlaceHolder}
+                    value={postContent}
+                    onChange={({target: {value}}) => setPostContent(value)}
+                    ref={textareaRef}
+                />
+            )}
+        </StyledSummarizationDialog>
     );
 };

@@ -16,11 +16,11 @@ import {addChats, addSummary, popLastChat} from 'reducers/PromptChat.reducer';
 import {getAllChats} from 'selectors';
 
 // Utils
-import {parseChatCompletionPayload} from 'utils';
+import {mapErrorMessageFromOpenAI, parseChatCompletionPayload} from 'utils';
 
 // Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {ChatCompletionApi, ErrorMessages} from 'constants/common';
+import {ChatCompletionApi} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
 // Styles
@@ -134,17 +134,7 @@ export const Prompt = () => {
         handleError: (error) => {
             setPromptValue('');
             dispatch(popLastChat());
-
-            switch (error.data.error?.code) {
-                case ChatCompletionApi.invalidApiCode:
-                    setErrorMessage(ErrorMessages.invalidApiKey);
-                    break;
-                case ChatCompletionApi.invalidOrganizationCode:
-                    setErrorMessage(ErrorMessages.invalidOrganizationId);
-                    break;
-                default:
-                    setErrorMessage(ErrorMessages.internalServerError);
-            }
+            setErrorMessage(mapErrorMessageFromOpenAI(error));
         },
     });
 
