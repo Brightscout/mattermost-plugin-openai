@@ -17,11 +17,13 @@ interface ReduxState extends GlobalState {
         >,
         never,
         void,
-        'openAiPluginApi'
+        'openAiPluginApi',
+        'mattermostApi'
         >;
     },
     never,
-    'openAiPluginApi'
+    'openAiPluginApi',
+    'mattermostApi'
     >;
 }
 

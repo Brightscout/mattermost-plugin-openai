@@ -1,6 +1,7 @@
 import {combineReducers} from '@reduxjs/toolkit';
 
 import services from 'services';
+import mattermostApiServices from 'services/mattermostApiService';
 
 import apiRequestCompletionSlice from './apiRequest';
 import promptChatSlice from './PromptChat.reducer';
@@ -12,6 +13,7 @@ const reducers = combineReducers({
     promptChatSlice,
     credentialSlice,
     postSummarizationSlice,
+    [mattermostApiServices.reducerPath]: mattermostApiServices.reducer,
     [services.reducerPath]: services.reducer,
 });
 

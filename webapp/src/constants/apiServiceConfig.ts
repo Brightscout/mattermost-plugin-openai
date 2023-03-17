@@ -14,4 +14,9 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'GET',
         serviceName: 'getOpenAIApiKeyFromWebapp',
     },
+    getThreadFromPostId: {
+        path: '/posts',
+        method: 'GET',
+        serviceName: 'getThreadFromPostId',
+    },
 };

@@ -41,3 +41,14 @@ type ChatCompletionResponseShape = {
         total_tokens: number;
     };
 };
+
+type PostThreadResponseShape = {
+    order: string[];
+    posts: {
+        [postId: string]: {
+            id: string;
+            user_id: string;
+            message: string;
+        };
+    };
+};
