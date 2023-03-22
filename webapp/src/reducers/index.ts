@@ -1,7 +1,8 @@
 import {combineReducers} from '@reduxjs/toolkit';
 
-import services from 'services';
-import mattermostApiServices from 'services/mattermostApiService';
+import openAiApiService from 'services/openAiApiService';
+import mattermostApiService from 'services/mattermostApiService';
+import pluginApiService from 'services/pluginApiService';
 
 import apiRequestCompletionSlice from './apiRequest';
 import promptChatSlice from './PromptChat.reducer';
@@ -13,8 +14,9 @@ const reducers = combineReducers({
     promptChatSlice,
     credentialSlice,
     threadSummarizationSlice,
-    [mattermostApiServices.reducerPath]: mattermostApiServices.reducer,
-    [services.reducerPath]: services.reducer,
+    [pluginApiService.reducerPath]: pluginApiService.reducer,
+    [mattermostApiService.reducerPath]: mattermostApiService.reducer,
+    [openAiApiService.reducerPath]: openAiApiService.reducer,
 });
 
 export type RootPluginState = ReturnType<typeof reducers>;

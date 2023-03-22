@@ -4,15 +4,14 @@ import {useDispatch} from 'react-redux';
 import {resetApiRequestCompletionState} from 'reducers/apiRequest';
 import {getApiRequestCompletionState} from 'selectors';
 
-import useMattermostApi from './useMattermostApi';
-import usePluginApi from './usePluginApi';
+import useHooksBasedOnService from './useHooksBasedOnService';
 
 type Props = {
     handleSuccess?: () => void;
     handleError?: (error: ApiErrorResponse) => void;
     serviceName: ApiServiceName;
     payload?: APIRequestPayload;
-    services?: 'usePluginApi' | 'useMattermostApi';
+    services?: 'useOpenAiApi' | 'useMattermostApi' | 'usePluginApi';
 };
 
 function useApiRequestCompletionState({
@@ -20,10 +19,9 @@ function useApiRequestCompletionState({
     handleError,
     serviceName,
     payload,
-    services = 'usePluginApi',
+    services = 'useOpenAiApi',
 }: Props) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const {getApiState, state} = services === 'usePluginApi' ? usePluginApi() : useMattermostApi();
+    const {getApiState, state} = useHooksBasedOnService({service: services})();
     const dispatch = useDispatch();
 
     // Observe for the change in redux state after API call and do the required actions

@@ -2,15 +2,15 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
 
-import pluginApiService from 'services/pluginApiService';
+import openAiApiService from 'services/openAiApiService';
 
-function usePluginApi() {
+function useOpenAiApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
     const dispatch = useDispatch();
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
     const makeApiRequest = async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-        dispatch(pluginApiService.endpoints[serviceName].initiate(payload));
+        dispatch(openAiApiService.endpoints[serviceName].initiate(payload));
 
     const makeApiRequestWithCompletionStatus = async (
         serviceName: ApiServiceName,
@@ -24,7 +24,7 @@ function usePluginApi() {
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
     const getApiState = (serviceName: ApiServiceName, payload: APIRequestPayload) => {
-        const {data, isError, isLoading, isSuccess, error, isUninitialized} = pluginApiService.endpoints[
+        const {data, isError, isLoading, isSuccess, error, isUninitialized} = openAiApiService.endpoints[
             serviceName
         ].select(payload)(state['plugins-mattermost-plugin-open-ai']);
         return {data, isError, isLoading, isSuccess, error, isUninitialized};
@@ -33,4 +33,4 @@ function usePluginApi() {
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }
 
-export default usePluginApi;
+export default useOpenAiApi;

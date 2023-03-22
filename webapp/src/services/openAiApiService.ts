@@ -5,12 +5,9 @@ import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {BaseUrlOpenAi} from 'constants/common';
 import {getConfigCredentials} from 'selectors';
 
-// Utils
-import {getPluginApiBaseUrl} from 'utils';
-
-// Service to make plugin API requests
-const pluginApi = createApi({
-    reducerPath: 'openAiPluginApi',
+// Service to make openAi API requests
+const openAiApi = createApi({
+    reducerPath: 'openAiApi',
     baseQuery: fetchBaseQuery({
         baseUrl: BaseUrlOpenAi,
         prepareHeaders: (headers, {getState}) => {
@@ -43,14 +40,7 @@ const pluginApi = createApi({
                 body: payload,
             }),
         }),
-
-        [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<OpenAIApiKeyFromWebappShape, APIRequestPayload>({
-            query: () => ({
-                url: `${getPluginApiBaseUrl().pluginApiBaseUrl}/${API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path}`,
-                method: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.method,
-            }),
-        }),
     }),
 });
 
-export default pluginApi;
+export default openAiApi;

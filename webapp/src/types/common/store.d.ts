@@ -22,8 +22,9 @@ interface ReduxState extends GlobalState {
         >;
     },
     never,
-    'openAiPluginApi',
-    'mattermostApi'
+    'openAiApi',
+    'mattermostApi',
+    'pluginApi'
     >;
 }
 

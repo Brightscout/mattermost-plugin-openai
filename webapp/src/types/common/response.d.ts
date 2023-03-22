@@ -2,7 +2,8 @@
 
 type OpenAIApiKeyFromWebappShape = {
     object: 'openAIKey';
-    openAIApiKey: string;
+    openAIAPIKey: string;
+    openAIOrganizationId: string;
 };
 
 type CompletionResponseShape = {
