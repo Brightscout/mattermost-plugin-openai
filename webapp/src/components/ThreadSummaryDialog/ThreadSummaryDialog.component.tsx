@@ -105,12 +105,14 @@ export const ThreadSummaryDialog = () => {
      * Whenever postId changes we fetch the threads present in the post.
      */
     useMemo(() => {
-        setIsCopied(false);
+        if (isDialogOpen) {
+            setIsCopied(false);
         setErrorMessage('');
         makeMattermostApiRequestWithCompletionStatus(
             API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
             getThreadApiPayload,
         );
+        }
     }, [postId]);
 
     return (
