@@ -1,6 +1,6 @@
 export const BaseUrlOpenAi = 'https://api.openai.com/v1';
 
-export const pluginId = 'mattermost-plugin-open-ai';
+export const pluginId = 'open-ai';
 
 /** channel button tooltip text */
 export const channelButtonTooltip = 'Open-ai';

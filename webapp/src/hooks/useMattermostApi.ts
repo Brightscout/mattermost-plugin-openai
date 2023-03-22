@@ -26,7 +26,7 @@ function useMattermostApi() {
     const getApiState = (serviceName: ApiServiceName, payload: APIRequestPayload) => {
         const {data, isError, isLoading, isSuccess, error, isUninitialized} =
             mattermostApiService.endpoints[serviceName].select(payload)(
-                state['plugins-mattermost-plugin-open-ai'],
+                state['plugins-open-ai'],
             );
         return {data, isError, isLoading, isSuccess, error, isUninitialized};
     };

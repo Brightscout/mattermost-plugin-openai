@@ -26,7 +26,7 @@ function usePluginApi() {
     const getApiState = (serviceName: ApiServiceName, payload: APIRequestPayload) => {
         const {data, isError, isLoading, isSuccess, error, isUninitialized} = pluginApiService.endpoints[
             serviceName
-        ].select(payload)(state['plugins-mattermost-plugin-open-ai']);
+        ].select(payload)(state['plugins-open-ai']);
         return {data, isError, isLoading, isSuccess, error, isUninitialized};
     };
 

@@ -1,4 +1,4 @@
-const getPluginState = (state: ReduxState) => state['plugins-mattermost-plugin-open-ai'];
+const getPluginState = (state: ReduxState) => state['plugins-open-ai'];
 
 export const getConfigCredentials = (state:ReduxState): ConfigCredentialState => getPluginState(state).credentialSlice;
 

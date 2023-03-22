@@ -4,7 +4,7 @@ interface ReduxState extends GlobalState {
             isSidebarOpen: boolean;
         };
     };
-    'plugins-mattermost-plugin-open-ai': RootState<
+    'plugins-open-ai': RootState<
     {
         [x: string]: QueryDefinition<
         void,

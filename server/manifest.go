@@ -4,6 +4,6 @@ var manifest = struct {
 	ID      string
 	Version string
 }{
-	ID:      "mattermost-plugin-open-ai",
+	ID:      "open-ai",
 	Version: "0.0.1",
 }
