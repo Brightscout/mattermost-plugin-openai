@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
@@ -9,10 +10,10 @@ function usePluginApi() {
     const dispatch = useDispatch();
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const makeApiRequest = async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-        dispatch(services.endpoints[serviceName].initiate(payload));
+    const makeApiRequest = useCallback(async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
+        dispatch(services.endpoints[serviceName].initiate(payload)), [dispatch]);
 
-    const makeApiRequestWithCompletionStatus = async (
+    const makeApiRequestWithCompletionStatus = useCallback(async (
         serviceName: ApiServiceName,
         payload: APIRequestPayload,
     ): Promise<void> => {
@@ -20,15 +21,15 @@ function usePluginApi() {
         if (apiRequest as unknown) {
             dispatch(setApiRequestCompletionState(serviceName));
         }
-    };
+    }, [dispatch]);
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const getApiState = (serviceName: ApiServiceName, payload: APIRequestPayload) => {
+    const getApiState = useCallback((serviceName: ApiServiceName, payload: APIRequestPayload) => {
         const {data, isError, isLoading, isSuccess, error, isUninitialized} = services.endpoints[
             serviceName
         ].select(payload)(state['plugins-mattermost-plugin-open-ai']);
         return {data, isError, isLoading, isSuccess, error, isUninitialized};
-    };
+    }, [state]);
 
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }

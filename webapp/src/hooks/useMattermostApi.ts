@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
@@ -9,27 +10,29 @@ function useMattermostApi() {
     const dispatch = useDispatch();
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const makeApiRequest = async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-        dispatch(mattermostApiService.endpoints[serviceName].initiate(payload));
+    const makeApiRequest = useCallback(async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
+    dispatch(mattermostApiService.endpoints[serviceName].initiate(payload)), [dispatch]);
 
-    const makeApiRequestWithCompletionStatus = async (
-        serviceName: ApiServiceName,
-        payload: APIRequestPayload,
-    ): Promise<void> => {
-        const apiRequest = await makeApiRequest(serviceName, payload);
-        if (apiRequest as unknown) {
-            dispatch(setApiRequestCompletionState(serviceName));
-        }
-    };
+    const makeApiRequestWithCompletionStatus = useCallback(
+        async (
+            serviceName: ApiServiceName,
+            payload: APIRequestPayload,
+        ): Promise<void> => {
+            const apiRequest = await makeApiRequest(serviceName, payload);
+            if (apiRequest as unknown) {
+                dispatch(setApiRequestCompletionState(serviceName));
+            }
+        }, [dispatch],
+    );
 
     // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const getApiState = (serviceName: ApiServiceName, payload: APIRequestPayload) => {
+    const getApiState = useCallback((serviceName: ApiServiceName, payload: APIRequestPayload) => {
         const {data, isError, isLoading, isSuccess, error, isUninitialized} =
             mattermostApiService.endpoints[serviceName].select(payload)(
                 state['plugins-mattermost-plugin-open-ai'],
             );
         return {data, isError, isLoading, isSuccess, error, isUninitialized};
-    };
+    }, [state]);
 
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }
