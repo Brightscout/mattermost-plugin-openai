@@ -28,7 +28,7 @@ export const ClearContextConfirmationDialog = {
  * Constants used in the thread summary modal.
  */
 export const THREAD_SUMMARY_MODAL = {
-    title: 'Thread SUmmary',
+    title: 'Thread Summary',
     subtitle: 'Summarization of the post thread',
     primaryActionText: ({isCopied}:{isCopied: boolean}) => (isCopied ? 'Copied' : 'Copy'),
 } as const;
