@@ -7,11 +7,24 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
 // Actions
-import {addPostAndOpenModal} from 'reducers/PostSummarization.reducer';
+import {addPostAndOpenModal} from 'reducers/ThreadSummarization.reducer';
+
+// Constants
+import {POST_MENU_ITEM} from 'constants/common';
 
 // Types
 import {PostMenuItemProps} from './PostMenuItem.d';
 
+// Constants
+
+/**
+ * PostMenuItem Component
+ *
+ * @example Correct usage
+ * ```tsx
+ * <PostMenuItem postId={postId} />
+ * ```
+ */
 export const PostMenuItem = ({postId}: PostMenuItemProps) => {
     // Initializing Hooks
     const dispatch = useDispatch();
@@ -20,12 +33,12 @@ export const PostMenuItem = ({postId}: PostMenuItemProps) => {
     const Post = useSelector((reduxState: GlobalState) => getPost(reduxState, postId));
 
     /**
-     * Opens the summarization modal.
+     * Opens the summarization modal and stores the postId in the slice to be used by the dialog component.
      */
     const handleClick = () => {
         dispatch(
             addPostAndOpenModal({
-                post: Post.message,
+                postId: Post.id,
                 isDialogOpen: true,
             }),
         );
@@ -33,10 +46,9 @@ export const PostMenuItem = ({postId}: PostMenuItemProps) => {
 
     return (
         <MenuItem
-            label='Summarize this post'
-            leadingIcon='Globe'
+            label={POST_MENU_ITEM.label}
+            leadingIcon={POST_MENU_ITEM.leadingIcon}
             onClick={handleClick}
-            secondaryLabel=''
             secondaryLabelPosition='inline'
         />
     );

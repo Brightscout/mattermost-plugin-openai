@@ -2,7 +2,7 @@ const getPluginState = (state: ReduxState) => state['plugins-mattermost-plugin-o
 
 export const getConfigCredentials = (state:ReduxState): ConfigCredentialState => getPluginState(state).credentialSlice;
 
-export const getPostSummarizationState = (state: ReduxState): PostSummarizationState => getPluginState(state).postSummarizationSlice;
+export const getPostSummarizationState = (state: ReduxState): ThreadSummarizationState => getPluginState(state).threadSummarizationSlice;
 
 export const getAllChats = (state: ReduxState): PromptChatState => getPluginState(state).promptChatSlice;
 

@@ -1,7 +1,14 @@
 // Export Utils functions here
 
-import {ChatCompletionApi, ErrorMessages, pluginId} from 'constants/common';
-import {ChatCompletionApiConfigs} from 'constants/configs';
+import GPT3Tokenizer from 'gpt3-tokenizer';
+
+// Mattermost Types
+import {UserProfile} from 'mattermost-redux/types/users';
+import {IDMappedObjects} from 'mattermost-redux/types/utilities';
+
+// Constants
+import {ChatCompletionApi, ErrorMessages, PARSE_THREAD_PROMPT, pluginId} from 'constants/common';
+import {ChatCompletionApiConfigs, THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS} from 'constants/configs';
 
 /**
  * Parses the payload required for the chat completion API to give response.
@@ -47,17 +54,6 @@ export const parseChatCompletionPayload = ({
     };
 };
 
-/**
- * Parses the payload required for the completion API to give summary of a given post.
- * @param post - The post which is to be summarized.
- */
-export const parsePostSummaryPayload = ({post}: {post: string}): GetCompletionPayload => ({
-    prompt: 'Summarize this prompt in detail\n' + post.trim(),
-    max_tokens: 3000,
-    model: 'text-davinci-003',
-    temperature: 0.5,
-});
-
 /*
  * Helper util function which returns the plugin api base url for the plugin.
  * @returns pluginApiBaseUrl
@@ -84,4 +80,45 @@ export const mapErrorMessageFromOpenAI = (error: ApiErrorResponse) => {
         default:
             return ErrorMessages.internalServerError;
     }
+};
+
+/**
+ * Parses the payload required for the completion API to give summary of the thread.
+ * @param threadResponse - response from the mattermost api for fetching thread
+ * @param Users - Users state from the mattermost redux store
+ */
+export const parseThreadPrompt = (
+    threadResponse: PostThreadResponseShape,
+    Users: IDMappedObjects<UserProfile>,
+): GetCompletionPayload => {
+    const tokenizer = new GPT3Tokenizer({type: 'gpt3'}); // or 'codex'
+    let totalToken = 0;
+
+    /**
+     * Here we are looping through the response to
+     * 1. get the threads in the correct order
+     * 2. transform the message in the format <author>: <message>
+     * 3. filter out thread having token limit greater than threadTokenLimit
+     */
+    const response = threadResponse.order
+        .map((threadId) => threadResponse.posts[threadId])
+        .splice(1)
+        .map(({user_id: userID, message}) => {
+            const tokenizedValue = tokenizer.encode(message);
+            totalToken += tokenizedValue.bpe.length;
+            return {
+                message: `${Users[userID].username}: ${message}`,
+                ...tokenizedValue,
+                totalToken,
+            };
+        })
+        .filter((post) => post.totalToken <= THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.threadTokenLimit);
+
+    return {
+        prompt:
+            PARSE_THREAD_PROMPT.systemPrompt +
+            response.map(({message}) => message).join('\n'),
+        model: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.model,
+        max_tokens: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.maxTokens,
+    };
 };

@@ -25,14 +25,27 @@ export const ClearContextConfirmationDialog = {
 } as const;
 
 /**
- * Constants used in the post summary modal.
+ * Constants used in the thread summary modal.
  */
-export const PostSummaryModal = {
-    title: 'Summarize Post',
-    subtitle: 'Create summary for the post',
-    primaryActionText: ({isSummarized}:{isSummarized: boolean}) => (isSummarized ? 'Close' : 'Summarize'),
-    secondaryActionText: ({isSummarized}: {isSummarized: boolean}) => (isSummarized ? 'Go Back' : 'Close'),
-    textAreaPlaceHolder: 'Enter content to summarize',
+export const THREAD_SUMMARY_MODAL = {
+    title: 'Thread SUmmary',
+    subtitle: 'Summarization of the post thread',
+    primaryActionText: ({isCopied}:{isCopied: boolean}) => (isCopied ? 'Copied' : 'Copy'),
+} as const;
+
+/**
+ * Constants used in the post menu item component
+ */
+export const POST_MENU_ITEM = {
+    label: 'Summarize',
+    leadingIcon: 'Globe',
+} as const;
+
+/**
+ * Constants required to create prompt for summarizing the thread.
+ */
+export const PARSE_THREAD_PROMPT = {
+    systemPrompt: 'Summarize the below thread in detail\n',
 };
 
 /**

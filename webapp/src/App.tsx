@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 
 // components
-import {PostSummaryDialog} from 'components/PostSummaryDialog/PostSummaryDialog.component';
+import {ThreadSummaryDialog} from 'components/ThreadSummaryDialog';
 
 // reducers
 import {fetchConfigCredentialsFromSettings} from 'reducers/Credentials.reducer';
@@ -26,5 +26,5 @@ export const App = () => {
         dispatch(fetchConfigCredentialsFromSettings());
     }, []);
 
-    return <PostSummaryDialog />;
+    return <ThreadSummaryDialog />;
 };

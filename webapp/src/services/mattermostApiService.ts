@@ -14,7 +14,7 @@ const mattermostApi = createApi({
         [API_SERVICE_CONFIG.getThreadFromPostId.serviceName]: builder.query<PostThreadResponseShape, APIRequestPayload>(
             {
                 query: (payload: GetThreadFromPost) => ({
-                    url: `${API_SERVICE_CONFIG.getThreadFromPostId.path}/${payload.postId}/thread`,
+                    url: `${API_SERVICE_CONFIG.getThreadFromPostId.path}/${payload.postId}/thread?direction=down`,
                     method: API_SERVICE_CONFIG.getThreadFromPostId.method,
                 }),
             },

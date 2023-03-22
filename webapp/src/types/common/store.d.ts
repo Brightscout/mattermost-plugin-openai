@@ -40,7 +40,7 @@ type ConfigCredentialState = {
     openAIOrganizationId: string;
 };
 
-type PostSummarizationState = {
-    post: string;
+type ThreadSummarizationState = {
+    postId: string;
     isDialogOpen: boolean;
 };
