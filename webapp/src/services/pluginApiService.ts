@@ -8,7 +8,7 @@ import {getPluginApiBaseUrl} from 'utils';
 
 // Service to make plugin API requests
 const pluginApi = createApi({
-    reducerPath: 'pluginApi',
+    reducerPath: 'openAiPluginApi',
     baseQuery: fetchBaseQuery({
         baseUrl: getPluginApiBaseUrl().pluginApiBaseUrl,
     }),
