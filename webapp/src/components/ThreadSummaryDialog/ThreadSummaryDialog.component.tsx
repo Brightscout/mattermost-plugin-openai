@@ -107,11 +107,11 @@ export const ThreadSummaryDialog = () => {
     useMemo(() => {
         if (isDialogOpen) {
             setIsCopied(false);
-        setErrorMessage('');
-        makeMattermostApiRequestWithCompletionStatus(
-            API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
-            getThreadApiPayload,
-        );
+            setErrorMessage('');
+            makeMattermostApiRequestWithCompletionStatus(
+                API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
+                getThreadApiPayload,
+            );
         }
     }, [postId]);
 
