@@ -50,7 +50,7 @@ export const POST_MENU_ITEM = {
  * Constants required to create prompt for summarizing the thread.
  */
 export const PARSE_THREAD_PROMPT = {
-    systemPrompt: 'Summarize the below thread in detail\n',
+    systemPrompt: 'Summarize the below thread briefly\n',
 };
 
 /**

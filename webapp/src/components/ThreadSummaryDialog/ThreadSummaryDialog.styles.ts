@@ -24,7 +24,7 @@ export const StyledSummarizationDialog = styled(Modal)({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '300px',
+        minHeight: '250px',
     },
 
     '&.isLoading .mm-modalFooter button': {
