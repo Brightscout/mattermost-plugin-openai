@@ -1,9 +1,16 @@
 import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
+// Reducers
 import {resetApiRequestCompletionState} from 'reducers/apiRequest';
+
+// Selectors
 import {getApiRequestCompletionState} from 'selectors';
 
+// Constants
+import {API_SERVICE} from 'constants/apiServiceConfig';
+
+// Hooks
 import useHooksBasedOnService from './useHooksBasedOnService';
 
 type Props = {
@@ -11,7 +18,7 @@ type Props = {
     handleError?: (error: ApiErrorResponse) => void;
     serviceName: ApiServiceName;
     payload?: APIRequestPayload;
-    services?: 'useOpenAiApi' | 'useMattermostApi' | 'usePluginApi';
+    services?: API_SERVICE;
 };
 
 function useApiRequestCompletionState({
@@ -19,7 +26,7 @@ function useApiRequestCompletionState({
     handleError,
     serviceName,
     payload,
-    services = 'useOpenAiApi',
+    services = API_SERVICE.openAiApi,
 }: Props) {
     const {getApiState, state} = useHooksBasedOnService({service: services})();
     const dispatch = useDispatch();

@@ -18,7 +18,7 @@ import useMattermostApi from 'hooks/useMattermostApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Constants
-import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
+import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {THREAD_SUMMARY_MODAL} from 'constants/common';
 
 // Utils
@@ -61,6 +61,7 @@ export const ThreadSummaryDialog = () => {
         API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
         getThreadApiPayload,
     ) as {isLoading: boolean; data: PostThreadResponseShape};
+
     const {isLoading, data} = getApiState(
         API_SERVICE_CONFIG.getCompletion.serviceName,
         payload,
@@ -72,7 +73,7 @@ export const ThreadSummaryDialog = () => {
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
         payload: getThreadApiPayload,
-        services: 'useMattermostApi',
+        services: API_SERVICE.mattermostApiService,
         handleSuccess: () => {
             const threadPayload = parseThreadPrompt(threadData, Users);
             setPayload(threadPayload);

@@ -8,7 +8,7 @@ import {ThreadSummaryDialog} from 'components/ThreadSummaryDialog';
 import {addCredentials} from 'reducers/Credentials.reducer';
 
 // constants
-import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
+import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 
 // hooks
 import usePluginApi from 'hooks/usePluginApi';
@@ -40,7 +40,7 @@ export const App = () => {
     }, []);
 
     useApiRequestCompletionState({
-        services: 'usePluginApi',
+        services: API_SERVICE.pluginApiService,
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
         handleSuccess: () => {
            if (data) {
