@@ -8,7 +8,10 @@ import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 // Constants
 import {ChatCompletionApi, ErrorMessages, PARSE_THREAD_PROMPT, pluginId} from 'constants/common';
-import {ChatCompletionApiConfigs, THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS} from 'constants/configs';
+import {
+    ChatCompletionApiConfigs,
+    THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS,
+} from 'constants/configs';
 
 /**
  * Parses the payload required for the chat completion API to give response.
@@ -54,7 +57,7 @@ export const parseChatCompletionPayload = ({
     };
 };
 
-/*
+/**
  * Helper util function which returns the plugin api base url for the plugin.
  * @returns pluginApiBaseUrl
  */
@@ -112,13 +115,32 @@ export const parseThreadPrompt = (
                 totalToken,
             };
         })
-        .filter((post) => post.totalToken <= THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.threadTokenLimit);
+        .filter(
+            (post) =>
+                post.totalToken <= THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.threadTokenLimit,
+        );
 
     return {
-        prompt:
-            PARSE_THREAD_PROMPT.systemPrompt +
-            response.map(({message}) => message).join('\n'),
+        prompt: PARSE_THREAD_PROMPT.systemPrompt + response.map(({message}) => message).join('\n'),
         model: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.model,
         max_tokens: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.maxTokens,
     };
 };
+
+// Takes a userId and generates a link to that user's profile image
+export const getProfileImgUrl = ({userId}: {userId: string}): string =>
+    `${window.location.protocol}//${window.location.host}/api/v4/users/${userId}/image?_=0`;
+
+/**
+ * Parses the content with a summary template if summary is being produced by chat Api.
+ * @param isSummary - Flag for checking if summary is being returned by the chat Api.
+ * @param content - Content which is returned by the Api.
+ */
+export const parseChatWithTemplateIfSummary = ({
+    isSummary,
+    content,
+}: {
+    isSummary?: boolean;
+    content: string;
+}) =>
+    (isSummary ? `**Summary**\n\n${content}\n\n*Max token limit is reached, summarizing the conversation to retain context*` : content);

@@ -36,6 +36,12 @@ declare global {
     interface Window {
         // eslint-disable-next-line no-shadow
         registerPlugin(id: string, plugin: Plugin): void;
+        Components: any;
+        PostUtils: Record<
+        'formatText' | 'messageHtmlToComponent',
+        (args: any) => string | React.Component
+        >;
+        basename: string;
     }
 }
 
