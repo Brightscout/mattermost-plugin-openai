@@ -20,3 +20,12 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         serviceName: 'getThreadFromPostId',
     },
 };
+
+export const API_SERVICE = {
+    mattermostApiService: 'useMattermostApi',
+    pluginApiService: 'usePluginApi',
+} as const;
+
+export type API_SERVICE =
+    | typeof API_SERVICE['mattermostApiService']
+    | typeof API_SERVICE['pluginApiService'];
