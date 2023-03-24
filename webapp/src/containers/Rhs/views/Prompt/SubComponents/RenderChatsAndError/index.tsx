@@ -1,7 +1,10 @@
 import React from 'react';
 
+// Components
 import {DisplayMessage} from 'components/DisplayMessage';
 import {ChatCard} from 'components/ChatCard/ChatCard.component';
+
+// Utils
 import {parseChatWithTemplateIfSummary} from 'utils';
 
 export const RenderChatsAndError = ({errorMessage, chats}:{errorMessage: string, chats: ChatsType}) => {

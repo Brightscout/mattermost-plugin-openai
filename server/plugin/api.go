@@ -55,7 +55,7 @@ func (p *Plugin) HandleStaticFiles() {
 	p.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(bundlePath, "assets")))))
 }
 
-func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, _ *http.Request) {
 	p.writeJSON(w, 0, p.getConfiguration())
 }
 
