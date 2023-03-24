@@ -21,11 +21,22 @@ import {PluginRegistry} from './types/mattermost-webapp';
 import {id} from './manifest';
 
 export default class Plugin {
-    public async initialize(registry: PluginRegistry, store: Store<GlobalState, Action<Record<string, unknown>>>) {
+    public async initialize(
+        registry: PluginRegistry,
+        store: Store<GlobalState, Action<Record<string, unknown>>>,
+    ) {
         registry.registerRootComponent(App);
         registry.registerReducer(reducers);
-        const {showRHSPlugin} = registry.registerRightHandSidebarComponent(Rhs, rightSidebarHeaderTitle);
-        registry.registerChannelHeaderButtonAction(<ChannelHeaderButton />, () => store.dispatch(showRHSPlugin), null, channelButtonTooltip);
+        const {showRHSPlugin} = registry.registerRightHandSidebarComponent(
+            Rhs,
+            rightSidebarHeaderTitle,
+        );
+        registry.registerChannelHeaderButtonAction(
+            <ChannelHeaderButton />,
+            () => store.dispatch(showRHSPlugin),
+            null,
+            channelButtonTooltip,
+        );
         registry.registerPostDropdownMenuComponent(PostMenuItem);
 
         // @see https://developers.mattermost.com/extend/plugins/webapp/reference/
@@ -38,8 +49,8 @@ declare global {
         registerPlugin(id: string, plugin: Plugin): void;
         Components: any;
         PostUtils: Record<
-        'formatText' | 'messageHtmlToComponent',
-        (args: any) => string | React.Component
+            'formatText' | 'messageHtmlToComponent',
+            (args: any) => string | React.Component
         >;
         basename: string;
     }
