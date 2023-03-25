@@ -7,17 +7,6 @@ import (
 	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
 )
 
-// func (p *Plugin) sendEphemeralPost(args *model.CommandArgs, text string) (*model.CommandResponse, *model.AppError) {
-// 	post := &model.Post{
-// 		UserId:    p.botUserID,
-// 		ChannelId: args.ChannelId,
-// 		Message:   text,
-// 	}
-// 	_ = p.API.SendEphemeralPost(args.UserId, post)
-
-// 	return &model.CommandResponse{}, nil
-// }
-
 func (p *Plugin) handleAPIError(w http.ResponseWriter, apiErr *serializer.APIErrorResponse) {
 	w.Header().Set("Content-Type", "application/json")
 	errorBytes, err := json.Marshal(apiErr)
