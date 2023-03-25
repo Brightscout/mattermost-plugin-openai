@@ -18,7 +18,7 @@ import {
 import {getPromptChatSlice} from 'selectors';
 
 // constants
-import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
+import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {ChatCompletionApi} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
@@ -71,7 +71,7 @@ export const App = () => {
 
     // Handling Api request for fetching plugin settings from mattermost.
     useApiRequestCompletionState({
-        services: 'usePluginApi',
+        services: API_SERVICE.pluginApiService,
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
         handleSuccess: () => {
             if (data) {

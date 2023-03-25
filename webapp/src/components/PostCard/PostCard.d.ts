@@ -14,9 +14,6 @@ export type PostCardProps = {
      */
     postMessage: string | ReactNode;
 } & Pick<
-PostHeaderProps,
-| 'floatingMenuComponents'
-| 'authorName'
-| 'botBadgeComponent'
-| 'timeStampComponent'
+    PostHeaderProps,
+    'floatingMenuComponents' | 'authorName' | 'botBadgeComponent' | 'timeStampComponent'
 >;
