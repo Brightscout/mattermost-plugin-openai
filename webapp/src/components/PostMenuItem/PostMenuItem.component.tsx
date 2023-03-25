@@ -15,8 +15,6 @@ import {POST_MENU_ITEM} from 'constants/common';
 // Types
 import {PostMenuItemProps} from './PostMenuItem.d';
 
-// Constants
-
 /**
  * PostMenuItem Component
  *
