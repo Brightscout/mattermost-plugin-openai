@@ -10,10 +10,7 @@ import useOpenAiApi from 'hooks/useOpenAiApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Actions
-import {
-    addChats,
-    setChatPromptPayload,
-} from 'reducers/PromptChat.reducer';
+import {addChats, setChatPromptPayload} from 'reducers/PromptChat.reducer';
 
 // Selectors
 import {getPromptChatSlice} from 'selectors';
@@ -46,7 +43,6 @@ export const Prompt = () => {
     const {chats, payload: chatCompletionsPayload, isChatSummarized} = getPromptChatSlice(state);
 
     /**
-     * The below disable of eslint is intentional.
      * The payload needs to be constant till the request cycle to be completed for our custom api to work.
      * We want the payload to change only when the prompt value changes.
      */
@@ -58,13 +54,13 @@ export const Prompt = () => {
     const {isLoading, error} = getApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         chatCompletionsPayload,
-    ) as {isLoading: boolean, error: ApiErrorResponse};
+    ) as UseApiResponse<ChatCompletionResponseShape>;
 
     /**
      * On Clicking the send button we are adding the user entered prompt to a state array,
      * and sending request to the open ai servers for the response.
      */
-    const handleSend = async () => {
+    const handleSend = () => {
         makeApiRequestWithCompletionStatus(
             API_SERVICE_CONFIG.getChatCompletion.serviceName,
             payload,
@@ -95,11 +91,9 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => {
-               setPromptValue('');
-            },
+            setPromptValue('');
         },
-
-    );
+    });
 
     /**
      * Whenever completions api is successful we are clearing the textarea.
@@ -108,11 +102,9 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => {
-               setPromptValue('');
-            },
+            setPromptValue('');
         },
-
-    );
+    });
 
     /**
      * When isChatSummarized is `true`, change the text in textarea to Summarizing...
@@ -126,7 +118,10 @@ export const Prompt = () => {
     return (
         <Container>
             <ChatArea>
-                <RenderChatsAndError chats={chats} errorMessage={error && mapErrorMessageFromOpenAI(error)} />
+                <RenderChatsAndError
+                    chats={chats}
+                    errorMessage={error && mapErrorMessageFromOpenAI(error)}
+                />
             </ChatArea>
             <ChatInput
                 value={promptValue}

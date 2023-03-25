@@ -12,11 +12,7 @@ const promptChatSlice = createSlice({
     reducers: {
         addChats: (
             state: PromptChatState,
-            action: PayloadAction<{
-                role: 'user' | 'assistant' | 'system';
-                content: string;
-                id: string;
-            }>,
+            action: PayloadAction<Chat>,
         ) => {
             state.chats.push(action.payload);
         },
@@ -25,12 +21,7 @@ const promptChatSlice = createSlice({
         },
         addSummary: (
             state: PromptChatState,
-            action: PayloadAction<{
-                role: 'assistant';
-                content: string;
-                id: string;
-                isSummary?: boolean;
-            }>,
+            action: PayloadAction<Chat>,
         ) => {
             state.chats = state.chats.filter(({isSummary}) => !isSummary);
             state.chats.push(action.payload);
