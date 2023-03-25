@@ -58,7 +58,7 @@ export const PARSE_THREAD_PROMPT = {
  */
 export const ChatCompletionApi = {
     responseObject: 'chat.completion',
-    summarizationPrompt: 'Summarization...',
+    summarizationPrompt: 'Summarizing...',
     summarizationContent: 'Summarize the chat precisely',
     invalidApiCode: 'invalid_api_key',
     invalidOrganizationCode: 'invalid_organization',

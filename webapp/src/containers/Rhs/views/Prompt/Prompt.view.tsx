@@ -10,10 +10,13 @@ import useOpenAiApi from 'hooks/useOpenAiApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Actions
-import {addChats, addSummary, popLastChat} from 'reducers/PromptChat.reducer';
+import {
+    addChats,
+    setChatPromptPayload,
+} from 'reducers/PromptChat.reducer';
 
 // Selectors
-import {getAllChats} from 'selectors';
+import {getPromptChatSlice} from 'selectors';
 
 // Utils
 import {mapErrorMessageFromOpenAI, parseChatCompletionPayload} from 'utils';
@@ -21,7 +24,6 @@ import {mapErrorMessageFromOpenAI, parseChatCompletionPayload} from 'utils';
 // Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {ChatCompletionApi} from 'constants/common';
-import {ChatCompletionApiConfigs} from 'constants/configs';
 
 // Styles
 import {Container, ChatArea} from './Prompt.styles';
@@ -39,11 +41,9 @@ export const Prompt = () => {
     const dispatch = useDispatch();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAiApi();
     const [promptValue, setPromptValue] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isChatSummarized, setIsChatSummarized] = useState(false);
 
     // Selectors
-    const {chats} = getAllChats(state);
+    const {chats, payload: chatCompletionsPayload, isChatSummarized} = getPromptChatSlice(state);
 
     /**
      * The below disable of eslint is intentional.
@@ -55,10 +55,10 @@ export const Prompt = () => {
         [promptValue],
     );
 
-    const {data, isLoading} = getApiState(
+    const {isLoading, error} = getApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
-        payload,
-    );
+        chatCompletionsPayload,
+    ) as {isLoading: boolean, error: ApiErrorResponse};
 
     /**
      * On Clicking the send button we are adding the user entered prompt to a state array,
@@ -69,6 +69,8 @@ export const Prompt = () => {
             API_SERVICE_CONFIG.getChatCompletion.serviceName,
             payload,
         );
+
+        dispatch(setChatPromptPayload({payload}));
         dispatch(
             addChats({
                 role: 'user',
@@ -82,7 +84,8 @@ export const Prompt = () => {
      * Triggers on changing the value in the text area,
      * in `loading` state the user wont be able to change the content in the text area.
      */
-    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) => !isLoading && setPromptValue(value);
+    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) =>
+        !isLoading && setPromptValue(value);
 
     /**
      * On getting the success response from the api, we are resetting the text area,
@@ -92,65 +95,38 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => {
-            setPromptValue('');
-            setErrorMessage('');
-
-            /**
-             * Since data is a union type, here we are narrowing the type to get the response data of the chat completion api.
-             * If `isChatSummarized` is true, we are adding it to the `chats` state, with isSummary flag to `true`
-             * else we are adding the transformed response data to the `chats` state
-             */
-            if (data?.object === ChatCompletionApi.responseObject) {
-                if (isChatSummarized) {
-                    dispatch(
-                        addSummary({
-                            id: data?.id,
-                            content: data?.choices[0].message.content,
-                            role: 'assistant',
-                            isSummary: true,
-                        }),
-                    );
-                    setIsChatSummarized(false);
-                    return;
-                }
-
-                dispatch(
-                    addChats({
-                        id: data?.id,
-                        content: data?.choices[0].message.content,
-                        role: data.choices[0].message.role,
-                    }),
-                );
-
-                /**
-                 * If token limit reached above the threshold limit summarize the chat
-                 */
-                if (data.usage.total_tokens > ChatCompletionApiConfigs.maxTokenLimitToSummarize) {
-                    setPromptValue(ChatCompletionApi.summarizationPrompt);
-                    setIsChatSummarized(true);
-                }
-            }
+               setPromptValue('');
+            },
         },
-        handleError: (error) => {
-            setPromptValue('');
-            dispatch(popLastChat());
-            setErrorMessage(mapErrorMessageFromOpenAI(error));
-        },
-    });
+
+    );
 
     /**
-     * When isChatSummarized is `true`, hit the chat api to get the summary.
+     * Whenever completions api is successful we are clearing the textarea.
+     */
+    useApiRequestCompletionState({
+        serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
+        payload: chatCompletionsPayload,
+        handleSuccess: () => {
+               setPromptValue('');
+            },
+        },
+
+    );
+
+    /**
+     * When isChatSummarized is `true`, change the text in textarea to Summarizing...
      */
     useEffect(() => {
-        if (isChatSummarized && promptValue === ChatCompletionApi.summarizationPrompt) {
-            makeApiRequestWithCompletionStatus(API_SERVICE_CONFIG.getChatCompletion.serviceName, payload);
+        if (isChatSummarized) {
+            setPromptValue(ChatCompletionApi.summarizationPrompt);
         }
-    }, [isChatSummarized, promptValue]);
+    }, [isChatSummarized]);
 
     return (
         <Container>
             <ChatArea>
-                <RenderChatsAndError chats={chats} errorMessage={errorMessage} />
+                <RenderChatsAndError chats={chats} errorMessage={error && mapErrorMessageFromOpenAI(error)} />
             </ChatArea>
             <ChatInput
                 value={promptValue}
