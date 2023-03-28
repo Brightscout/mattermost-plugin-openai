@@ -1,16 +1,16 @@
 import React, {useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 
-// components
+// Components
 import {ThreadSummaryDialog} from 'components/ThreadSummaryDialog';
 
-// reducers
+// Reducers
 import {addCredentials} from 'reducers/Credentials.reducer';
 
-// constants
+// Constants
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 
-// hooks
+// Hooks
 import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
