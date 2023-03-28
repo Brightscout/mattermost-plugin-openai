@@ -6,7 +6,7 @@ import {ChatInput} from 'components/ChatInput';
 import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
-import useOpenAiApi from 'hooks/useOpenAiApi';
+import useOpenAIApi from 'hooks/useOpenAIApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Actions
@@ -37,7 +37,7 @@ import {Container, ChatArea} from './Prompt.styles';
 export const Prompt = () => {
     // Initialize hooks
     const dispatch = useDispatch();
-    const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAiApi();
+    const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
     const [promptValue, setPromptValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isChatSummarized, setIsChatSummarized] = useState(false);
@@ -82,7 +82,8 @@ export const Prompt = () => {
      * Triggers on changing the value in the text area,
      * in `loading` state the user wont be able to change the content in the text area.
      */
-    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) => !isLoading && setPromptValue(value);
+    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) =>
+        !isLoading && setPromptValue(value);
 
     /**
      * On getting the success response from the api, we are resetting the text area,
@@ -143,7 +144,10 @@ export const Prompt = () => {
      */
     useEffect(() => {
         if (isChatSummarized && promptValue === ChatCompletionApi.summarizationPrompt) {
-            makeApiRequestWithCompletionStatus(API_SERVICE_CONFIG.getChatCompletion.serviceName, payload);
+            makeApiRequestWithCompletionStatus(
+                API_SERVICE_CONFIG.getChatCompletion.serviceName,
+                payload,
+            );
         }
     }, [isChatSummarized, promptValue]);
 

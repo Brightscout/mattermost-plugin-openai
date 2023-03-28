@@ -1,38 +1,45 @@
 import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+// Reducers
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
 
+// Services
 import mattermostApiService from 'services/mattermostApiService';
+
+// Constants
+import {PLUGIN_ID} from 'constants/common';
 
 function useMattermostApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
     const dispatch = useDispatch();
 
-    // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const makeApiRequest = useCallback(async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-    dispatch(mattermostApiService.endpoints[serviceName].initiate(payload)), [dispatch]);
-
-    const makeApiRequestWithCompletionStatus = useCallback(
-        async (
-            serviceName: ApiServiceName,
-            payload: APIRequestPayload,
-        ): Promise<void> => {
-            const apiRequest = await makeApiRequest(serviceName, payload);
-            if (apiRequest as unknown) {
-                dispatch(setApiRequestCompletionState(serviceName));
-            }
-        }, [dispatch],
+    // Pass payload only in POST requests. For GET requests, there is no need to pass a payload argument
+    const makeApiRequest = useCallback(
+        async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
+            dispatch(mattermostApiService.endpoints[serviceName].initiate(payload)),
+        [dispatch],
     );
 
-    // Pass payload only in POST requests for GET requests there is no need to pass payload argument
-    const getApiState = useCallback((serviceName: ApiServiceName, payload: APIRequestPayload) => {
-        const {data, isError, isLoading, isSuccess, error, isUninitialized} =
-            mattermostApiService.endpoints[serviceName].select(payload)(
-                state['plugins-open-ai'],
-            );
-        return {data, isError, isLoading, isSuccess, error, isUninitialized};
-    }, [state]);
+    const makeApiRequestWithCompletionStatus = useCallback(
+        async (serviceName: ApiServiceName, payload: APIRequestPayload): Promise<void> => {
+            await makeApiRequest(serviceName, payload);
+            dispatch(setApiRequestCompletionState(serviceName));
+        },
+        [dispatch],
+    );
+
+    // Pass payload only in POST requests. For GET requests, there is no need to pass a payload argument
+    const getApiState = useCallback(
+        (serviceName: ApiServiceName, payload: APIRequestPayload) => {
+            const {data, isError, isLoading, isSuccess, error, isUninitialized} =
+                mattermostApiService.endpoints[serviceName].select(payload)(
+                    state[PLUGIN_ID],
+                );
+            return {data, isError, isLoading, isSuccess, error, isUninitialized};
+        },
+        [state],
+    );
 
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }

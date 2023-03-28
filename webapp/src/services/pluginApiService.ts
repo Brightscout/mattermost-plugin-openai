@@ -13,7 +13,10 @@ const pluginApi = createApi({
         baseUrl: getPluginApiBaseUrl().pluginApiBaseUrl,
     }),
     endpoints: (builder) => ({
-        [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<OpenAIApiKeyFromWebappShape, APIRequestPayload>({
+        [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<
+            OpenAIApiKeyFromWebapp,
+            APIRequestPayload
+        >({
             query: () => ({
                 url: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path,
                 method: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.method,
