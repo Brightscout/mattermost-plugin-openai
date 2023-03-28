@@ -21,9 +21,12 @@ linters:
   disable-all: true
   enable:
     - bodyclose
+    - errcheck
+    - goconst
     - gocritic
     - gofmt
     - goimports
+    - gosec
     - gosimple
     - govet
     - ineffassign
