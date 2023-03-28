@@ -12,14 +12,14 @@ import {getProfileImgUrl} from 'utils';
 import {PostCard} from 'components/PostCard';
 
 // Constants
-import {openAiBotName, openAiSvgUri} from 'constants/common';
+import {openAiBotName, openAISvgUri} from 'constants/common';
 
 export const ChatCard = ({isUser, chat}: {isUser: boolean; chat: string}) => {
     const {Avatar} = window.Components;
     const PostUtils = window.PostUtils;
 
     const currentUser = useSelector((reduxState: GlobalState) => getCurrentUser(reduxState));
-    const userAvatarUrl = isUser ? getProfileImgUrl({userId: currentUser.id}) : openAiSvgUri;
+    const userAvatarUrl = isUser ? getProfileImgUrl({userId: currentUser.id}) : openAISvgUri;
 
     const formattedText = PostUtils.formatText(chat);
 

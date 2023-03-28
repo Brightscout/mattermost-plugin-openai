@@ -129,10 +129,10 @@ export const parseThreadPrompt = (
 
 // Takes a userId and generates a link to that user's profile image
 export const getProfileImgUrl = ({userId}: {userId: string}): string =>
-    `${window.location.protocol}//${window.location.host}/api/v4/users/${userId}/image?_=0`;
+    `${window.location.protocol}//${window.location.host}/api/v4/users/${userId}/image`;
 
 /**
- * Parses the content with a summary template if summary is being produced by chat Api.
+ * Parses the content with a summary template if the summary is being produced by chat API.
  * @param isSummary - Flag for checking if summary is being returned by the chat Api.
  * @param content - Content which is returned by the Api.
  */
