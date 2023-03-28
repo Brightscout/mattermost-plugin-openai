@@ -51,10 +51,10 @@ export const App = () => {
 
     const {payload, isChatSummarized, chats} = getPromptChatSlice(state);
 
-    // Get plugin api states
+    // Get plugin API states
     const {data} = getApiState(API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName);
 
-    // Get open ai api states
+    // Get open AI API states
     const {data: chatCompletionResponse} = getOpenAiApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
@@ -69,7 +69,7 @@ export const App = () => {
         );
     }, []);
 
-    // Handling Api request for fetching plugin settings from mattermost.
+    // Handling API request for fetching plugin settings from mattermost.
     useApiRequestCompletionState({
         services: API_SERVICE.pluginApiService,
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
@@ -80,13 +80,13 @@ export const App = () => {
         },
     });
 
-    // Handling Api request for chat prompt
+    // Handling API request for chat prompt
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => {
             /**
-             * Since data is a union type, here we are narrowing the type to get the response data of the chat completion api.
+             * Since data is a union type, here we are narrowing the type to get the response data of the chat completion API.
              * If `isChatSummarized` is true, we are adding it to the `chats` state, with isSummary flag to `true`
              * else we are adding the transformed response data to the `chats` state
              */
@@ -144,13 +144,11 @@ export const App = () => {
                 }
             }
         },
-        handleError: () => {
-            dispatch(popLastChat());
-        },
+        handleError: () => dispatch(popLastChat()),
     });
 
     /**
-     * When isChatSummarized is `true`, hit the chat api to get the summary.
+     * When isChatSummarized is `true`, call the chat API to get the summary.
      */
     useEffect(() => {
         if (isChatSummarized) {
