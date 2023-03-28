@@ -7,7 +7,7 @@ import {UserProfile} from 'mattermost-redux/types/users';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 // Constants
-import {ChatCompletionApi, ErrorMessages, PARSE_THREAD_PROMPT, pluginId} from 'constants/common';
+import {ChatCompletionApi, ErrorMessages, pluginId} from 'constants/common';
 import {
     ChatCompletionApiConfigs,
     THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS,
@@ -90,10 +90,10 @@ export const mapErrorMessageFromOpenAI = (error: ApiErrorResponse) => {
  * @param threadResponse - response from the mattermost api for fetching thread
  * @param Users - Users state from the mattermost redux store
  */
-export const parseThreadPrompt = (
+export const parseThread = (
     threadResponse: PostThreadResponseShape,
     Users: IDMappedObjects<UserProfile>,
-): GetCompletionPayload => {
+) => {
     const tokenizer = new GPT3Tokenizer({type: 'gpt3'}); // or 'codex'
     let totalToken = 0;
 
@@ -114,18 +114,16 @@ export const parseThreadPrompt = (
                 ...tokenizedValue,
                 totalToken,
             };
-        })
-        .filter(
-            (post) =>
-                post.totalToken <= THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.threadTokenLimit,
-        );
+        });
 
-    return {
-        prompt: PARSE_THREAD_PROMPT.systemPrompt + response.map(({message}) => message).join('\n'),
-        model: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.model,
-        max_tokens: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.maxTokens,
-    };
+    return response;
 };
+
+export const parseThreadPayload = (threadPrompt: string): GetCompletionPayload => ({
+    prompt: threadPrompt,
+    model: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.model,
+    max_tokens: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.maxTokens,
+});
 
 // Takes a userId and generates a link to that user's profile image
 export const getProfileImgUrl = ({userId}: {userId: string}): string =>

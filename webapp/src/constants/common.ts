@@ -52,7 +52,8 @@ export const POST_MENU_ITEM = {
  */
 export const PARSE_THREAD_PROMPT = {
     systemPrompt: 'Summarize the below thread briefly\n',
-};
+    recursiveSummarizationPrompt: '\nSummarize the below thread with above context\n',
+} as const;
 
 /**
  * Constants used with chat completion api

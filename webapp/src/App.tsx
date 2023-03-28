@@ -15,7 +15,7 @@ import {
 } from 'reducers/PromptChat.reducer';
 
 // Selectors
-import {getPromptChatSlice} from 'selectors';
+import {getPromptChatSlice, getPostSummarizationState} from 'selectors';
 
 // Constants
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
@@ -50,6 +50,7 @@ export const App = () => {
     } = useOpenAiApi();
 
     const {payload, isChatSummarized, chats} = getPromptChatSlice(state);
+    const {isDialogOpen} = getPostSummarizationState(state);
 
     // Get plugin api states
     const {data} = getApiState(API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName);
@@ -161,5 +162,5 @@ export const App = () => {
         }
     }, [isChatSummarized]);
 
-    return <ThreadSummaryDialog />;
+    return isDialogOpen && <ThreadSummaryDialog />;
 };
