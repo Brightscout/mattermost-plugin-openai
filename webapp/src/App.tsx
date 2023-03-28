@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 
-// components
+// Components
 import {ThreadSummaryDialog} from 'components/ThreadSummaryDialog';
 
-// reducers
+// Reducers
 import {addCredentials} from 'reducers/Credentials.reducer';
 import {
     addChats,
@@ -14,20 +14,20 @@ import {
     setChatPromptPayload,
 } from 'reducers/PromptChat.reducer';
 
-// selectors
+// Selectors
 import {getPromptChatSlice} from 'selectors';
 
-// constants
+// Constants
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {ChatCompletionApi} from 'constants/common';
+import {ChatCompletionApi, CHAT_API_ROLES} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
-// hooks
+// Hooks
 import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
-import useOpenAiApi from 'hooks/useOpenAiApi';
+import useOpenAiApi from 'hooks/useOpenAIApi';
 
-// utils
+// Utils
 import {parseChatCompletionPayload} from 'utils';
 
 /**
@@ -96,7 +96,7 @@ export const App = () => {
                         addSummary({
                             id: chatCompletionResponse?.id,
                             content: chatCompletionResponse?.choices[0].message.content,
-                            role: 'assistant',
+                            role: CHAT_API_ROLES.assistant,
                             isSummary: true,
                         }),
                     );

@@ -5,7 +5,7 @@ import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {BaseUrlOpenAi} from 'constants/common';
 import {getConfigCredentials} from 'selectors';
 
-// Service to make openAi API requests
+// Service to make openAI API requests
 const openAiApi = createApi({
     reducerPath: 'openAiApi',
     baseQuery: fetchBaseQuery({

@@ -11,7 +11,7 @@ const credentialSlice = createSlice({
     reducers: {
         addCredentials: (
             state: ConfigCredentialState,
-            action: PayloadAction<OpenAIApiKeyFromWebappShape>,
+            action: PayloadAction<OpenAIApiKeyFromWebapp>,
         ) => {
             state.openAIApiKey = action.payload.openAIAPIKey;
             state.openAIOrganizationId = action.payload.openAIOrganizationId;
