@@ -6,3 +6,8 @@ export const ChatCompletionApiConfigs = {
     maxTokenLimitToSummarize: 2000,
 } as const;
 
+export const THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS = {
+    model: 'text-davinci-003',
+    maxTokens: 800,
+    threadTokenLimit: 3000,
+} as const;

@@ -12,3 +12,7 @@ type GetChatCompletionPayload = {
     messages: {role: 'user' | 'assistant' | 'system'; content: string}[];
     max_tokens?: number;
 };
+
+type GetThreadFromPost = {
+    postId: string;
+};

@@ -1,8 +1,9 @@
 // Types for API response
 
-type OpenAIApiKeyFromWebappShape = {
+type OpenAIApiKeyFromWebapp = {
     object: 'openAIKey';
-    openAIApiKey: string;
+    openAIAPIKey: string;
+    openAIOrganizationId: string;
 };
 
 type CompletionResponseShape = {
@@ -39,5 +40,16 @@ type ChatCompletionResponseShape = {
         prompt_tokens: number;
         completion_tokens: number;
         total_tokens: number;
+    };
+};
+
+type PostThreadResponseShape = {
+    order: string[];
+    posts: {
+        [postId: string]: {
+            id: string;
+            user_id: string;
+            message: string;
+        };
     };
 };

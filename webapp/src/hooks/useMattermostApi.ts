@@ -5,19 +5,19 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
 
 // Services
-import pluginApiService from 'services/pluginApiService';
+import mattermostApiService from 'services/mattermostApiService';
 
 // Constants
 import {PLUGIN_ID} from 'constants/common';
 
-function usePluginApi() {
+function useMattermostApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
     const dispatch = useDispatch();
 
     // Pass payload only in POST requests. For GET requests, there is no need to pass a payload argument
     const makeApiRequest = useCallback(
         async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-            dispatch(pluginApiService.endpoints[serviceName].initiate(payload)),
+            dispatch(mattermostApiService.endpoints[serviceName].initiate(payload)),
         [dispatch],
     );
 
@@ -33,7 +33,9 @@ function usePluginApi() {
     const getApiState = useCallback(
         (serviceName: ApiServiceName, payload: APIRequestPayload) => {
             const {data, isError, isLoading, isSuccess, error, isUninitialized} =
-                pluginApiService.endpoints[serviceName].select(payload)(state[PLUGIN_ID]);
+                mattermostApiService.endpoints[serviceName].select(payload)(
+                    state[PLUGIN_ID],
+                );
             return {data, isError, isLoading, isSuccess, error, isUninitialized};
         },
         [state],
@@ -42,4 +44,4 @@ function usePluginApi() {
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }
 
-export default usePluginApi;
+export default useMattermostApi;
