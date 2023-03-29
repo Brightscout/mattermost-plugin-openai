@@ -10,7 +10,6 @@ export const Container = styled('div')({
 export const ChatArea = styled('div')({
     display: 'flex',
     flexDirection: 'column-reverse',
-    gap: '8px',
     flex: 1,
     overflowY: 'auto',
     paddingRight: '10px',

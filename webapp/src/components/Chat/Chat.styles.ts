@@ -23,4 +23,5 @@ export const StyledText = styled.pre({
     padding: 0,
     margin: 0,
     background: 'transparent !important',
+    wordBreak: 'unset',
 });

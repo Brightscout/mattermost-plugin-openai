@@ -13,7 +13,7 @@ import {DisplayMessage} from 'components/DisplayMessage';
 import {getPostSummarizationState} from 'selectors';
 
 // Hooks
-import usePluginApi from 'hooks/usePluginApi';
+import useOpenAIApi from 'hooks/useOpenAIApi';
 import useMattermostApi from 'hooks/useMattermostApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
@@ -47,7 +47,7 @@ export const ThreadSummaryDialog = () => {
         getApiState: getMattermostApiState,
         makeApiRequestWithCompletionStatus: makeMattermostApiRequestWithCompletionStatus,
     } = useMattermostApi();
-    const {state, getApiState, makeApiRequestWithCompletionStatus} = usePluginApi();
+    const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
     const [isCopied, setIsCopied] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 

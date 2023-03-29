@@ -1,7 +1,7 @@
 {
-  "id": "mattermost-plugin-open-ai",
-  "name": "Mattermost plugin Open-AI integration",
-  "description": "Mattermost plugin for integration with Open-AI",
+  "id": "open-ai",
+  "name": "Open-AI",
+  "description": "Open-AI integration for Mattermost",
   "icon_path": "assets/open_ai.svg",
   "version": "0.0.1",
   "min_server_version": "7.0.0",

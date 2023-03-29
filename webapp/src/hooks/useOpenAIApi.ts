@@ -5,19 +5,19 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setApiRequestCompletionState} from 'reducers/apiRequest';
 
 // Services
-import mattermostApiService from 'services/mattermostApiService';
+import openAiApiService from 'services/openAiApiService';
 
 // Constants
 import {PLUGIN_ID} from 'constants/common';
 
-function useMattermostApi() {
+function useOpenAIApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
     const dispatch = useDispatch();
 
     // Pass payload only in POST requests. For GET requests, there is no need to pass a payload argument
     const makeApiRequest = useCallback(
         async (serviceName: ApiServiceName, payload: APIRequestPayload) =>
-            dispatch(mattermostApiService.endpoints[serviceName].initiate(payload)),
+            dispatch(openAiApiService.endpoints[serviceName].initiate(payload)),
         [dispatch],
     );
 
@@ -33,9 +33,7 @@ function useMattermostApi() {
     const getApiState = useCallback(
         (serviceName: ApiServiceName, payload: APIRequestPayload) => {
             const {data, isError, isLoading, isSuccess, error, isUninitialized} =
-                mattermostApiService.endpoints[serviceName].select(payload)(
-                    state[PLUGIN_ID],
-                );
+                openAiApiService.endpoints[serviceName].select(payload)(state[PLUGIN_ID]);
             return {data, isError, isLoading, isSuccess, error, isUninitialized};
         },
         [state],
@@ -44,4 +42,4 @@ function useMattermostApi() {
     return {makeApiRequest, makeApiRequestWithCompletionStatus, getApiState, state};
 }
 
-export default useMattermostApi;
+export default useOpenAIApi;

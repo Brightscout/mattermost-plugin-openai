@@ -10,9 +10,8 @@ import {getApiRequestCompletionState} from 'selectors';
 // Constants
 import {API_SERVICE} from 'constants/apiServiceConfig';
 
-// Services
-import useMattermostApi from './useMattermostApi';
-import usePluginApi from './usePluginApi';
+// Hooks
+import useHooksBasedOnService from './useHooksBasedOnService';
 
 type Props = {
     handleSuccess?: () => void;
@@ -27,10 +26,9 @@ function useApiRequestCompletionState({
     handleError,
     serviceName,
     payload,
-    services = API_SERVICE.pluginApiService,
+    services = API_SERVICE.openAiApi,
 }: Props) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const {getApiState, state} = services === API_SERVICE.pluginApiService ? usePluginApi() : useMattermostApi();
+    const {getApiState, state} = useHooksBasedOnService({service: services})();
     const dispatch = useDispatch();
 
     // Observe for the change in redux state after API call and do the required actions

@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/dist/query/react';
 
+// Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 
 // Utils

@@ -1,8 +1,9 @@
 // Types for API response
 
-type OpenAIApiKeyFromWebappShape = {
+type OpenAIApiKeyFromWebapp = {
     object: 'openAIKey';
-    openAIApiKey: string;
+    openAIAPIKey: string;
+    openAIOrganizationId: string;
 };
 
 type CompletionResponseShape = {
