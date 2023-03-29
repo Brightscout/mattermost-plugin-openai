@@ -15,4 +15,4 @@ type GetChatCompletionPayload = {
 
 type GetThreadFromPost = {
     postId: string;
-}
+};
