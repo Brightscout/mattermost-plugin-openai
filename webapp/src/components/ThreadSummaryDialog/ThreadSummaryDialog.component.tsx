@@ -20,7 +20,7 @@ import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Constants
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {PARSE_THREAD_PROMPT, THREAD_SUMMARY_MODAL} from 'constants/common';
+import {PARSE_THREAD_PROMPT, THREAD_SUMMARY_MODAL, TOKENIZATION_TYPE} from 'constants/common';
 import {THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS} from 'constants/configs';
 
 // Utils
@@ -41,7 +41,7 @@ import {StyledSummarizationDialog} from './ThreadSummaryDialog.styles';
  * ```
  */
 export const ThreadSummaryDialog = () => {
-    const tokenizer = new GPT3Tokenizer({type: 'gpt3'}); // or 'codex'
+    const tokenizer = new GPT3Tokenizer({type: TOKENIZATION_TYPE.codex});
 
     // Initializing hooks
     const dispatch = useDispatch();
@@ -65,25 +65,24 @@ export const ThreadSummaryDialog = () => {
     const {isLoading: isThreadLoading, data: threadData} = getMattermostApiState(
         API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
         getThreadApiPayload,
-    ) as {isLoading: boolean; data: PostThreadResponseShape};
+    ) as UseApiResponse<PostThreadResponseShape>;
 
     const {isLoading, data} = getApiState(
         API_SERVICE_CONFIG.getCompletion.serviceName,
         payload,
-    ) as {isLoading: boolean; data: CompletionResponseShape};
+    ) as UseApiResponse<CompletionResponseShape>;
 
     /**
      * This function loops through the threads and creates payload on the go.
      * Whenever payload reaches the `max_token_limit` we save the index of the thread which is last added to the payload and we send this payload to summarize,
      * then we start from the threads which are not summarized using the saved index and creates payload with it,
      * and when the token limit is reached again we append the previous summary to the payload to persist the context and then summarizes it.
-     * @param startIndex - previous thread index till which it is summarized.
      */
-    const recursiveSummarizeHandler = ({startIndex}: {startIndex: number}) => {
+    const recursiveSummarizeHandler = () => {
         const threadPayload = parseThread(threadData, Users);
         let payloadPrompt =
-            startIndex === 0 ? PARSE_THREAD_PROMPT.systemPrompt : data.choices[0].text.trim() + PARSE_THREAD_PROMPT.recursiveSummarizationPrompt;
-        let i = startIndex;
+        startPositionThread === 0 ? PARSE_THREAD_PROMPT.systemPrompt : data.choices[0].text.trim() + PARSE_THREAD_PROMPT.recursiveSummarizationPrompt;
+        let i = startPositionThread;
         for (; i < threadPayload.length; i += 1) {
             payloadPrompt += threadPayload[i].message + '\n';
             if (
@@ -117,7 +116,7 @@ export const ThreadSummaryDialog = () => {
         payload: getThreadApiPayload,
         services: API_SERVICE.mattermostApiService,
         handleSuccess: () => {
-            recursiveSummarizeHandler({startIndex: 0});
+            recursiveSummarizeHandler();
         },
     });
 
@@ -130,7 +129,7 @@ export const ThreadSummaryDialog = () => {
         payload,
         handleSuccess: () => {
             if (!isWholeThreadSummarized) {
-                recursiveSummarizeHandler({startIndex: startPositionThread});
+                recursiveSummarizeHandler();
             }
         },
         handleError: (error) => setErrorMessage(mapErrorMessageFromOpenAI(error)),
