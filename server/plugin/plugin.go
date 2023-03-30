@@ -25,9 +25,6 @@ type Plugin struct {
 	// setConfiguration for usage.
 	configuration *config.Configuration
 	router        *mux.Router
-
-	// user ID of the bot account
-	botUserID string
 }
 
 // getConfiguration retrieves the active configuration under lock, making it safe to use
@@ -72,6 +69,6 @@ func (p *Plugin) setConfiguration(configuration *config.Configuration) {
 }
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests.
-func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) ServeHTTP(_ *plugin.Context, w http.ResponseWriter, r *http.Request) {
 	p.router.ServeHTTP(w, r)
 }

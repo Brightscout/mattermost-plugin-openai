@@ -1,4 +1,8 @@
-type ApiServiceName = 'getCompletion' | 'getChatCompletion' | 'getOpenAIApiKeyFromWebapp';
+type ApiServiceName =
+    | 'getCompletion'
+    | 'getChatCompletion'
+    | 'getOpenAIApiKeyFromWebapp'
+    | 'getThreadFromPostId';
 
 type PluginApiService = {
     path: string;
@@ -10,10 +14,10 @@ type ApiErrorResponse = {
     data: {
         Error: string;
         error?: {
-            code: string,
-        }
+            code: string;
+        };
     };
     status: number;
 };
 
-type APIRequestPayload = GetCompletionPayload | GetChatCompletionPayload | void;
+type APIRequestPayload = GetCompletionPayload | GetChatCompletionPayload | GetThreadFromPost | void;

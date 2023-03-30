@@ -4,24 +4,28 @@ interface ReduxState extends GlobalState {
             isSidebarOpen: boolean;
         };
     };
-    'plugins-mattermost-plugin-open-ai': RootState<
-    {
-        [x: string]: QueryDefinition<
-        void,
-        BaseQueryFn<
-        string | FetchArgs,
-        unknown,
-        FetchBaseQueryError,
-        Record<string, never>,
-        FetchBaseQueryMeta
-        >,
+    'plugins-open-ai': RootState<
+        {
+            [x: string]: QueryDefinition<
+                void,
+                BaseQueryFn<
+                    string | FetchArgs,
+                    unknown,
+                    FetchBaseQueryError,
+                    Record<string, never>,
+                    FetchBaseQueryMeta
+                >,
+                never,
+                void,
+                'openAiPluginApi',
+                'mattermostApi',
+                'openAiApi'
+            >;
+        },
         never,
-        void,
+        'openAiApi',
+        'mattermostApi',
         'openAiPluginApi'
-        >;
-    },
-    never,
-    'openAiPluginApi'
     >;
 }
 
@@ -31,9 +35,17 @@ type ApiRequestCompletionState = {
 
 type PromptChatState = {
     chats: ChatsType;
+    payload?: GetChatCompletionPayload;
+    isRequestOnProcess?: boolean;
+    isChatSummarized: boolean;
 };
 
 type ConfigCredentialState = {
     openAIApiKey: string;
     openAIOrganizationId: string;
+};
+
+type ThreadSummarizationState = {
+    postId: string;
+    isDialogOpen: boolean;
 };

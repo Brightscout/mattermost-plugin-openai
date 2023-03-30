@@ -14,4 +14,4 @@ import {StyledCard} from './DisplayMessage.styles';
  * <DisplayMessage message={message} isError={isError} />
  * ```
  */
-export const DisplayMessage = ({message, isError}: DisplayMessageProps) => <StyledCard isError={isError}>{message}</StyledCard>;
+export const DisplayMessage = ({message, isError, marginBottom}: DisplayMessageProps) => <StyledCard marginBottom={marginBottom} isError={isError}>{message}</StyledCard>;
