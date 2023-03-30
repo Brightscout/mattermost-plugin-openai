@@ -5,5 +5,5 @@ var manifest = struct {
 	Version string
 }{
 	ID:      "open-ai",
-	Version: "0.0.1",
+	Version: "1.0.0",
 }
