@@ -16,3 +16,10 @@ type UseApiResponse<T> = {
 
 // Type of chat stored inside the chats state in promptChat slice
 type ChatsType = Chat[];
+
+type ParseThread = {
+    totalToken: number;
+    bpe: number[];
+    text: string[];
+    message: string;
+}[]

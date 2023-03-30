@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import GPT3Tokenizer from 'gpt3-tokenizer';
 import {Spinner} from '@brightscout/mattermost-ui-library';
 
 // Mattermost
@@ -19,10 +20,11 @@ import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Constants
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {THREAD_SUMMARY_MODAL} from 'constants/common';
+import {PARSE_THREAD_PROMPT, THREAD_SUMMARY_MODAL, TOKENIZATION_TYPE} from 'constants/common';
+import {THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS} from 'constants/configs';
 
 // Utils
-import {mapErrorMessageFromOpenAI, parseThreadPrompt} from 'utils';
+import {mapErrorMessageFromOpenAI, parseThread, parseThreadPayload} from 'utils';
 
 // Actions
 import {closeAndResetState} from 'reducers/ThreadSummarization.reducer';
@@ -39,7 +41,7 @@ import {StyledSummarizationDialog} from './ThreadSummaryDialog.styles';
  * ```
  */
 export const ThreadSummaryDialog = () => {
-    const [payload, setPayload] = useState<GetCompletionPayload>();
+    const tokenizer = new GPT3Tokenizer({type: TOKENIZATION_TYPE.codex});
 
     // Initializing hooks
     const dispatch = useDispatch();
@@ -48,8 +50,11 @@ export const ThreadSummaryDialog = () => {
         makeApiRequestWithCompletionStatus: makeMattermostApiRequestWithCompletionStatus,
     } = useMattermostApi();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
+    const [payload, setPayload] = useState<GetCompletionPayload>();
     const [isCopied, setIsCopied] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [startPositionThread, setStartPositionThread] = useState(0);
+    const [isWholeThreadSummarized, setIsWholeThreadSummarized] = useState(false);
 
     // Selectors
     const {postId, isDialogOpen} = getPostSummarizationState(state);
@@ -60,12 +65,48 @@ export const ThreadSummaryDialog = () => {
     const {isLoading: isThreadLoading, data: threadData} = getMattermostApiState(
         API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
         getThreadApiPayload,
-    ) as {isLoading: boolean; data: PostThreadResponseShape};
+    ) as UseApiResponse<PostThreadResponseShape>;
 
     const {isLoading, data} = getApiState(
         API_SERVICE_CONFIG.getCompletion.serviceName,
         payload,
-    ) as {isLoading: boolean; data: CompletionResponseShape};
+    ) as UseApiResponse<CompletionResponseShape>;
+
+    /**
+     * This function loops through the threads and creates payload on the go.
+     * Whenever payload reaches the `max_token_limit` we save the index of the thread which is last added to the payload and we send this payload to summarize,
+     * then we start from the threads which are not summarized using the saved index and creates payload with it,
+     * and when the token limit is reached again we append the previous summary to the payload to persist the context and then summarizes it.
+     */
+    const recursiveSummarizeHandler = () => {
+        const threadPayload = parseThread(threadData, Users);
+        let payloadPrompt =
+        startPositionThread === 0 ? PARSE_THREAD_PROMPT.systemPrompt : data.choices[0].text.trim() + PARSE_THREAD_PROMPT.recursiveSummarizationPrompt;
+        let i = startPositionThread;
+        for (; i < threadPayload.length; i += 1) {
+            payloadPrompt += threadPayload[i].message + '\n';
+            if (
+                tokenizer.encode(payloadPrompt).bpe.length >=
+                THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.threadTokenLimit
+            ) {
+                setStartPositionThread(i + 1);
+                setPayload(parseThreadPayload(payloadPrompt));
+                makeApiRequestWithCompletionStatus(
+                    API_SERVICE_CONFIG.getCompletion.serviceName,
+                    parseThreadPayload(payloadPrompt),
+                );
+                break;
+            }
+        }
+        if (i >= threadPayload.length) {
+            setIsWholeThreadSummarized(true);
+            setPayload(parseThreadPayload(payloadPrompt));
+            makeApiRequestWithCompletionStatus(
+                API_SERVICE_CONFIG.getCompletion.serviceName,
+                parseThreadPayload(payloadPrompt),
+            );
+        }
+    };
 
     /**
      * After fetching thread for a given post, we then parse the thread to payload and send it to completion api.
@@ -75,12 +116,7 @@ export const ThreadSummaryDialog = () => {
         payload: getThreadApiPayload,
         services: API_SERVICE.mattermostApiService,
         handleSuccess: () => {
-            const threadPayload = parseThreadPrompt(threadData, Users);
-            setPayload(threadPayload);
-            makeApiRequestWithCompletionStatus(
-                API_SERVICE_CONFIG.getCompletion.serviceName,
-                threadPayload,
-            );
+            recursiveSummarizeHandler();
         },
     });
 
@@ -91,6 +127,11 @@ export const ThreadSummaryDialog = () => {
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getCompletion.serviceName,
         payload,
+        handleSuccess: () => {
+            if (!isWholeThreadSummarized) {
+                recursiveSummarizeHandler();
+            }
+        },
         handleError: (error) => setErrorMessage(mapErrorMessageFromOpenAI(error)),
     });
 
@@ -107,8 +148,6 @@ export const ThreadSummaryDialog = () => {
      */
     useMemo(() => {
         if (isDialogOpen) {
-            setIsCopied(false);
-            setErrorMessage('');
             makeMattermostApiRequestWithCompletionStatus(
                 API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
                 getThreadApiPayload,

@@ -52,10 +52,11 @@ export const POST_MENU_ITEM = {
  */
 export const PARSE_THREAD_PROMPT = {
     systemPrompt: 'Summarize the below thread briefly\n',
-};
+    recursiveSummarizationPrompt: '\nSummarize the below thread with above context\n',
+} as const;
 
 /**
- * Constants used with chat completion api
+ * Constants used with chat completion API.
  */
 export const ChatCompletionApi = {
     responseObject: 'chat.completion',
@@ -65,8 +66,21 @@ export const ChatCompletionApi = {
     invalidOrganizationCode: 'invalid_organization',
 } as const;
 
+/**
+ * Constants used for chat roles in chat completions API.
+ */
 export const CHAT_API_ROLES = {
     user: 'user',
     system: 'system',
     assistant: 'assistant',
+} as const;
+
+/**
+ * Type of encodings used by the gpt3Tokenizer
+ */
+export const TOKENIZATION_TYPE = {
+    gpt3: 'gpt3',
+
+    // Different set of encoding which handles whitespace more efficiently
+    codex: 'codex',
 } as const;
