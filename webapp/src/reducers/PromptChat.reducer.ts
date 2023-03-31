@@ -29,7 +29,7 @@ const promptChatSlice = createSlice({
         resetChat: (state: PromptChatState) => {
             state.chats = [];
         },
-        setChatPromptPayload: (state: PromptChatState, action: PayloadAction<{payload: GetChatCompletionPayload}>) => {
+        setChatPromptPayload: (state: PromptChatState, action: PayloadAction<{payload: GetChatCompletionPayload | GetImageFromTextPayload}>) => {
             state.payload = action.payload.payload;
         },
         setIsChatSummarized: (state: PromptChatState, action: PayloadAction<boolean>) => {

@@ -40,6 +40,14 @@ const openAiApi = createApi({
                 body: payload,
             }),
         }),
+
+        [API_SERVICE_CONFIG.getImageFromText.serviceName]: builder.query<ImageGenerationResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                url: API_SERVICE_CONFIG.getImageFromText.path,
+                method: API_SERVICE_CONFIG.getImageFromText.method,
+                body: payload,
+            }),
+        }),
     }),
 });
 

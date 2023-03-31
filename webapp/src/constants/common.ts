@@ -1,3 +1,9 @@
+export const MMCSRF = 'MMCSRF';
+export const MMAUTHTOKEN = 'MMAUTHTOKEN';
+export const MMUSERID = 'MMUSERID';
+export const HEADER_CSRF_TOKEN = 'X-CSRF-Token';
+export const HEADER_AUTHORIZATION = 'authorization';
+
 export const BaseUrlOpenAi = 'https://api.openai.com/v1';
 
 export const pluginId = 'open-ai';
@@ -70,4 +76,21 @@ export const CHAT_API_ROLES = {
     user: 'user',
     system: 'system',
     assistant: 'assistant',
+} as const;
+
+export const IMAGE_GENERATIONS = {
+    expiryInfo: ({plural = true}: {plural: boolean}) =>
+        `*The ${
+            plural ? 'Images' : 'Image'
+        } will expire after an hour. Please download it for further use.*`,
+    fileNameForDownloadedImage: 'image.png',
+    altTextForGeneratedImages: 'Prompt response',
+    downloadButtonTooltipText: 'Download',
+    postToChannelButtonTooltipText: 'Post to channel',
+} as const;
+
+export const IMAGE_RESOLUTIONS = {
+    x1024: '1024x1024',
+    x512: '512x512',
+    x256: '256x256',
 } as const;

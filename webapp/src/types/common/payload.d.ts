@@ -16,3 +16,16 @@ type GetChatCompletionPayload = {
 type GetThreadFromPost = {
     postId: string;
 };
+
+type GetImageFromTextPayload = {
+    prompt: string;
+    n: number;
+    size: '1024x1024' | '512x512' | '256x256';
+};
+
+type PostPostToChannelPayload = {
+    channel_id: string;
+    message: string;
+    root_id?: string;
+    file_ids?: string[];
+};

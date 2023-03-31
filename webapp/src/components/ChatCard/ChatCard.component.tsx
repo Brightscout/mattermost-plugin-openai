@@ -5,16 +5,40 @@ import {useSelector} from 'react-redux';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {GlobalState} from 'mattermost-redux/types/store';
 
+// Components
+import {Image} from 'components/Image';
+import {PostCard} from 'components/PostCard';
+
 // Utils
 import {getProfileImgUrl} from 'utils';
 
-// Styles
-import {PostCard} from 'components/PostCard';
-
 // Constants
-import {openAiBotName, openAiSvgUri} from 'constants/common';
+import {IMAGE_GENERATIONS, openAiBotName, openAiSvgUri} from 'constants/common';
 
-export const ChatCard = ({isUser, chat}: {isUser: boolean; chat: string}) => {
+// Styles
+import {StyledGroupImageContainer} from './ChatCard.styles';
+
+/**
+ * ChatCard Component
+ *
+ * @example Correct usage
+ * ```tsx
+ * <ChatCard
+ *  isUser={isUser}
+ *  chat={chat}
+ *  isImage={isImage}
+ * />
+ * ```
+ */
+export const ChatCard = ({
+    isUser,
+    chat,
+    isImage = false,
+}: {
+    isUser: boolean;
+    chat: string;
+    isImage?: boolean;
+}) => {
     const {Avatar} = window.Components;
     const PostUtils = window.PostUtils;
 
@@ -27,7 +51,27 @@ export const ChatCard = ({isUser, chat}: {isUser: boolean; chat: string}) => {
         <PostCard
             avatarComponent={<Avatar url={userAvatarUrl} />}
             authorName={isUser ? currentUser.username : openAiBotName}
-            postMessage={PostUtils.messageHtmlToComponent(formattedText)}
+            postMessage={
+                isImage ? (
+                    <>
+                        {PostUtils.messageHtmlToComponent(
+                            PostUtils.formatText(IMAGE_GENERATIONS.expiryInfo({plural: true})),
+                        )}
+                        <StyledGroupImageContainer>
+                            {chat.split(' ').map((url) => (
+                                <Image
+                                    key={url}
+                                    size='100%'
+                                    src={url}
+                                    alt={IMAGE_GENERATIONS.altTextForGeneratedImages}
+                                />
+                            ))}
+                        </StyledGroupImageContainer>
+                    </>
+                ) : (
+                    PostUtils.messageHtmlToComponent(formattedText)
+                )
+            }
         />
     );
 };

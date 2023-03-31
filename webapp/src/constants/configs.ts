@@ -1,3 +1,5 @@
+import {IMAGE_RESOLUTIONS} from './common';
+
 export const ChatCompletionApiConfigs = {
     model: 'gpt-3.5-turbo',
     maxTokens: 3000,
@@ -11,3 +13,8 @@ export const THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS = {
     maxTokens: 800,
     threadTokenLimit: 3000,
 } as const;
+
+export const IMAGE_GENERATIONS_API_CONFIGS = {
+    size: IMAGE_RESOLUTIONS.x256,
+    numberOfImagesPerRequest: 4,
+};

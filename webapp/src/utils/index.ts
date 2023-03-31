@@ -7,9 +7,10 @@ import {UserProfile} from 'mattermost-redux/types/users';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 // Constants
-import {ChatCompletionApi, ErrorMessages, pluginId} from 'constants/common';
+import {ChatCompletionApi, CHAT_API_ROLES, ErrorMessages, IMAGE_RESOLUTIONS, pluginId} from 'constants/common';
 import {
     ChatCompletionApiConfigs,
+    IMAGE_GENERATIONS_API_CONFIGS,
     THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS,
 } from 'constants/configs';
 
@@ -24,15 +25,12 @@ export const parseChatCompletionPayload = ({
     chatHistory,
 }: {
     prompt: string;
-    chatHistory: {
-        role: 'user' | 'system' | 'assistant';
-        content: string;
-        id: string;
-        isSummary?: boolean;
-    }[];
+    chatHistory: ChatsType;
 }): GetChatCompletionPayload => {
     // Removing the id property from the message object
-    let prevChats = chatHistory.map(({id, ...restProperties}) => restProperties);
+    let prevChats = chatHistory
+        .map(({id, ...restProperties}) => restProperties)
+        .filter(({isImage, content}) => !(isImage || checkIfIsImageCommand({content})));
 
     const indexOfSummary = chatHistory.findIndex(({isSummary}) => isSummary);
 
@@ -40,7 +38,8 @@ export const parseChatCompletionPayload = ({
     if (indexOfSummary !== -1) {
         prevChats = prevChats
             .slice(indexOfSummary)
-            .map(({isSummary, ...restProperties}) => restProperties);
+            .map(({isSummary, ...restProperties}) => restProperties)
+            .filter(({isImage, content}) => !(isImage || checkIfIsImageCommand({content})));
     }
 
     const isSummarizing = prompt === ChatCompletionApi.summarizationPrompt;
@@ -50,7 +49,7 @@ export const parseChatCompletionPayload = ({
         messages: [
             ...prevChats,
             {
-                role: isSummarizing ? 'system' : 'user',
+                role: isSummarizing ? CHAT_API_ROLES.system : CHAT_API_ROLES.user,
                 content: isSummarizing ? ChatCompletionApi.summarizationContent : prompt,
             },
         ],
@@ -119,6 +118,10 @@ export const parseThread = (
     return response;
 };
 
+/**
+ * Parses payload for summarizing thread
+ * @param threadPrompt - thread to be summarized
+ */
 export const parseThreadPayload = (threadPrompt: string): GetCompletionPayload => ({
     prompt: threadPrompt,
     model: THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS.model,
@@ -142,3 +145,24 @@ export const parseChatWithTemplateIfSummary = ({
     content: string;
 }) =>
     (isSummary ? `**Summary**\n\n${content}\n\n*Max token limit is reached, summarizing the conversation to retain context*` : content);
+
+/**
+ * Parses image generation payload using the prompt passed in.
+ * @param prompt - image generation prompt.
+ */
+export const parsePayloadForImageGeneration = ({
+    prompt,
+}: {
+    prompt: string;
+}): GetImageFromTextPayload => ({
+    prompt,
+    n: IMAGE_GENERATIONS_API_CONFIGS.numberOfImagesPerRequest,
+    size: IMAGE_GENERATIONS_API_CONFIGS.size,
+});
+
+/**
+ * Returns true if the prompt starts with `/image`
+ * @param content - prompt by the user
+ */
+export const checkIfIsImageCommand = ({content}: {content: string}) =>
+    content.split(' ')[0] === '/image';

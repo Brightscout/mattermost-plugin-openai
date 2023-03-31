@@ -3,6 +3,7 @@ type Chat = {
     content: string;
     id: string;
     isSummary?: boolean;
+    isImage?: boolean;
 };
 
 type UseApiResponse<T> = {

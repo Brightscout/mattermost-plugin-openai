@@ -1,15 +1,7 @@
 import styled from 'styled-components';
 
-export const StyledContainer = styled('div')({
-    display: 'flex',
+export const StyledGroupImageContainer = styled('div')({
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
     gap: '10px',
-});
-
-export const RightContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-});
-
-export const UserName = styled('p')({
-    fontWeight: 600,
 });
