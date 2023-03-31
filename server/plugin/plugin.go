@@ -25,9 +25,6 @@ type Plugin struct {
 	// setConfiguration for usage.
 	configuration *config.Configuration
 	router        *mux.Router
-
-	// user ID of the bot account
-	// botUserID string
 }
 
 // getConfiguration retrieves the active configuration under lock, making it safe to use

@@ -13,7 +13,7 @@ import {PostCard} from 'components/PostCard';
 import {getProfileImgUrl} from 'utils';
 
 // Constants
-import {IMAGE_GENERATIONS, openAiBotName, openAiSvgUri} from 'constants/common';
+import {IMAGE_GENERATIONS, openAiBotName, openAISvgUri} from 'constants/common';
 
 // Styles
 import {StyledGroupImageContainer} from './ChatCard.styles';
@@ -43,7 +43,7 @@ export const ChatCard = ({
     const PostUtils = window.PostUtils;
 
     const currentUser = useSelector((reduxState: GlobalState) => getCurrentUser(reduxState));
-    const userAvatarUrl = isUser ? getProfileImgUrl({userId: currentUser.id}) : openAiSvgUri;
+    const userAvatarUrl = isUser ? getProfileImgUrl({userId: currentUser.id}) : openAISvgUri;
 
     const formattedText = PostUtils.formatText(chat);
 

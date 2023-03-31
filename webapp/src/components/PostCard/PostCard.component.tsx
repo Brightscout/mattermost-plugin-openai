@@ -1,3 +1,4 @@
+// TODO: Component to be removed in future PR. Should be imported from MM-UI library.
 import React from 'react';
 
 // Components

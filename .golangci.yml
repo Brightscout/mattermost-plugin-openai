@@ -21,16 +21,16 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    # - errcheck
-    # - goconst
+    - errcheck
+    - goconst
     - gocritic
     - gofmt
     - goimports
-    # - gosec
+    - gosec
     - gosimple
     - govet
     - ineffassign
-    # - misspell
+    - misspell
     - nakedret
     - revive
     - staticcheck

@@ -3,7 +3,7 @@
   "name": "Open-AI",
   "description": "Open-AI integration for Mattermost",
   "icon_path": "assets/open_ai.svg",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "min_server_version": "7.0.0",
   "server": {
     "executables": {
