@@ -7,7 +7,12 @@ import {UserProfile} from 'mattermost-redux/types/users';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 // Constants
-import {ChatCompletionApi, CHAT_API_ROLES, ErrorMessages, IMAGE_RESOLUTIONS, pluginId} from 'constants/common';
+import {
+    ChatCompletionApi,
+    CHAT_API_ROLES,
+    ErrorMessages,
+    pluginId,
+} from 'constants/common';
 import {
     ChatCompletionApiConfigs,
     IMAGE_GENERATIONS_API_CONFIGS,
@@ -149,19 +154,54 @@ export const parseChatWithTemplateIfSummary = ({
 /**
  * Parses image generation payload using the prompt passed in.
  * @param prompt - image generation prompt.
+ * @param resolution - image resolution to be generated.
  */
 export const parsePayloadForImageGeneration = ({
     prompt,
+    resolution,
 }: {
     prompt: string;
+    resolution: ImageResolution;
 }): GetImageFromTextPayload => ({
     prompt,
     n: IMAGE_GENERATIONS_API_CONFIGS.numberOfImagesPerRequest,
-    size: IMAGE_GENERATIONS_API_CONFIGS.size,
+    size: resolution,
 });
 
 /**
  * Returns true if the prompt starts with `/image`
  * @param content - prompt by the user
  */
-export const checkIfIsImageCommand = ({content}: {content: string}) => content.split(/\s+/)[0] === '/image';
+export const checkIfIsImageCommand = ({content}: {content: string}) =>
+    content.split(/\s+/)[0] === '/image' || content.split(/\s+/)[0] === '**`image`**';
+
+/**
+ * If prompt is for generating image then styles the prompt using markdown
+ * else returns without any transformations
+ * @param content - prompt by the user.
+ */
+export const stylePromptIfImage = ({content, resolution}: {content: string, resolution?: ImageResolution}) => {
+    if (checkIfIsImageCommand({content}) && resolution) {
+        const newLineIndex = content.indexOf('\n');
+        const spaceIndex = content.indexOf(' ');
+        let indexAfterFirstWord: number;
+        if (newLineIndex === -1) {
+            indexAfterFirstWord = spaceIndex;
+        } else if (spaceIndex === -1) {
+            indexAfterFirstWord = newLineIndex;
+        } else {
+            indexAfterFirstWord = Math.min(newLineIndex, spaceIndex);
+        }
+
+        return `**\`image\`** **\`${mapImageResolutionToPlaceholders(resolution)}\`** ${content.substring(indexAfterFirstWord)}`;
+    }
+    return content;
+};
+
+export const mapImageResolutionToPlaceholders = (resolution: ImageResolution) => {
+    switch (resolution) {
+        case '256x256': return 'x256';
+        case '512x512': return 'x512';
+        default: return 'x1024';
+    }
+};

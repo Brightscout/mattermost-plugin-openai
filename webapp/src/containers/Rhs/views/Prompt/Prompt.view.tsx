@@ -21,14 +21,26 @@ import {
     mapErrorMessageFromOpenAI,
     parseChatCompletionPayload,
     parsePayloadForImageGeneration,
+    stylePromptIfImage,
 } from 'utils';
 
 // Constants
 import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {ChatCompletionApi, CHAT_API_ROLES} from 'constants/common';
+import {
+    ChatCompletionApi,
+    CHAT_API_ROLES,
+    IMAGE_RESOLUTIONS,
+    RESOLUTION_CONFIRMATION_DIALOG,
+} from 'constants/common';
 
 // Styles
-import {Container, ChatArea} from './Prompt.styles';
+import {
+    Container,
+    ChatArea,
+    ResolutionDialog,
+    ResolutionRadio,
+    ResolutionWrapper,
+} from './Prompt.styles';
 
 /**
  * Prompt View
@@ -42,6 +54,8 @@ export const Prompt = () => {
     // Initialize hooks
     const dispatch = useDispatch();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
+    const [resolution, setResolution] = useState<ImageResolution>(IMAGE_RESOLUTIONS.x256);
+    const [showResolutionDialog, setShowResolutionDialog] = useState(false);
     const [promptValue, setPromptValue] = useState('');
 
     // Selectors
@@ -56,10 +70,11 @@ export const Prompt = () => {
             // Before creating the payload we are removing the /image command from the promptValue.
             return parsePayloadForImageGeneration({
                 prompt: promptValue.split(/\s+/).slice(1).join(' '),
+                resolution,
             });
         }
         return parseChatCompletionPayload({prompt: promptValue, chatHistory: chats});
-    }, [promptValue]);
+    }, [promptValue, resolution]);
 
     const {isLoading, error} = getApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
@@ -68,7 +83,7 @@ export const Prompt = () => {
 
     const {isLoading: isImageFromTextLoading, error: imageGenerationError} = getApiState(
         API_SERVICE_CONFIG.getImageFromText.serviceName,
-        payload,
+        chatCompletionsPayload,
     ) as UseApiResponse<ImageGenerationResponseShape>;
 
     /**
@@ -77,28 +92,52 @@ export const Prompt = () => {
      */
     const handleSend = () => {
         /**
-         * If prompt contains / slash commands then image generation endpoint is called.
+         * If prompt contains / slash commands then resolution confirmation modal is opened.
          */
         if (checkIfIsImageCommand({content: promptValue})) {
-            makeApiRequestWithCompletionStatus(
-                API_SERVICE_CONFIG.getImageFromText.serviceName,
-                payload,
-            );
-        } else {
-            makeApiRequestWithCompletionStatus(
-                API_SERVICE_CONFIG.getChatCompletion.serviceName,
-                payload,
-            );
+            setShowResolutionDialog(true);
+            return;
         }
+
+        makeApiRequestWithCompletionStatus(
+            API_SERVICE_CONFIG.getChatCompletion.serviceName,
+            payload,
+        );
         dispatch(setChatPromptPayload({payload}));
 
         dispatch(
             addChats({
                 role: CHAT_API_ROLES.user,
-                content: promptValue.trim(),
+                content: stylePromptIfImage({content: promptValue.trim()}),
                 id: Date.now().toString(),
             }),
         );
+    };
+
+    const handleConfirmationImagePromptSend = () => {
+        makeApiRequestWithCompletionStatus(
+            API_SERVICE_CONFIG.getImageFromText.serviceName,
+            payload,
+        );
+        dispatch(setChatPromptPayload({payload}));
+
+        dispatch(
+            addChats({
+                role: CHAT_API_ROLES.user,
+                content: stylePromptIfImage({content: promptValue.trim(), resolution}),
+                id: Date.now().toString(),
+            }),
+        );
+
+        // Resetting the dialog states
+        setResolution(IMAGE_RESOLUTIONS.x256);
+        setShowResolutionDialog(false);
+    };
+
+    const handleResolutionConfirmationModalClose = () => {
+        // Resetting the dialog states
+        setResolution(IMAGE_RESOLUTIONS.x256);
+        setShowResolutionDialog(false);
     };
 
     /**
@@ -107,6 +146,15 @@ export const Prompt = () => {
      */
     const handleOnChange = (value: string) =>
         !(isLoading || isImageFromTextLoading) && setPromptValue(value);
+
+    /**
+     * Triggers on changing the selected radio from the confirmation modal.
+     * @param _ - event source of the callback.
+     * @param value - value on the selected radio.
+     */
+    const handleRadioClick = (_: React.MouseEvent<HTMLInputElement, MouseEvent>, value: string) => {
+        setResolution(value as ImageResolution);
+    };
 
     /**
      * On getting the success response from the api, we are resetting the text area,
@@ -129,7 +177,7 @@ export const Prompt = () => {
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
-        payload,
+        payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
     });
 
@@ -159,6 +207,43 @@ export const Prompt = () => {
                 handleOnChange={handleOnChange}
                 handleOnSend={handleSend}
             />
+            {showResolutionDialog && (
+                <ResolutionDialog
+                    show
+                    title={RESOLUTION_CONFIRMATION_DIALOG.title}
+                    description={RESOLUTION_CONFIRMATION_DIALOG.description}
+                    primaryActionText={RESOLUTION_CONFIRMATION_DIALOG.primaryActionText}
+                    onSubmitHandler={handleConfirmationImagePromptSend}
+                    onCloseHandler={handleResolutionConfirmationModalClose}
+                >
+                    <ResolutionWrapper>
+                        <ResolutionRadio
+                            checked={resolution === IMAGE_RESOLUTIONS.x256}
+                            label={IMAGE_RESOLUTIONS.x256}
+                            value={IMAGE_RESOLUTIONS.x256}
+                            name={IMAGE_RESOLUTIONS.x256}
+                            id={IMAGE_RESOLUTIONS.x256}
+                            onClick={handleRadioClick}
+                        />
+                        <ResolutionRadio
+                            checked={resolution === IMAGE_RESOLUTIONS.x512}
+                            label={IMAGE_RESOLUTIONS.x512}
+                            value={IMAGE_RESOLUTIONS.x512}
+                            name={IMAGE_RESOLUTIONS.x512}
+                            id={IMAGE_RESOLUTIONS.x512}
+                            onClick={handleRadioClick}
+                        />
+                        <ResolutionRadio
+                            checked={resolution === IMAGE_RESOLUTIONS.x1024}
+                            label={IMAGE_RESOLUTIONS.x1024}
+                            value={IMAGE_RESOLUTIONS.x1024}
+                            name={IMAGE_RESOLUTIONS.x1024}
+                            id={IMAGE_RESOLUTIONS.x1024}
+                            onClick={handleRadioClick}
+                        />
+                    </ResolutionWrapper>
+                </ResolutionDialog>
+            )}
         </Container>
     );
 };
