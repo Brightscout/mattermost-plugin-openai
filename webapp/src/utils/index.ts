@@ -164,5 +164,4 @@ export const parsePayloadForImageGeneration = ({
  * Returns true if the prompt starts with `/image`
  * @param content - prompt by the user
  */
-export const checkIfIsImageCommand = ({content}: {content: string}) =>
-    content.split(' ')[0] === '/image';
+export const checkIfIsImageCommand = ({content}: {content: string}) => content.split(/\s+/)[0] === '/image';

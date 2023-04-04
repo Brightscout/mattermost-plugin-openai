@@ -55,7 +55,7 @@ export const Prompt = () => {
         if (checkIfIsImageCommand({content: promptValue})) {
             // Before creating the payload we are removing the /image command from the promptValue.
             return parsePayloadForImageGeneration({
-                prompt: promptValue.split(' ').slice(1).join(' '),
+                prompt: promptValue.split(/\s+/).slice(1).join(' '),
             });
         }
         return parseChatCompletionPayload({prompt: promptValue, chatHistory: chats});
@@ -105,7 +105,7 @@ export const Prompt = () => {
      * Triggers on changing the value in the text area,
      * in `loading` state the user wont be able to change the content in the text area.
      */
-    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) =>
+    const handleOnChange = (value: string) =>
         !(isLoading || isImageFromTextLoading) && setPromptValue(value);
 
     /**

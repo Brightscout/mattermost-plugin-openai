@@ -18,8 +18,12 @@ import {StyledButton, StyledTextArea, Container} from './ChatInput.styles';
  *  handleOnSend={handleOnSend}
  * />
  */
-export const ChatInput = ({value, handleOnChange, isLoading, handleOnSend}: ChatInputProps) => {
+export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: ChatInputProps) => {
     const [isFocused, setIsFocused] = useState(false);
+
+    const items = [
+        {label: '/image', value: '/image'},
+    ];
 
     useEffect(() => {
         setIsFocused(false);
@@ -30,21 +34,25 @@ export const ChatInput = ({value, handleOnChange, isLoading, handleOnSend}: Chat
             className={`${isFocused && !isLoading ? 'focused' : ''}`}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-        >
-            <StyledTextArea
-                className={`${value ? 'contain-value' : ''}`}
-                rows={2}
-                label='Please enter your prompt'
-                onChange={handleOnChange}
-                value={value}
-            />
-            <StyledButton
-                {...(isLoading && {iconName: 'Spinner'})}
-                disabled={isLoading || Boolean(!value)}
-                onClick={handleOnSend}
             >
-                Send
-            </StyledButton>
-        </Container>
+                <StyledTextArea
+                    value={value}
+                    onChange={handleOnChange}
+                    component='textarea'
+                    items={items}
+                    fullWidth
+                    disableResize
+                    removeCloseButton
+                    className={`${value ? 'contain-value' : ''}`}
+                    rows={2}
+                />
+                <StyledButton
+                    {...(isLoading && {iconName: 'Spinner'})}
+                    disabled={isLoading || Boolean(!value)}
+                    onClick={handleOnSend}
+                >
+                    Send
+                </StyledButton>
+            </Container>
     );
 };

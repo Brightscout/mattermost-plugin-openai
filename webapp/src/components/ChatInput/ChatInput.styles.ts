@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {TextArea, Button} from '@brightscout/mattermost-ui-library';
+import {Button, AutoComplete} from '@brightscout/mattermost-ui-library';
 
 import Colors from 'styles/colorsForJs.module.scss';
 
@@ -21,31 +21,14 @@ export const Container = styled('div')({
 });
 
 // Styles for the text area
-export const StyledTextArea = styled(TextArea)({
-    '&.contain-value label': {
-        display: 'none',
-    },
-
-    '& textarea': {
-        resize: 'none',
-    },
-
-    '& textarea::-webkit-scrollbar': {
-        width: '5px',
-    },
-
-    '& textarea:focus + label': {
-        display: 'none',
+export const StyledTextArea = styled(AutoComplete)({
+    '& .select__option-list': {
+        top: 'unset',
+        bottom: '67px',
     },
 
     '& fieldset': {
-        width: '100%',
-        inset: '0 0 0',
-        border: 0,
-    },
-
-    '& fieldset legend': {
-        display: 'none',
+        border: 'none',
     },
 });
 
