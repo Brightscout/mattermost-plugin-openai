@@ -127,15 +127,6 @@ export const TOKENIZATION_TYPE = {
 } as const;
 
 /**
- * Constants used in the resolution confirmation modal.
- */
-export const RESOLUTION_CONFIRMATION_DIALOG = {
-    title: 'Choose Resolution',
-    description: 'Choose the resolution for the image to be generated',
-    primaryActionText: 'Send',
-} as const;
-
-/**
  * Constants for Key values
  */
 export const KEY_VALUES = {

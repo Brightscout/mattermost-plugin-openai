@@ -202,7 +202,7 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
             />
             <ButtonWrapper>
                 <StyledButton
-                    disabled={isLoading || Boolean(!value)}
+                    disabled={isLoading || !!value}
                     onClick={handleOnSend}
                 >
                     {POST_CHANNEL_ICON}

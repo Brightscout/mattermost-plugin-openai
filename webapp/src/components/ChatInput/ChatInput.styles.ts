@@ -24,7 +24,7 @@ export const Container = styled('div')({
 export const StyledTextArea = styled(MMSearch)({
     '& .select__option-list': {
         top: 'unset',
-        bottom: '67px',
+        bottom: '48px',
     },
 
     '& fieldset': {
