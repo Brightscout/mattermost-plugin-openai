@@ -53,3 +53,13 @@ type PostThreadResponseShape = {
         };
     };
 };
+
+type ImageGenerationResponseShape = {
+    created: number;
+    data: {url: string}[];
+};
+
+type PostPostToChannelResponseShape = {
+    id: string;
+    message: string;
+};

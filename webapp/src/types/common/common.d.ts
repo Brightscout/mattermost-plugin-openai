@@ -3,6 +3,7 @@ type Chat = {
     content: string;
     id: string;
     isSummary?: boolean;
+    isImage?: boolean;
 };
 
 type UseApiResponse<T> = {
@@ -22,4 +23,10 @@ type ParseThread = {
     bpe: number[];
     text: string[];
     message: string;
-}[]
+}[];
+
+type ImageResolution = '256x256' | '512x512' | '1024x1024';
+
+type ImageResolutionPlaceholders = 'x256' | 'x512' | 'x1024';
+
+type ImageGenerationOption = {label: string; value: string; secondaryLabel: string};

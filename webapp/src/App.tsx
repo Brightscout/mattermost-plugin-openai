@@ -59,7 +59,12 @@ export const App = () => {
     const {data: chatCompletionResponse} = getOpenAiApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
-    );
+    ) as UseApiResponse<ChatCompletionResponseShape>;
+
+    const {data: getImageFromTextResponse} = getOpenAiApiState(
+        API_SERVICE_CONFIG.getImageFromText.serviceName,
+        payload,
+    ) as UseApiResponse<ImageGenerationResponseShape>;
 
     /**
      * Before the first render we are fetching the configuration settings from the mattermost webapp.
@@ -70,7 +75,25 @@ export const App = () => {
         );
     }, []);
 
-    // Handling API request for fetching plugin settings from mattermost.
+    useApiRequestCompletionState({
+        serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
+        payload,
+        handleSuccess: () => {
+            dispatch(
+                addChats({
+                    id: getImageFromTextResponse.created.toString(),
+                    content: getImageFromTextResponse.data.map(({url}) => url).join(' '),
+                    role: CHAT_API_ROLES.assistant,
+                    isImage: true,
+                }),
+            );
+        },
+        handleError: () => {
+            dispatch(popLastChat());
+        },
+    });
+
+    // Handling Api request for fetching plugin settings from mattermost.
     useApiRequestCompletionState({
         services: API_SERVICE.pluginApiService,
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,

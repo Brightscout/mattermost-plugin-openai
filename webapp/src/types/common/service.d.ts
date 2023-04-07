@@ -2,7 +2,9 @@ type ApiServiceName =
     | 'getCompletion'
     | 'getChatCompletion'
     | 'getOpenAIApiKeyFromWebapp'
-    | 'getThreadFromPostId';
+    | 'getThreadFromPostId'
+    | 'getImageFromText'
+    | 'postPostToChannel';
 
 type PluginApiService = {
     path: string;
@@ -20,4 +22,9 @@ type ApiErrorResponse = {
     status: number;
 };
 
-type APIRequestPayload = GetCompletionPayload | GetChatCompletionPayload | GetThreadFromPost | void;
+type APIRequestPayload =
+    | GetCompletionPayload
+    | GetChatCompletionPayload
+    | GetThreadFromPost
+    | PostPostToChannelPayload
+    | void;

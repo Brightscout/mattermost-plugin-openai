@@ -19,6 +19,16 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'GET',
         serviceName: 'getThreadFromPostId',
     },
+    getImageFromText: {
+        path: '/images/generations',
+        method: 'POST',
+        serviceName: 'getImageFromText',
+    },
+    postPostToChannel: {
+        path: '/posts',
+        method: 'POST',
+        serviceName: 'postPostToChannel',
+    },
 };
 
 export const API_SERVICE = {

@@ -35,7 +35,7 @@ type ApiRequestCompletionState = {
 
 type PromptChatState = {
     chats: ChatsType;
-    payload?: GetChatCompletionPayload;
+    payload?: GetChatCompletionPayload | GetImageFromTextPayload;
     isRequestOnProcess?: boolean;
     isChatSummarized: boolean;
 };
