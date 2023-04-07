@@ -72,14 +72,15 @@
         "@types/js-cookie": "3.0.3"
     },
     "dependencies": {
-        "@brightscout/mattermost-ui-library": "2.0.4",
+        "@brightscout/mattermost-ui-library": "2.0.9",
         "@reduxjs/toolkit": "1.8.2",
         "core-js": "3.6.5",
         "file-saver": "2.0.5",
         "gpt3-tokenizer": "1.1.5",
         "js-cookie": "3.0.1",
         "mattermost-redux": "5.27.0",
-        "react": "16.13.1",
+        "react": "17.0.2",
+        "react-dom": "17.0.2",
         "react-redux": "7.2.0",
         "redux": "4.0.5",
         "styled-components": "5.3.0"

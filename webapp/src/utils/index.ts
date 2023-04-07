@@ -7,10 +7,19 @@ import {UserProfile} from 'mattermost-redux/types/users';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 // Constants
-import {ChatCompletionApi, CHAT_API_ROLES, ErrorMessages, IMAGE_RESOLUTIONS, pluginId} from 'constants/common';
+import {
+    ChatCompletionApi,
+    CHAT_API_ROLES,
+    ErrorMessages,
+    IMAGE_RESOLUTIONS,
+    IMAGE_RESOLUTION_PLACEHOLDERS,
+    pluginId,
+    REGEX,
+} from 'constants/common';
 import {
     ChatCompletionApiConfigs,
     IMAGE_GENERATIONS_API_CONFIGS,
+    IMAGE_GENERATIONS_COMMAND_CONFIGS,
     THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS,
 } from 'constants/configs';
 
@@ -149,20 +158,105 @@ export const parseChatWithTemplateIfSummary = ({
 /**
  * Parses image generation payload using the prompt passed in.
  * @param prompt - image generation prompt.
+ * @param resolution - image resolution to be generated.
  */
 export const parsePayloadForImageGeneration = ({
     prompt,
 }: {
     prompt: string;
-}): GetImageFromTextPayload => ({
-    prompt,
-    n: IMAGE_GENERATIONS_API_CONFIGS.numberOfImagesPerRequest,
-    size: IMAGE_GENERATIONS_API_CONFIGS.size,
-});
+}): GetImageFromTextPayload => {
+    const splitPrompt = prompt.split(REGEX.whiteSpace);
+    const resolution = splitPrompt[1] as ImageResolutionPlaceholders;
+    let endIndexAfterSlashCommands: number;
+
+    // Setting index to create a substring starting from the index to remove the slash command from the prompt
+    endIndexAfterSlashCommands = prompt.indexOf(splitPrompt[0]) + splitPrompt[0].length;
+    if (REGEX.resolution.test(resolution)) {
+        // If resolution present in the prompt we extract it and then generate the prompt excluding the commands
+        const startIndexOfResolution = prompt.indexOf(resolution);
+        endIndexAfterSlashCommands = startIndexOfResolution + resolution.length;
+    }
+
+    return {
+        prompt: prompt.substring(endIndexAfterSlashCommands),
+        n: IMAGE_GENERATIONS_API_CONFIGS.numberOfImagesPerRequest,
+        size: mapImageResolutionPlaceholderToResolution(resolution),
+    };
+};
 
 /**
  * Returns true if the prompt starts with `/image`
  * @param content - prompt by the user
  */
 export const checkIfIsImageCommand = ({content}: {content: string}) =>
-    content.split(' ')[0] === '/image';
+    content.split(REGEX.whiteSpace)[0] === IMAGE_GENERATIONS_COMMAND_CONFIGS.image.trim() ||
+    content.split(REGEX.whiteSpace)[0] === '**`image`**';
+
+/**
+ * If prompt is for generating image then styles the prompt using markdown
+ * else returns without any transformations
+ * @param content - prompt by the user.
+ */
+export const stylePromptIfImage = ({content}: {content: string}) => {
+    if (checkIfIsImageCommand({content})) {
+        const splitPrompt = content.split(REGEX.whiteSpace);
+        const resolution = splitPrompt[1];
+        let endIndexAfterSlashCommands: number;
+
+        // Setting index to create a substring starting from the index to remove the slash command from the prompt
+        endIndexAfterSlashCommands = content.indexOf(splitPrompt[0]) + splitPrompt[0].length;
+        if (REGEX.resolution.test(resolution)) {
+            // If resolution present in the prompt we extract it and then generate the prompt excluding the commands
+            const startIndexOfResolution = content.indexOf(resolution);
+            endIndexAfterSlashCommands = startIndexOfResolution + resolution.length;
+        }
+
+        return `**\`image\`** **\`${mapImageResolutionToPlaceholders(
+            mapImageResolutionPlaceholderToResolution(resolution as ImageResolutionPlaceholders),
+        )}\`** ${content.substring(endIndexAfterSlashCommands)}`;
+    }
+    return content;
+};
+
+/**
+ * Returns resolution placeholder x256 | x512 | x1024 when resolution is passed in.
+ * @param resolution - 256x254 | 512x512 | 1024x1024
+ */
+export const mapImageResolutionToPlaceholders = (resolution: ImageResolution) => {
+    switch (resolution) {
+        case IMAGE_RESOLUTIONS.x256:
+            return IMAGE_RESOLUTION_PLACEHOLDERS.x256;
+        case IMAGE_RESOLUTIONS.x512:
+            return IMAGE_RESOLUTION_PLACEHOLDERS.x512;
+        default:
+            return IMAGE_RESOLUTION_PLACEHOLDERS.x1024;
+    }
+};
+
+/**
+ * Returns resolution 256x254 | 512x512 | 1024x1024 when resolution placeholder is passed in.
+ * @param resolution - x256 | x512 | x1024
+ */
+export const mapImageResolutionPlaceholderToResolution = (
+    resolution: ImageResolutionPlaceholders,
+) => {
+    switch (resolution) {
+        case IMAGE_RESOLUTION_PLACEHOLDERS.x256:
+            return IMAGE_RESOLUTIONS.x256;
+        case IMAGE_RESOLUTION_PLACEHOLDERS.x512:
+            return IMAGE_RESOLUTIONS.x512;
+        case IMAGE_RESOLUTION_PLACEHOLDERS.x1024:
+            return IMAGE_RESOLUTIONS.x1024;
+        default:
+            return IMAGE_RESOLUTIONS.x256;
+    }
+};
+
+/**
+ * Returns the last value from the string
+ * example if completeString = "Hello my name" and splitBy is ' ', then it will return name
+ */
+export const getLastValue = (completeString: string, splitBy = ' ') => {
+    const valuesArr = completeString.split(splitBy);
+    return valuesArr.length ? valuesArr[valuesArr.length - 1] : '';
+};

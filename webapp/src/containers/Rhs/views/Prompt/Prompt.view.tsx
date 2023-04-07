@@ -1,8 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 // Components
 import {ChatInput} from 'components/ChatInput';
+import {RhsEmptyState} from 'components/RhsEmptyState';
 import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
@@ -21,6 +22,7 @@ import {
     mapErrorMessageFromOpenAI,
     parseChatCompletionPayload,
     parsePayloadForImageGeneration,
+    stylePromptIfImage,
 } from 'utils';
 
 // Constants
@@ -44,6 +46,8 @@ export const Prompt = () => {
     const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
     const [promptValue, setPromptValue] = useState('');
 
+    const chatStartRef = useRef<HTMLDivElement | null>(null);
+
     // Selectors
     const {chats, payload: chatCompletionsPayload, isChatSummarized} = getPromptChatSlice(state);
 
@@ -55,7 +59,7 @@ export const Prompt = () => {
         if (checkIfIsImageCommand({content: promptValue})) {
             // Before creating the payload we are removing the /image command from the promptValue.
             return parsePayloadForImageGeneration({
-                prompt: promptValue.split(' ').slice(1).join(' '),
+                prompt: promptValue,
             });
         }
         return parseChatCompletionPayload({prompt: promptValue, chatHistory: chats});
@@ -68,7 +72,7 @@ export const Prompt = () => {
 
     const {isLoading: isImageFromTextLoading, error: imageGenerationError} = getApiState(
         API_SERVICE_CONFIG.getImageFromText.serviceName,
-        payload,
+        chatCompletionsPayload,
     ) as UseApiResponse<ImageGenerationResponseShape>;
 
     /**
@@ -77,25 +81,35 @@ export const Prompt = () => {
      */
     const handleSend = () => {
         /**
-         * If prompt contains / slash commands then image generation endpoint is called.
+         * If prompt contains / slash commands then resolution confirmation modal is opened.
          */
         if (checkIfIsImageCommand({content: promptValue})) {
             makeApiRequestWithCompletionStatus(
                 API_SERVICE_CONFIG.getImageFromText.serviceName,
                 payload,
             );
-        } else {
-            makeApiRequestWithCompletionStatus(
-                API_SERVICE_CONFIG.getChatCompletion.serviceName,
-                payload,
+            dispatch(setChatPromptPayload({payload}));
+
+            dispatch(
+                addChats({
+                    role: CHAT_API_ROLES.user,
+                    content: stylePromptIfImage({content: promptValue.trim()}),
+                    id: Date.now().toString(),
+                }),
             );
+            return;
         }
+
+        makeApiRequestWithCompletionStatus(
+            API_SERVICE_CONFIG.getChatCompletion.serviceName,
+            payload,
+        );
         dispatch(setChatPromptPayload({payload}));
 
         dispatch(
             addChats({
                 role: CHAT_API_ROLES.user,
-                content: promptValue.trim(),
+                content: stylePromptIfImage({content: promptValue.trim()}),
                 id: Date.now().toString(),
             }),
         );
@@ -105,8 +119,15 @@ export const Prompt = () => {
      * Triggers on changing the value in the text area,
      * in `loading` state the user wont be able to change the content in the text area.
      */
-    const handleOnChange = ({target: {value}}: React.ChangeEvent<HTMLTextAreaElement>) =>
+    const handleOnChange = (value: string) =>
         !(isLoading || isImageFromTextLoading) && setPromptValue(value);
+
+    /**
+     * Scroll the chat window to the latest chat
+     */
+    const scrollToBottom = () => {
+        chatStartRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
+    };
 
     /**
      * On getting the success response from the api, we are resetting the text area,
@@ -129,7 +150,7 @@ export const Prompt = () => {
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
-        payload,
+        payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
     });
 
@@ -142,16 +163,26 @@ export const Prompt = () => {
         }
     }, [isChatSummarized]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [chats.length]);
+
     return (
         <Container>
             <ChatArea>
-                <RenderChatsAndError
-                    chats={chats}
-                    errorMessage={
-                        (error && mapErrorMessageFromOpenAI(error)) ||
-                        (imageGenerationError && mapErrorMessageFromOpenAI(imageGenerationError))
-                    }
-                />
+                <div ref={chatStartRef} />
+                {chats.length ? (
+                    <RenderChatsAndError
+                        chats={chats}
+                        errorMessage={
+                            (error && mapErrorMessageFromOpenAI(error)) ||
+                            (imageGenerationError &&
+                                mapErrorMessageFromOpenAI(imageGenerationError))
+                        }
+                    />
+                ) : (
+                    <RhsEmptyState />
+                )}
             </ChatArea>
             <ChatInput
                 value={promptValue}

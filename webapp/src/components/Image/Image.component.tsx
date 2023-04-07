@@ -58,7 +58,7 @@ export const Image = ({src, alt, size = '100%'}: ImageProps) => {
      */
     const handleDownloadImage = async () => {
         setIsDownloadInProgress(true);
-        const response = await fetch(src);
+        const response = await fetch(src, {mode: 'no-cors'});
         const blob = await response.blob();
         saveAs(blob, IMAGE_GENERATIONS.fileNameForDownloadedImage);
         setIsDownloadInProgress(false);

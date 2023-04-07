@@ -4,7 +4,7 @@
   "description": "Open-AI integration for Mattermost",
   "icon_path": "assets/open_ai.svg",
   "version": "1.0.0",
-  "min_server_version": "7.0.0",
+  "min_server_version": "7.8.2",
   "server": {
     "executables": {
       "linux-amd64": "server/dist/plugin-linux-amd64",

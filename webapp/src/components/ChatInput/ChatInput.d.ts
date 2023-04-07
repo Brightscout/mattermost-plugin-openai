@@ -12,9 +12,9 @@ export type ChatInputProps = {
 
     /**
      * Handler triggered when there is a change in the value of the textarea
-     * @param event - event source of the callback.
+     * @param value - changed value.
      */
-    handleOnChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    handleOnChange: (value: string) => void;
 
     /**
      * Handler triggered when the send button is clicked.
