@@ -27,7 +27,6 @@ import {StyledButton, StyledTextArea, Container, ButtonWrapper} from './ChatInpu
  * />
  */
 export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: ChatInputProps) => {
-    const [isFocused, setIsFocused] = useState(false);
     const [searchOptions, setSearchOptions] = useState<ImageGenerationOption[]>([]);
     const [optionFilterBy, setOptionFilterBy] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -106,7 +105,7 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
              */
         } else if (
             inputValue.startsWith(IMAGE_GENERATIONS_COMMAND_CONFIGS.slash) &&
-            !(REGEX.whiteSpace).test(inputValue) &&
+            !REGEX.whiteSpace.test(inputValue) &&
             !(inputValue === IMAGE_GENERATIONS_COMMAND_CONFIGS.image.trim())
         ) {
             setSearchOptions(
@@ -148,11 +147,12 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
             const splitPrompt = value.split(REGEX.whiteSpace).filter((string) => string);
             const secondWordInPrompt = splitPrompt[1];
             if (
-                splitPrompt.length < 3 &&
-                value.trim().startsWith(IMAGE_GENERATIONS_COMMAND_CONFIGS.slash) &&
-                (!secondWordInPrompt ||
-                    REGEX.resolution.test(secondWordInPrompt) ||
-                    secondWordInPrompt === 'x')
+                (splitPrompt.length < 3 &&
+                    value.trim().startsWith(IMAGE_GENERATIONS_COMMAND_CONFIGS.slash) &&
+                    (!secondWordInPrompt ||
+                        REGEX.resolution.test(secondWordInPrompt) ||
+                        secondWordInPrompt === 'x')) ||
+                value === ''
             ) {
                 return;
             }
@@ -164,10 +164,6 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
         handleValueChange(value);
     }, [value]);
 
-    useEffect(() => {
-        setIsFocused(false);
-    }, [isLoading]);
-
     /**
      * To make the height of the text area to grow with content.
      */
@@ -175,15 +171,13 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
         if (textareaRef.current) {
             textareaRef.current.style.height = IMAGE_GENERATIONS.textAreaDefaultHeight;
             const scrollHeight = textareaRef.current.scrollHeight;
-            textareaRef.current.style.height = Math.min(scrollHeight, IMAGE_GENERATIONS.textAreaMaxHeight) + 'px';
+            textareaRef.current.style.height =
+                Math.min(scrollHeight, IMAGE_GENERATIONS.textAreaMaxHeight) + 'px';
         }
     }, [value]);
 
     return (
-        <Container
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-        >
+        <Container>
             <StyledTextArea
                 searchValue={value}
                 setSearchValue={handleOnChange}
@@ -201,10 +195,7 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
                 onKeyPress={handleSearchSubmit}
             />
             <ButtonWrapper>
-                <StyledButton
-                    disabled={isLoading || !!value}
-                    onClick={handleOnSend}
-                >
+                <StyledButton disabled={isLoading || !value} onClick={handleOnSend}>
                     {POST_CHANNEL_ICON}
                 </StyledButton>
             </ButtonWrapper>
