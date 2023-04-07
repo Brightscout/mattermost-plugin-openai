@@ -147,6 +147,8 @@ export const REGEX = {
  * Constants used inside the RhsEmptyState component.
  */
 export const RHS_EMPTY_STATE = {
+
+    // TODO: update title
     title: 'OpenAI',
     subtitle: 'Examples',
     chatExample: 'How do I make an HTTP request in Javascript ?',
