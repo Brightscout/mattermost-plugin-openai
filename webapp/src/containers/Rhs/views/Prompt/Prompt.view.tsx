@@ -1,8 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 // Components
 import {ChatInput} from 'components/ChatInput';
+import {RhsEmptyState} from 'components/RhsEmptyState';
 import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
@@ -44,6 +45,8 @@ export const Prompt = () => {
     const dispatch = useDispatch();
     const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
     const [promptValue, setPromptValue] = useState('');
+
+    const chatStartRef = useRef<HTMLDivElement | null>(null);
 
     // Selectors
     const {chats, payload: chatCompletionsPayload, isChatSummarized} = getPromptChatSlice(state);
@@ -120,6 +123,13 @@ export const Prompt = () => {
         !(isLoading || isImageFromTextLoading) && setPromptValue(value);
 
     /**
+     * Scroll the chat window to the latest chat
+     */
+    const scrollToBottom = () => {
+        chatStartRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
+    };
+
+    /**
      * On getting the success response from the api, we are resetting the text area,
      * and also storing the response in a state array.
      */
@@ -153,16 +163,26 @@ export const Prompt = () => {
         }
     }, [isChatSummarized]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [chats.length]);
+
     return (
         <Container>
             <ChatArea>
-                <RenderChatsAndError
-                    chats={chats}
-                    errorMessage={
-                        (error && mapErrorMessageFromOpenAI(error)) ||
-                        (imageGenerationError && mapErrorMessageFromOpenAI(imageGenerationError))
-                    }
-                />
+                <div ref={chatStartRef} />
+                {chats.length ? (
+                    <RenderChatsAndError
+                        chats={chats}
+                        errorMessage={
+                            (error && mapErrorMessageFromOpenAI(error)) ||
+                            (imageGenerationError &&
+                                mapErrorMessageFromOpenAI(imageGenerationError))
+                        }
+                    />
+                ) : (
+                    <RhsEmptyState />
+                )}
             </ChatArea>
             <ChatInput
                 value={promptValue}

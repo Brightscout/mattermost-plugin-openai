@@ -30,6 +30,10 @@ export const StyledTextArea = styled(MMSearch)({
     '& fieldset': {
         border: 'none',
     },
+
+    '& textarea': {
+        background: 'transparent',
+    },
 });
 
 // Styles for the send button
@@ -47,4 +51,8 @@ export const ButtonWrapper = styled('div')({
     justifyContent: 'end',
     padding: '10px',
     height: '48px',
+
+    '& svg': {
+        width: '20px',
+    },
 });
