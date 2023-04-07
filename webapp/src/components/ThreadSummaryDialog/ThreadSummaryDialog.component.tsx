@@ -83,6 +83,10 @@ export const ThreadSummaryDialog = () => {
         let payloadPrompt =
         startPositionThread === 0 ? PARSE_THREAD_PROMPT.systemPrompt : data.choices[0].text.trim() + PARSE_THREAD_PROMPT.recursiveSummarizationPrompt;
         let i = startPositionThread;
+        if (threadPayload.length === 1) {
+             i = threadPayload.length + 1;
+             payloadPrompt = PARSE_THREAD_PROMPT.singlePostSystemPrompt + threadPayload[0].message + '\n';
+        }
         for (; i < threadPayload.length; i += 1) {
             payloadPrompt += threadPayload[i].message + '\n';
             if (

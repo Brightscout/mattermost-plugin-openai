@@ -58,6 +58,7 @@ export const POST_MENU_ITEM = {
  */
 export const PARSE_THREAD_PROMPT = {
     systemPrompt: 'Summarize the below thread briefly\n',
+    singlePostSystemPrompt: 'Summarize the content of the user\n',
     recursiveSummarizationPrompt: '\nSummarize the below thread with above context\n',
 } as const;
 
