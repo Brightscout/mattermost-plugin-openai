@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 
 // Components
 import {ChatInput} from 'components/ChatInput';
+import {RhsEmptyState} from 'components/RhsEmptyState';
 import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
@@ -156,13 +157,18 @@ export const Prompt = () => {
     return (
         <Container>
             <ChatArea>
-                <RenderChatsAndError
-                    chats={chats}
-                    errorMessage={
-                        (error && mapErrorMessageFromOpenAI(error)) ||
-                        (imageGenerationError && mapErrorMessageFromOpenAI(imageGenerationError))
-                    }
-                />
+                {chats.length ? (
+                    <RenderChatsAndError
+                        chats={chats}
+                        errorMessage={
+                            (error && mapErrorMessageFromOpenAI(error)) ||
+                            (imageGenerationError &&
+                                mapErrorMessageFromOpenAI(imageGenerationError))
+                        }
+                    />
+                ) : (
+                    <RhsEmptyState />
+                )}
             </ChatArea>
             <ChatInput
                 value={promptValue}

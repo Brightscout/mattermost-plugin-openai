@@ -18,7 +18,7 @@ export const PLUGIN_ID = 'plugins-open-ai';
 export const channelButtonTooltip = 'Open-ai';
 
 /** plugin header tile */
-export const rightSidebarHeaderTitle = 'Open-ai';
+export const rightSidebarHeaderTitle = 'Open-AI';
 
 export const ErrorMessages = {
     internalServerError: 'Something went wrong, please try again',
@@ -140,4 +140,16 @@ export const REGEX = {
     imageGenerationSlashPrompt: /^\/image\s+x\w*/,
     whiteSpace: /\s+/,
     resolution: /^(x256|x512|x1024)$/,
+};
+
+/**
+ * Constants used inside the RhsEmptyState component.
+ */
+export const RHS_EMPTY_STATE = {
+    title: 'OpenAI',
+    subtitle: 'Examples',
+    chatExample: 'How do I make an HTTP request in Javascript ?',
+    imageInstructionExample: 'To generate Image use /image command',
+    imageExample: '/image House in a snowfield',
+    emptyStateSvgViewBox: '0 0 24 24',
 };

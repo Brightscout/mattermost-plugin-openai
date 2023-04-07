@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import {Spinner} from '@brightscout/mattermost-ui-library';
 
 // Utils
 import {getLastValue} from 'utils';
@@ -196,7 +197,7 @@ export const ChatInput = ({value, isLoading, handleOnSend, handleOnChange}: Chat
             />
             <ButtonWrapper>
                 <StyledButton disabled={isLoading || !value} onClick={handleOnSend}>
-                    {POST_CHANNEL_ICON}
+                    {isLoading ? <Spinner /> : POST_CHANNEL_ICON}
                 </StyledButton>
             </ButtonWrapper>
         </Container>
