@@ -1,5 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {PostCard} from '@brightscout/mattermost-ui-library';
 
 // Mattermost
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -7,7 +8,6 @@ import {GlobalState} from 'mattermost-redux/types/store';
 
 // Components
 import {Image} from 'components/Image';
-import {PostCard} from 'components/PostCard';
 
 // Utils
 import {getProfileImgUrl} from 'utils';
