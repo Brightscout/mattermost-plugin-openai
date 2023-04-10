@@ -89,14 +89,17 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	response, imageErr := http.Get(body.ImageURL)
 	if imageErr != nil {
-		p.API.LogWarn("Error fetching image", err.Error())
+		p.API.LogWarn("Error fetching image", imageErr.Error())
 		p.handleError(w, r, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
 		return
 	}
 	defer response.Body.Close()
 
 	buf := bytes.NewBuffer(nil)
-	io.Copy(buf, response.Body)
+	if _, err := io.Copy(buf, response.Body); err != nil {
+		p.API.LogWarn(err.Error())
+		p.handleError(w, r, &serializer.Error{Code: http.StatusInternalServerError, Message: err.Error()})
+	}
 	data := buf.Bytes()
 
 	fileUploadResponse, uploadErr := p.API.UploadFile(data, channelID, body.FileName)
