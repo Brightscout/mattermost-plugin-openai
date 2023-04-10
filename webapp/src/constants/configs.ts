@@ -2,7 +2,7 @@ import {IMAGE_RESOLUTIONS} from './common';
 
 export const ChatCompletionApiConfigs = {
     model: 'gpt-3.5-turbo',
-    maxTokens: 3000,
+    maxTokens: 2000,
 
     /** Reduce this to get the summary quicker */
     maxTokenLimitToSummarize: 2000,
