@@ -18,7 +18,7 @@ export const PLUGIN_ID = 'plugins-open-ai';
 export const channelButtonTooltip = 'Open-ai';
 
 /** plugin header tile */
-export const rightSidebarHeaderTitle = 'Open-ai';
+export const rightSidebarHeaderTitle = 'Open-AI';
 
 export const ErrorMessages = {
     internalServerError: 'Something went wrong, please try again',
@@ -58,6 +58,7 @@ export const POST_MENU_ITEM = {
  */
 export const PARSE_THREAD_PROMPT = {
     systemPrompt: 'Summarize the below thread briefly\n',
+    singlePostSystemPrompt: 'Summarize the content of the user\n',
     recursiveSummarizationPrompt: '\nSummarize the below thread with above context\n',
 } as const;
 
@@ -81,6 +82,9 @@ export const CHAT_API_ROLES = {
     assistant: 'assistant',
 } as const;
 
+/**
+ * Constants used in Image generation functionality
+ */
 export const IMAGE_GENERATIONS = {
     expiryInfo: ({plural = true}: {plural: boolean}) =>
         `*The ${
@@ -90,12 +94,27 @@ export const IMAGE_GENERATIONS = {
     altTextForGeneratedImages: 'Prompt response',
     downloadButtonTooltipText: 'Download',
     postToChannelButtonTooltipText: 'Post to channel',
+    resolutionPlaceholder: 'Resolution',
+    textAreaDefaultHeight: '46px',
+    textAreaMaxHeight: 136,
 } as const;
 
+/**
+ * Image resolutions.
+ */
 export const IMAGE_RESOLUTIONS = {
     x1024: '1024x1024',
     x512: '512x512',
     x256: '256x256',
+} as const;
+
+/**
+ * Placeholders for image resolution.
+ */
+export const IMAGE_RESOLUTION_PLACEHOLDERS = {
+    x256: 'x256',
+    x512: 'x512',
+    x1024: 'x1024',
 } as const;
 
 /**
@@ -109,10 +128,31 @@ export const TOKENIZATION_TYPE = {
 } as const;
 
 /**
- * Constants used in the resolution confirmation modal.
+ * Constants for Key values
  */
-export const RESOLUTION_CONFIRMATION_DIALOG = {
-    title: 'Choose Resolution',
-    description: 'Choose the resolution for the image to be generated',
-    primaryActionText: 'Send',
+export const KEY_VALUES = {
+    enter: 'Enter',
 } as const;
+
+/**
+ * Constants for all regex used within the app.
+ */
+export const REGEX = {
+    imageGenerationSlashPrompt: /^\/image\s+x\w*/,
+    whiteSpace: /\s+/,
+    resolution: /^(x256|x512|x1024)$/,
+};
+
+/**
+ * Constants used inside the RhsEmptyState component.
+ */
+export const RHS_EMPTY_STATE = {
+
+    // TODO: update title
+    title: 'OpenAI',
+    subtitle: 'Examples',
+    chatExample: 'How do I make an HTTP request in Javascript ?',
+    imageInstructionExample: 'To generate Image use /image command',
+    imageExample: '/image House in a snowfield',
+    emptyStateSvgViewBox: '0 0 24 24',
+};
