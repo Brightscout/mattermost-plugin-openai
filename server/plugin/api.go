@@ -1,6 +1,9 @@
 package plugin
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"net/http"
 	"path/filepath"
 	"runtime/debug"
@@ -9,6 +12,7 @@ import (
 
 	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
+	"github.com/mattermost/mattermost-server/v6/model"
 )
 
 // Initializes the plugin REST API
@@ -26,6 +30,7 @@ func (p *Plugin) InitRoutes() {
 	s := p.router.PathPrefix(constants.APIPrefix).Subrouter()
 
 	s.HandleFunc(constants.PathGetConfig, p.checkAuth(p.handleGetConfiguration)).Methods(http.MethodGet)
+	s.HandleFunc(constants.PathPostImage, p.checkAuth(p.handlePostImage)).Methods(http.MethodPost)
 }
 
 func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
@@ -57,6 +62,75 @@ func (p *Plugin) HandleStaticFiles() {
 
 func (p *Plugin) handleGetConfiguration(w http.ResponseWriter, _ *http.Request) {
 	p.writeJSON(w, 0, p.getConfiguration())
+}
+
+func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
+	pathParams := mux.Vars(r)
+	channelID := pathParams[constants.PathParamChannelID]
+	if !model.IsValidId(channelID) {
+		p.API.LogWarn("Invalid channel id")
+		p.handleError(w, r, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid channel id"})
+		return
+	}
+
+	mattermostUserID := r.Header.Get(constants.HeaderMattermostUserID)
+
+	if statusCode, err := p.hasChannelMembership(mattermostUserID, channelID); err != nil {
+		p.handleError(w, r, &serializer.Error{Code: statusCode, Message: err.Error()})
+		return
+	}
+
+	body, err := serializer.GetPostImageDetailsFromJSON(r.Body)
+	if err != nil {
+		p.API.LogError("Error in decoding the body for posting image", "Error", err.Error())
+		p.handleError(w, r, &serializer.Error{Code: http.StatusBadRequest, Message: err.Error()})
+		return
+	}
+
+	response, imageErr := http.Get(body.ImageURL)
+	if imageErr != nil {
+		p.API.LogWarn("Error fetching image", err.Error())
+		p.handleError(w, r, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
+		return
+	}
+	defer response.Body.Close()
+
+	buf := bytes.NewBuffer(nil)
+	io.Copy(buf, response.Body)
+	data := buf.Bytes()
+
+	fileUploadResponse, uploadErr := p.API.UploadFile(data, channelID, body.FileName)
+	if uploadErr != nil {
+		p.API.LogError(uploadErr.Error())
+		p.handleError(w, r, &serializer.Error{Code: http.StatusInternalServerError, Message: uploadErr.Error()})
+		return
+	}
+
+	if _, postErr := p.API.CreatePost(&model.Post{
+		UserId:    mattermostUserID,
+		ChannelId: channelID,
+		FileIds:   model.StringArray{fileUploadResponse.Id},
+	}); postErr != nil {
+		p.API.LogError(postErr.Error())
+		p.handleError(w, r, &serializer.Error{Code: http.StatusInternalServerError, Message: postErr.Error()})
+		return
+	}
+
+	p.writeJSON(w, http.StatusCreated, map[string]string{"success": "image posted"})
+}
+
+// handleError handles writing HTTP response error
+func (p *Plugin) handleError(w http.ResponseWriter, r *http.Request, error *serializer.Error) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(error.Code)
+	message := map[string]string{constants.Error: error.Message}
+	response, err := json.Marshal(message)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if _, err := w.Write(response); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {

@@ -5,5 +5,8 @@ const (
 	ErrorNotAuthorized     = "Not authorized"
 
 	// Error messages
+	Error               = "Error"
 	GenericErrorMessage = "something went wrong, please try again later"
+
+	PathParamChannelID = "channel_id"
 )

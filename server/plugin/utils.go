@@ -2,10 +2,13 @@ package plugin
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
 )
+
+var ErrNotFound = errors.New("not found")
 
 func (p *Plugin) handleAPIError(w http.ResponseWriter, apiErr *serializer.APIErrorResponse) {
 	w.Header().Set("Content-Type", "application/json")
@@ -45,4 +48,13 @@ func (p *Plugin) writeJSON(w http.ResponseWriter, statusCode int, v interface{})
 	}
 
 	w.WriteHeader(statusCode)
+}
+
+func (p *Plugin) hasChannelMembership(userID, channelID string) (int, error) {
+	if _, err := p.API.GetChannelMember(channelID, userID); err != nil {
+		p.API.LogError("Failed to verify channel membership", "channel id: ", channelID, "user id: ", userID, "Error", err.Error())
+		return err.StatusCode, err
+	}
+
+	return 0, nil
 }
