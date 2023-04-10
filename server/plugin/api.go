@@ -99,6 +99,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 	if _, err := io.Copy(buf, response.Body); err != nil {
 		p.API.LogWarn(err.Error())
 		p.handleError(w, r, &serializer.Error{Code: http.StatusInternalServerError, Message: err.Error()})
+		return
 	}
 	data := buf.Bytes()
 
