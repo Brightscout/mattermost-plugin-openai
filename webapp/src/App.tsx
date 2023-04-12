@@ -99,7 +99,7 @@ export const App = () => {
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
         handleSuccess: () => {
             if (data) {
-                dispatch(addCredentials(data));
+                dispatch(addCredentials(data as OpenAIApiKeyFromWebapp));
             }
         },
     });
