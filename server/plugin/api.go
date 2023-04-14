@@ -10,8 +10,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
-	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/constants"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/serializer"
 	"github.com/mattermost/mattermost-server/v6/model"
 )
 

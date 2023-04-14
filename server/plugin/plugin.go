@@ -10,7 +10,7 @@ import (
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
-	"github.com/mattermost/mattermost-plugin-open-ai/server/config"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/config"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.

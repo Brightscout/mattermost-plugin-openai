@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/serializer"
 )
 
 var ErrNotFound = errors.New("not found")
