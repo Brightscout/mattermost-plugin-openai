@@ -19,11 +19,9 @@ interface ReduxState extends GlobalState {
                 void,
                 'openAiPluginApi',
                 'mattermostApi',
-                'openAiApi'
             >;
         },
         never,
-        'openAiApi',
         'mattermostApi',
         'openAiPluginApi'
     >;
@@ -42,7 +40,7 @@ type PromptChatState = {
 
 type ConfigCredentialState = {
     openAIApiKey: string;
-    openAIOrganizationId: string;
+    openAiOrganizationId: string;
 };
 
 type ThreadSummarizationState = {

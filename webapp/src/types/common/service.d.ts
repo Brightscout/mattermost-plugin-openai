@@ -1,7 +1,6 @@
 type ApiServiceName =
     | 'getCompletion'
     | 'getChatCompletion'
-    | 'getOpenAIApiKeyFromWebapp'
     | 'getThreadFromPostId'
     | 'getImageFromText'
     | 'postImageToChannel';

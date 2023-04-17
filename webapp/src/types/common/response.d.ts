@@ -2,8 +2,8 @@
 
 type OpenAIApiKeyFromWebapp = {
     object: 'openAIKey';
-    openAIAPIKey: string;
-    openAIOrganizationId: string;
+    openAiApiKey: string;
+    openAiOrganizationId: string;
 };
 
 type CompletionResponseShape = {

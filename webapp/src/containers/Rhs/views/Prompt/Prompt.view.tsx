@@ -7,7 +7,7 @@ import {RhsEmptyState} from 'components/RhsEmptyState';
 import {RenderChatsAndError} from 'containers/Rhs/views/Prompt/SubComponents/RenderChatsAndError';
 
 // Hooks
-import useOpenAIApi from 'hooks/useOpenAIApi';
+import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Actions
@@ -43,7 +43,7 @@ import {Container, ChatArea} from './Prompt.styles';
 export const Prompt = () => {
     // Initialize hooks
     const dispatch = useDispatch();
-    const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
+    const {state, getApiState, makeApiRequestWithCompletionStatus} = usePluginApi();
     const [promptValue, setPromptValue] = useState('');
 
     const chatStartRef = useRef<HTMLDivElement | null>(null);
