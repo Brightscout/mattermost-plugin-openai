@@ -21,7 +21,7 @@ const pluginApi = createApi({
     }),
     endpoints: (builder) => ({
         [API_SERVICE_CONFIG.postImageToChannel.serviceName]: builder.query<
-            PostPostToChannelResponseShape,
+            PostImageToChannelResponseShape,
             APIRequestPayload
         >({
             query: (payload: PostImageToChannelPayload) => ({

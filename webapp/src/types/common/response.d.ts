@@ -59,4 +59,4 @@ type ImageGenerationResponseShape = {
     data: {url: string}[];
 };
 
-type PostPostToChannelResponseShape = Record<string, string>
+type PostImageToChannelResponseShape = Record<string, string>
