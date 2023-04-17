@@ -52,7 +52,7 @@ func (p *Plugin) WithRecovery(next http.Handler) http.Handler {
 func (p *Plugin) HandleStaticFiles() {
 	bundlePath, err := p.API.GetBundlePath()
 	if err != nil {
-		p.API.LogWarn("Failed to get bundle path.", "Error", err.Error())
+		p.API.LogWarn("Failed to get bundle path.", constants.Error, err.Error())
 		return
 	}
 
@@ -69,12 +69,11 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 	channelID := pathParams[constants.PathParamChannelID]
 	if !model.IsValidId(channelID) {
 		p.API.LogWarn("Invalid channel id")
-		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid channel id"})
+		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "Invalid channel ID"})
 		return
 	}
 
 	mattermostUserID := r.Header.Get(constants.HeaderMattermostUserID)
-
 	if statusCode, err := p.hasChannelMembership(mattermostUserID, channelID); err != nil {
 		p.handleError(w, &serializer.Error{Code: statusCode, Message: err.Error()})
 		return
@@ -82,14 +81,14 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	body, err := serializer.GetPostImageDetailsFromJSON(r.Body)
 	if err != nil {
-		p.API.LogError("Error in decoding the body for posting image", "Error", err.Error())
+		p.API.LogError("Error in decoding the body for posting the image", constants.Error, err.Error())
 		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
 
 	response, imageErr := http.Get(body.ImageURL)
 	if imageErr != nil {
-		p.API.LogWarn("Error fetching image", imageErr.Error())
+		p.API.LogWarn("Error occurred while fetching the image", imageErr.Error())
 		p.handleError(w, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
 		return
 	}
@@ -97,7 +96,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	buf := bytes.NewBuffer(nil)
 	if _, err := io.Copy(buf, response.Body); err != nil {
-		p.API.LogWarn(err.Error())
+		p.API.LogWarn("Error copying the image file", constants.Error, err.Error())
 		p.handleError(w, &serializer.Error{Code: http.StatusInternalServerError, Message: err.Error()})
 		return
 	}
@@ -105,7 +104,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	fileUploadResponse, uploadErr := p.API.UploadFile(data, channelID, body.FileName)
 	if uploadErr != nil {
-		p.API.LogError(uploadErr.Error())
+		p.API.LogError("Error uploading the image file", constants.Error, uploadErr.Error())
 		p.handleError(w, &serializer.Error{Code: http.StatusInternalServerError, Message: uploadErr.Error()})
 		return
 	}
@@ -120,7 +119,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p.writeJSON(w, http.StatusCreated, map[string]string{"success": "image posted"})
+	p.writeJSON(w, http.StatusCreated, map[string]string{"success": "Image posted"})
 }
 
 // handleError handles writing HTTP response error
@@ -132,6 +131,7 @@ func (p *Plugin) handleError(w http.ResponseWriter, error *serializer.Error) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
 	if _, err := w.Write(response); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
