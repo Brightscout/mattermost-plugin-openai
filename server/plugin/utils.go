@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
 	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
 )
 
@@ -14,7 +15,7 @@ func (p *Plugin) handleAPIError(w http.ResponseWriter, apiErr *serializer.APIErr
 	w.Header().Set("Content-Type", "application/json")
 	errorBytes, err := json.Marshal(apiErr)
 	if err != nil {
-		p.API.LogError("Failed to marshal API error", "Error", err.Error())
+		p.API.LogError("Failed to marshal API error", constants.Error, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -22,7 +23,7 @@ func (p *Plugin) handleAPIError(w http.ResponseWriter, apiErr *serializer.APIErr
 	w.WriteHeader(apiErr.StatusCode)
 
 	if _, err = w.Write(errorBytes); err != nil {
-		p.API.LogError("Failed to write JSON response", "Error", err.Error())
+		p.API.LogError("Failed to write JSON response", constants.Error, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -36,13 +37,13 @@ func (p *Plugin) writeJSON(w http.ResponseWriter, statusCode int, v interface{})
 	w.Header().Set("Content-Type", "application/json")
 	b, err := json.Marshal(v)
 	if err != nil {
-		p.API.LogError("Failed to marshal JSON response", "Error", err.Error())
+		p.API.LogError("Failed to marshal JSON response", constants.Error, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	if _, err = w.Write(b); err != nil {
-		p.API.LogError("Failed to write JSON response", "Error", err.Error())
+		p.API.LogError("Failed to write JSON response", constants.Error, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -52,7 +53,7 @@ func (p *Plugin) writeJSON(w http.ResponseWriter, statusCode int, v interface{})
 
 func (p *Plugin) hasChannelMembership(userID, channelID string) (int, error) {
 	if _, err := p.API.GetChannelMember(channelID, userID); err != nil {
-		p.API.LogError("Failed to verify channel membership", "channel id: ", channelID, "user id: ", userID, "Error", err.Error())
+		p.API.LogError("Failed to verify channel membership", "ChannelID: ", channelID, "UserID: ", userID, constants.Error, err.Error())
 		return err.StatusCode, err
 	}
 
