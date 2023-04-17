@@ -88,7 +88,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	response, imageErr := http.Get(body.ImageURL)
 	if imageErr != nil {
-		p.API.LogWarn("Error occurred while fetching the image", imageErr.Error())
+		p.API.LogWarn("Error occurred while fetching the image", constants.Error, imageErr.Error())
 		p.handleError(w, r, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
 		return
 	}

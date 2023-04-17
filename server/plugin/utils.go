@@ -53,7 +53,7 @@ func (p *Plugin) writeJSON(w http.ResponseWriter, statusCode int, v interface{})
 
 func (p *Plugin) hasChannelMembership(userID, channelID string) (int, error) {
 	if _, err := p.API.GetChannelMember(channelID, userID); err != nil {
-		p.API.LogError("Failed to verify channel membership", "ChannelID: ", channelID, "UserID: ", userID, constants.Error, err.Error())
+		p.API.LogError("Failed to verify channel membership", "ChannelID", channelID, "UserID", userID, constants.Error, err.Error())
 		return err.StatusCode, err
 	}
 
