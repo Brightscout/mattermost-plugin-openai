@@ -67,8 +67,8 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 	channelID := pathParams[constants.PathParamChannelID]
 	if !model.IsValidId(channelID) {
-		p.API.LogWarn("Invalid channel id")
-		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid channel id"})
+		p.API.LogWarn(constants.ErrorInvalidChannelID)
+		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: constants.ErrorInvalidChannelID})
 		return
 	}
 
@@ -81,14 +81,14 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	body, err := serializer.GetPostImageDetailsFromJSON(r.Body)
 	if err != nil {
-		p.API.LogError("Error in decoding the body for posting image", "Error", err.Error())
+		p.API.LogError("Error occurred while decoding the body for posting the image", "Error", err.Error())
 		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
 
 	response, imageErr := http.Get(body.ImageURL)
 	if imageErr != nil {
-		p.API.LogWarn("Error fetching image", imageErr.Error())
+		p.API.LogWarn("Error occurred while fetching the image", imageErr.Error())
 		p.handleError(w, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
 		return
 	}
@@ -125,14 +125,14 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 func (p *Plugin) handleGetCompletion(w http.ResponseWriter, r *http.Request) {
 	body, err := serializer.GetCompletionRequestPayloadFromJSON(r.Body)
 	if err != nil {
-		p.API.LogError("Error in decoding the body for completion", "Error", err.Error())
-		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid request payload"})
+		p.API.LogError("Error occurred while decoding the body for completion", "Error", err.Error())
+		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: constants.ErrorInvalidRequestPayload})
 		return
 	}
 
 	response, statusCode, responseErr := p.Client.GetCompletion(body)
 	if responseErr != nil {
-		p.API.LogWarn("Error processing completion request", "Error", responseErr.Error())
+		p.API.LogWarn("Error occurred while processing the completion request", "Error", responseErr.Error())
 		p.handleError(w, &serializer.Error{Code: statusCode, Message: responseErr.Error()})
 		return
 	}
@@ -143,14 +143,14 @@ func (p *Plugin) handleGetCompletion(w http.ResponseWriter, r *http.Request) {
 func (p *Plugin) handleGetChatCompletion(w http.ResponseWriter, r *http.Request) {
 	body, err := serializer.GetChatCompletionRequestPayloadFromJSON(r.Body)
 	if err != nil {
-		p.API.LogError("Error in decoding the body for completion", "Error", err.Error())
-		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid request payload"})
+		p.API.LogError("Error occurred while decoding the body for completion", "Error", err.Error())
+		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: constants.ErrorInvalidRequestPayload})
 		return
 	}
 
 	response, statusCode, responseErr := p.Client.GetChatCompletion(body)
 	if responseErr != nil {
-		p.API.LogWarn("Error processing chat completion request", "Error", responseErr.Error())
+		p.API.LogWarn("Error occurred while processing the chat completion request", "Error", responseErr.Error())
 		p.handleError(w, &serializer.Error{Code: statusCode, Message: responseErr.Error()})
 		return
 	}
@@ -161,14 +161,14 @@ func (p *Plugin) handleGetChatCompletion(w http.ResponseWriter, r *http.Request)
 func (p *Plugin) handleImageGeneration(w http.ResponseWriter, r *http.Request) {
 	body, err := serializer.GetImageGenerationPayloadFromJSON(r.Body)
 	if err != nil {
-		p.API.LogError("Error in decoding the body for completion", "Error", err.Error())
-		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: "invalid request payload"})
+		p.API.LogError("Error occurred while decoding the body for completion", "Error", err.Error())
+		p.handleError(w, &serializer.Error{Code: http.StatusBadRequest, Message: constants.ErrorInvalidRequestPayload})
 		return
 	}
 
 	response, statusCode, responseErr := p.Client.GetImage(body)
 	if responseErr != nil {
-		p.API.LogWarn("Error generating image", "Error", responseErr.Error())
+		p.API.LogWarn("Error occurred while generating image", "Error", responseErr.Error())
 		p.handleError(w, &serializer.Error{Code: statusCode, Message: responseErr.Error()})
 		return
 	}

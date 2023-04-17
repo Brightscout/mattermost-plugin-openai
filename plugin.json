@@ -33,14 +33,14 @@
         "key": "openAiApiKey",
         "display_name": "OpenAI API key",
         "type": "text",
-        "help_text": "Enter the OpenAI Api key",
+        "help_text": "Enter the OpenAI API key",
         "default": null
       },
       {
         "key": "openAiOrganizationId",
-        "display_name": "OpenAI organization Id",
+        "display_name": "OpenAI organization ID",
         "type": "text",
-        "help_text": "Enter the OpenAI organization Id",
+        "help_text": "Enter the OpenAI organization ID",
         "default": null
       }
     ]
