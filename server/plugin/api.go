@@ -2,7 +2,6 @@ package plugin
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -87,7 +86,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 
 	response, imageErr := http.Get(body.ImageURL)
 	if imageErr != nil {
-		p.API.LogWarn("Error occurred while fetching the image", imageErr.Error())
+		p.API.LogWarn("Error occurred while fetching the image", constants.Error, imageErr.Error())
 		p.handleError(w, &serializer.Error{Code: response.StatusCode, Message: imageErr.Error()})
 		return
 	}
@@ -173,21 +172,6 @@ func (p *Plugin) handleImageGeneration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p.writeJSON(w, http.StatusOK, response)
-}
-
-// handleError handles writing HTTP response error
-func (p *Plugin) handleError(w http.ResponseWriter, error *serializer.Error) {
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(error.Code)
-	message := map[string]string{constants.Error: error.Message}
-	response, err := json.Marshal(message)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
-	if _, err := w.Write(response); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {
