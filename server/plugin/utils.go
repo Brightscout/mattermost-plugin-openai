@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mattermost/mattermost-plugin-open-ai/server/constants"
-	"github.com/mattermost/mattermost-plugin-open-ai/server/serializer"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/constants"
+	"github.com/mattermost/mattermost-plugin-OpenAI/server/serializer"
 )
 
 var ErrNotFound = errors.New("not found")
@@ -61,7 +61,7 @@ func (p *Plugin) hasChannelMembership(userID, channelID string) (int, error) {
 }
 
 // handleError handles writing HTTP response error
-func (p *Plugin) handleError(w http.ResponseWriter, _ *http.Request, error *serializer.Error) {
+func (p *Plugin) handleError(w http.ResponseWriter, error *serializer.Error) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(error.Code)
 	message := map[string]string{constants.Error: error.Message}

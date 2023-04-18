@@ -55,7 +55,7 @@ export const App = () => {
     // Get plugin API states
     const {data} = getApiState(API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName);
 
-    // Get open AI API states
+    // Get OpenAI API states
     const {data: chatCompletionResponse} = getOpenAiApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
@@ -99,7 +99,7 @@ export const App = () => {
         serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
         handleSuccess: () => {
             if (data) {
-                dispatch(addCredentials(data));
+                dispatch(addCredentials(data as OpenAIApiKeyFromWebapp));
             }
         },
     });

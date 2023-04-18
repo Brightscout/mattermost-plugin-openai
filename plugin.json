@@ -1,7 +1,7 @@
 {
   "id": "open-ai",
-  "name": "Open-AI",
-  "description": "Open-AI integration for Mattermost",
+  "name": "OpenAI",
+  "description": "OpenAI integration for Mattermost",
   "icon_path": "assets/open_ai.svg",
   "version": "2.0.0",
   "min_server_version": "7.8.2",
@@ -23,15 +23,15 @@
     "settings": [
       {
         "key": "openAIAPIKey",
-        "display_name": "Open AI API key",
+        "display_name": "OpenAI API key",
         "type": "text",
-        "help_text": "Enter the Open AI Api key"
+        "help_text": "Enter the OpenAI Api key"
       },
       {
         "key": "openAIOrganizationId",
-        "display_name": "Open AI organization Id",
+        "display_name": "OpenAI organization Id",
         "type": "text",
-        "help_text": "Enter the Open AI organization Id"
+        "help_text": "Enter the OpenAI organization Id"
       }
     ]
   }

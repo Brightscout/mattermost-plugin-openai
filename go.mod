@@ -1,4 +1,4 @@
-module github.com/mattermost/mattermost-plugin-open-ai
+module github.com/mattermost/mattermost-plugin-OpenAI
 
 go 1.18
 

@@ -126,7 +126,7 @@ export const ThreadSummaryDialog = () => {
 
     /**
      * Hook runs after completion api is completed.
-     * Here we are using to catch any errors coming from the open ai servers
+     * Here we are using to catch any errors coming from the OpenAI servers
      */
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getCompletion.serviceName,

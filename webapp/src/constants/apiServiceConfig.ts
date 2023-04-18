@@ -24,10 +24,10 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'POST',
         serviceName: 'getImageFromText',
     },
-    postPostToChannel: {
-        path: '/posts',
+    postImageToChannel: {
+        path: '/image',
         method: 'POST',
-        serviceName: 'postPostToChannel',
+        serviceName: 'postImageToChannel',
     },
 };
 

@@ -8,7 +8,7 @@ import {setApiRequestCompletionState} from 'reducers/apiRequest';
 import openAiApiService from 'services/openAiApiService';
 
 // Constants
-import {PLUGIN_ID} from 'constants/common';
+import {pluginReduxStateId} from 'constants/common';
 
 function useOpenAIApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
@@ -33,7 +33,7 @@ function useOpenAIApi() {
     const getApiState = useCallback(
         (serviceName: ApiServiceName, payload: APIRequestPayload) => {
             const {data, isError, isLoading, isSuccess, error, isUninitialized} =
-                openAiApiService.endpoints[serviceName].select(payload)(state[PLUGIN_ID]);
+                openAiApiService.endpoints[serviceName].select(payload)(state[pluginReduxStateId]);
             return {data, isError, isLoading, isSuccess, error, isUninitialized};
         },
         [state],

@@ -13,7 +13,6 @@ import {
     ErrorMessages,
     IMAGE_RESOLUTIONS,
     IMAGE_RESOLUTION_PLACEHOLDERS,
-    pluginId,
     REGEX,
 } from 'constants/common';
 import {
@@ -22,6 +21,8 @@ import {
     IMAGE_GENERATIONS_COMMAND_CONFIGS,
     THREAD_SUMMARIZATION_COMPLETION_API_CONFIGS,
 } from 'constants/configs';
+
+import {id as pluginId} from 'manifest';
 
 /**
  * Parses the payload required for the chat completion API to give response.
@@ -79,7 +80,7 @@ export const getPluginApiBaseUrl = () => {
 };
 
 /**
- * Maps the error coming from the open ai server to a user friendly feedback
+ * Maps the error coming from the OpenAI server to a user friendly feedback
  * @param error - api error response
  */
 export const mapErrorMessageFromOpenAI = (error: ApiErrorResponse) => {
