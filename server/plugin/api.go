@@ -2,7 +2,6 @@ package plugin
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -68,7 +67,7 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 	channelID := pathParams[constants.PathParamChannelID]
 	if !model.IsValidId(channelID) {
-		p.API.LogWarn("Invalid channel id")
+		p.API.LogWarn("Invalid channel ID")
 		p.handleError(w, r, &serializer.Error{Code: http.StatusBadRequest, Message: "Invalid channel ID"})
 		return
 	}
@@ -120,21 +119,6 @@ func (p *Plugin) handlePostImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p.writeJSON(w, http.StatusCreated, map[string]string{"success": "Image posted"})
-}
-
-// handleError handles writing HTTP response error
-func (p *Plugin) handleError(w http.ResponseWriter, _ *http.Request, error *serializer.Error) {
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(error.Code)
-	message := map[string]string{constants.Error: error.Message}
-	response, err := json.Marshal(message)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
-	if _, err := w.Write(response); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
 }
 
 func (p *Plugin) checkAuth(handler http.HandlerFunc) http.HandlerFunc {
