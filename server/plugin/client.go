@@ -103,8 +103,8 @@ func (c *client) Call(basePath, method, path, contentType string, inBody io.Read
 		req.Header.Add("Content-Type", contentType)
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.plugin.getConfiguration().OpenAIAPIKey))
-	req.Header.Add("OpenAI-Organization", c.plugin.getConfiguration().OpenAIOrganizationID)
+	req.Header.Add(constants.OpenAIHeaderAuthorization, fmt.Sprintf(constants.OpenAIHeaderAuthorizationBearer, c.plugin.getConfiguration().OpenAIAPIKey))
+	req.Header.Add(constants.OpenAIHeaderOrganization, c.plugin.getConfiguration().OpenAIOrganizationID)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
