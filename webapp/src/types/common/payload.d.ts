@@ -23,9 +23,8 @@ type GetImageFromTextPayload = {
     size: '1024x1024' | '512x512' | '256x256';
 };
 
-type PostPostToChannelPayload = {
+type PostImageToChannelPayload = {
     channel_id: string;
-    message: string;
-    root_id?: string;
-    file_ids?: string[];
+    imageUrl: string;
+    fileName: string;
 };

@@ -13,7 +13,7 @@ import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {IMAGE_GENERATIONS} from 'constants/common';
 
 // Hooks
-import useMattermostApi from 'hooks/useMattermostApi';
+import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
 // Types
@@ -43,14 +43,15 @@ import {
 export const Image = ({src, alt, size = '100%'}: ImageProps) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDownloadInProgress, setIsDownloadInProgress] = useState(false);
-    const {makeApiRequestWithCompletionStatus} = useMattermostApi();
+    const {makeApiRequestWithCompletionStatus} = usePluginApi();
 
     const currentChannelId = useSelector((state: GlobalState) => getCurrentChannelId(state));
 
     // Payload
-    const payload: PostPostToChannelPayload = {
+    const payload: PostImageToChannelPayload = {
         channel_id: currentChannelId,
-        message: IMAGE_GENERATIONS.expiryInfo({plural: false}) + `\n![](${src})`,
+        imageUrl: src,
+        fileName: IMAGE_GENERATIONS.fileNameForDownloadedImage,
     };
 
     /**
@@ -70,14 +71,14 @@ export const Image = ({src, alt, size = '100%'}: ImageProps) => {
     const handleCreatingPostInCurrentChannel = () => {
         setIsDownloadInProgress(true);
         makeApiRequestWithCompletionStatus(
-            API_SERVICE_CONFIG.postPostToChannel.serviceName,
+            API_SERVICE_CONFIG.postImageToChannel.serviceName,
             payload,
         );
     };
 
     useApiRequestCompletionState({
-        serviceName: API_SERVICE_CONFIG.postPostToChannel.serviceName,
-        services: API_SERVICE.mattermostApiService,
+        serviceName: API_SERVICE_CONFIG.postImageToChannel.serviceName,
+        services: API_SERVICE.pluginApiService,
         payload,
         handleSuccess: () => setIsDownloadInProgress(false),
     });

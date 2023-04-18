@@ -8,7 +8,7 @@ import {setApiRequestCompletionState} from 'reducers/apiRequest';
 import mattermostApiService from 'services/mattermostApiService';
 
 // Constants
-import {PLUGIN_ID} from 'constants/common';
+import {pluginReduxStateId} from 'constants/common';
 
 function useMattermostApi() {
     const state = useSelector((reduxState: ReduxState) => reduxState);
@@ -34,7 +34,7 @@ function useMattermostApi() {
         (serviceName: ApiServiceName, payload: APIRequestPayload) => {
             const {data, isError, isLoading, isSuccess, error, isUninitialized} =
                 mattermostApiService.endpoints[serviceName].select(payload)(
-                    state[PLUGIN_ID],
+                    state[pluginReduxStateId],
                 );
             return {data, isError, isLoading, isSuccess, error, isUninitialized};
         },

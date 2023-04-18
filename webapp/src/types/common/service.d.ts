@@ -4,7 +4,7 @@ type ApiServiceName =
     | 'getOpenAIApiKeyFromWebapp'
     | 'getThreadFromPostId'
     | 'getImageFromText'
-    | 'postPostToChannel';
+    | 'postImageToChannel';
 
 type PluginApiService = {
     path: string;
@@ -26,5 +26,5 @@ type APIRequestPayload =
     | GetCompletionPayload
     | GetChatCompletionPayload
     | GetThreadFromPost
-    | PostPostToChannelPayload
+    | PostImageToChannelPayload
     | void;

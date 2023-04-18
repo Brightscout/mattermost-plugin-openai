@@ -77,7 +77,7 @@ export const Prompt = () => {
 
     /**
      * On Clicking the send button we are adding the user entered prompt to a state array,
-     * and sending request to the open ai servers for the response.
+     * and sending request to the OpenAI servers for the response.
      */
     const handleSend = () => {
         /**

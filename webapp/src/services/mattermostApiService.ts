@@ -29,17 +29,6 @@ const mattermostApi = createApi({
                 method: API_SERVICE_CONFIG.getThreadFromPostId.method,
             }),
         }),
-
-        [API_SERVICE_CONFIG.postPostToChannel.serviceName]: builder.query<
-            PostPostToChannelResponseShape,
-            APIRequestPayload
-        >({
-            query: (payload: PostPostToChannelPayload) => ({
-                url: API_SERVICE_CONFIG.postPostToChannel.path,
-                method: API_SERVICE_CONFIG.postPostToChannel.method,
-                body: payload,
-            }),
-        }),
     }),
 });
 
