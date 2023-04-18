@@ -27,6 +27,9 @@ import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 // Utils
 import {parseChatCompletionPayload} from 'utils';
 
+// Global styles
+import 'styles/main.scss';
+
 /**
  * App Component
  * This is the main App component for the plugin.

@@ -98,6 +98,7 @@ export const IMAGE_GENERATIONS = {
     resolutionPlaceholder: 'Resolution',
     textAreaDefaultHeight: '46px',
     textAreaMaxHeight: 136,
+    errorLoadingImages: 'Images below are expired. Please try a new search.',
 } as const;
 
 /**

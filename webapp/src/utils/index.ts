@@ -76,7 +76,7 @@ export const getPluginApiBaseUrl = () => {
     const pluginUrl = `${baseUrl}/plugins/${pluginId}`;
     const mattermostApiBaseUrl = `${baseUrl}/api/v4`;
     const pluginApiBaseUrl = `${pluginUrl}/api/v1`;
-    return {pluginApiBaseUrl, mattermostApiBaseUrl};
+    return {pluginApiBaseUrl, mattermostApiBaseUrl, pluginUrl};
 };
 
 /**
