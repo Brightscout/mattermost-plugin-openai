@@ -87,10 +87,10 @@ export const CHAT_API_ROLES = {
  * Constants used in Image generation functionality
  */
 export const IMAGE_GENERATIONS = {
-    expiryInfo: ({plural = true}: {plural: boolean}) =>
+    expiryInfo: ({plural = true, expiryTime}: {plural: boolean; expiryTime: string}) =>
         `*The ${
             plural ? 'Images' : 'Image'
-        } will expire after an hour. Please download it for further use.*`,
+        } will expire at ${expiryTime}. Please download it for further use.*`,
     fileNameForDownloadedImage: 'image.png',
     altTextForGeneratedImages: 'Prompt response',
     downloadButtonTooltipText: 'Download',
@@ -98,7 +98,7 @@ export const IMAGE_GENERATIONS = {
     resolutionPlaceholder: 'Resolution',
     textAreaDefaultHeight: '46px',
     textAreaMaxHeight: 136,
-    errorLoadingImages: 'Images below are expired. Please try a new search.',
+    errorLoadingImages: 'The images below have expired.',
 } as const;
 
 /**
@@ -158,3 +158,9 @@ export const RHS_EMPTY_STATE = {
     imageExample: '/image House in a snowfield',
     emptyStateSvgViewBox: '0 0 24 24',
 };
+
+export const BUFFER_FOR_IMAGE_EXPIRY_IN_MINUTE = 5;
+
+export const MAX_DURATION_FOR_IMAGE_EXPIRY_IN_MINUTE = 60;
+
+export const DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER = (MAX_DURATION_FOR_IMAGE_EXPIRY_IN_MINUTE - BUFFER_FOR_IMAGE_EXPIRY_IN_MINUTE) * 60 * 1000;

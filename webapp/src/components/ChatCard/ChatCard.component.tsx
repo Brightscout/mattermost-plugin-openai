@@ -10,7 +10,7 @@ import {GlobalState} from 'mattermost-redux/types/store';
 import {Image} from 'components/Image';
 
 // Utils
-import {getProfileImgUrl} from 'utils';
+import {getProfileImgUrl, getImageExpiryTime} from 'utils';
 
 // Constants
 import {IMAGE_GENERATIONS, openAiBotName, openAISvgUri} from 'constants/common';
@@ -61,7 +61,7 @@ export const ChatCard = ({
                             isImageLoadingError ? PostUtils.messageHtmlToComponent(
                                 PostUtils.formatText(IMAGE_GENERATIONS.errorLoadingImages),
                             ) : PostUtils.messageHtmlToComponent(
-                                PostUtils.formatText(IMAGE_GENERATIONS.expiryInfo({plural: true})),
+                                PostUtils.formatText(IMAGE_GENERATIONS.expiryInfo({plural: true, expiryTime: getImageExpiryTime(createdAt)})),
                             )
                         }
                         <StyledGroupImageContainer>
