@@ -26,7 +26,7 @@ function useApiRequestCompletionState({
     handleError,
     serviceName,
     payload,
-    services = API_SERVICE.openAiApi,
+    services = API_SERVICE.pluginApiService,
 }: Props) {
     const {getApiState, state} = useHooksBasedOnService({service: services})();
     const dispatch = useDispatch();

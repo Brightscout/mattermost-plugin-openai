@@ -7,14 +7,13 @@ import {Spinner} from '@brightscout/mattermost-ui-library';
 import {getUsers} from 'mattermost-redux/selectors/entities/common';
 import {GlobalState} from 'mattermost-redux/types/store';
 
-// Components
 import {DisplayMessage} from 'components/DisplayMessage';
 
 // Selectors
 import {getPostSummarizationState} from 'selectors';
 
 // Hooks
-import useOpenAIApi from 'hooks/useOpenAIApi';
+import usePluginApi from 'hooks/usePluginApi';
 import useMattermostApi from 'hooks/useMattermostApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 
@@ -49,7 +48,7 @@ export const ThreadSummaryDialog = () => {
         getApiState: getMattermostApiState,
         makeApiRequestWithCompletionStatus: makeMattermostApiRequestWithCompletionStatus,
     } = useMattermostApi();
-    const {state, getApiState, makeApiRequestWithCompletionStatus} = useOpenAIApi();
+    const {state, getApiState, makeApiRequestWithCompletionStatus} = usePluginApi();
     const [payload, setPayload] = useState<GetCompletionPayload>();
     const [isCopied, setIsCopied] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -137,6 +136,7 @@ export const ThreadSummaryDialog = () => {
             }
         },
         handleError: (error) => setErrorMessage(mapErrorMessageFromOpenAI(error)),
+        services: 'usePluginApi',
     });
 
     /**

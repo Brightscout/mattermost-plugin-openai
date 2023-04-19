@@ -1,11 +1,9 @@
 import React, {useEffect, useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 
-// Components
 import {ThreadSummaryDialog} from 'components/ThreadSummaryDialog';
 
 // Reducers
-import {addCredentials} from 'reducers/Credentials.reducer';
 import {
     addChats,
     addSummary,
@@ -18,14 +16,13 @@ import {
 import {getPromptChatSlice, getPostSummarizationState} from 'selectors';
 
 // Constants
-import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
+import {API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {ChatCompletionApi, CHAT_API_ROLES} from 'constants/common';
 import {ChatCompletionApiConfigs} from 'constants/configs';
 
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
 import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
-import useOpenAiApi from 'hooks/useOpenAIApi';
 
 // Utils
 import {parseChatCompletionPayload} from 'utils';
@@ -42,38 +39,21 @@ import {parseChatCompletionPayload} from 'utils';
 export const App = () => {
     // Initializing Hooks
     const dispatch = useDispatch();
-    const {makeApiRequestWithCompletionStatus, getApiState} = usePluginApi();
-    const {
-        state,
-        getApiState: getOpenAiApiState,
-        makeApiRequestWithCompletionStatus: makeOpenAiApiRequestWithCompletionStatus,
-    } = useOpenAiApi();
+    const {state, makeApiRequestWithCompletionStatus, getApiState} = usePluginApi();
 
     const {payload, isChatSummarized, chats} = getPromptChatSlice(state);
     const {isDialogOpen} = getPostSummarizationState(state);
 
-    // Get plugin API states
-    const {data} = getApiState(API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName);
-
     // Get OpenAI API states
-    const {data: chatCompletionResponse} = getOpenAiApiState(
+    const {data: chatCompletionResponse} = getApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
     ) as UseApiResponse<ChatCompletionResponseShape>;
 
-    const {data: getImageFromTextResponse} = getOpenAiApiState(
+    const {data: getImageFromTextResponse} = getApiState(
         API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload,
     ) as UseApiResponse<ImageGenerationResponseShape>;
-
-    /**
-     * Before the first render we are fetching the configuration settings from the mattermost webapp.
-     */
-    useMemo(() => {
-        makeApiRequestWithCompletionStatus(
-            API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
-        );
-    }, []);
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
@@ -91,17 +71,7 @@ export const App = () => {
         handleError: () => {
             dispatch(popLastChat());
         },
-    });
-
-    // Handling Api request for fetching plugin settings from mattermost.
-    useApiRequestCompletionState({
-        services: API_SERVICE.pluginApiService,
-        serviceName: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName,
-        handleSuccess: () => {
-            if (data) {
-                dispatch(addCredentials(data as OpenAIApiKeyFromWebapp));
-            }
-        },
+        services: 'usePluginApi',
     });
 
     // Handling API request for chat prompt
@@ -176,7 +146,7 @@ export const App = () => {
      */
     useEffect(() => {
         if (isChatSummarized) {
-            makeOpenAiApiRequestWithCompletionStatus(
+            makeApiRequestWithCompletionStatus(
                 API_SERVICE_CONFIG.getChatCompletion.serviceName,
                 payload,
             );

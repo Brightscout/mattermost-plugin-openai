@@ -9,4 +9,8 @@ const (
 	GenericErrorMessage = "something went wrong, please try again later"
 
 	PathParamChannelID = "channel_id"
+
+	OpenAIHeaderAuthorization       = "Authorization"
+	OpenAIHeaderOrganization        = "OpenAI-Organization"
+	OpenAIHeaderAuthorizationBearer = "Bearer %s"
 )

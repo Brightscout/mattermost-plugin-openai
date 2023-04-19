@@ -9,11 +9,6 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
         method: 'POST',
         serviceName: 'getChatCompletion',
     },
-    getOpenAIApiKeyFromWebapp: {
-        path: '/config',
-        method: 'GET',
-        serviceName: 'getOpenAIApiKeyFromWebapp',
-    },
     getThreadFromPostId: {
         path: '/posts',
         method: 'GET',
@@ -34,10 +29,8 @@ export const API_SERVICE_CONFIG: Record<ApiServiceName, PluginApiService> = {
 export const API_SERVICE = {
     mattermostApiService: 'useMattermostApi',
     pluginApiService: 'usePluginApi',
-    openAiApi: 'useOpenAIApi',
 } as const;
 
 export type API_SERVICE =
     | typeof API_SERVICE['mattermostApiService']
     | typeof API_SERVICE['pluginApiService']
-    | typeof API_SERVICE['openAiApi'];

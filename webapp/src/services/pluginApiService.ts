@@ -20,16 +20,6 @@ const pluginApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        [API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.serviceName]: builder.query<
-            OpenAIApiKeyFromWebapp,
-            APIRequestPayload
-        >({
-            query: () => ({
-                url: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.path,
-                method: API_SERVICE_CONFIG.getOpenAIApiKeyFromWebapp.method,
-            }),
-        }),
-
         [API_SERVICE_CONFIG.postImageToChannel.serviceName]: builder.query<
             PostImageToChannelResponseShape,
             APIRequestPayload
@@ -37,6 +27,30 @@ const pluginApi = createApi({
             query: (payload: PostImageToChannelPayload) => ({
                 url: `/${payload.channel_id}${API_SERVICE_CONFIG.postImageToChannel.path}`,
                 method: API_SERVICE_CONFIG.postImageToChannel.method,
+                body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getCompletion.serviceName]: builder.query<CompletionResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                url: API_SERVICE_CONFIG.getCompletion.path,
+                method: API_SERVICE_CONFIG.getCompletion.method,
+                body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getChatCompletion.serviceName]: builder.query<ChatCompletionResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                url: API_SERVICE_CONFIG.getChatCompletion.path,
+                method: API_SERVICE_CONFIG.getChatCompletion.method,
+                body: payload,
+            }),
+        }),
+
+        [API_SERVICE_CONFIG.getImageFromText.serviceName]: builder.query<ImageGenerationResponseShape, APIRequestPayload>({
+            query: (payload) => ({
+                url: API_SERVICE_CONFIG.getImageFromText.path,
+                method: API_SERVICE_CONFIG.getImageFromText.method,
                 body: payload,
             }),
         }),
