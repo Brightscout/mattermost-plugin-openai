@@ -96,7 +96,7 @@ export const Image = ({createdAt, src, alt, size = '100%', isImageLoadingError, 
      */
     const isImageExpired = () => ((parseInt(createdAt ?? '0', 10) * 1000) + DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER) < new Date().getTime();
 
-    const getBrokenImageUrl = () => `${getPluginApiBaseUrl().pluginUrl}/public/assets/broken-image.jpg`;
+    const getBrokenImageUrl = () => `${getPluginApiBaseUrl().pluginUrl}/public/assets/broken-image.png`;
 
     return (
         <ImageWrapper size={size}>
