@@ -132,6 +132,13 @@ export const Prompt = () => {
         chatStartRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
     };
 
+    const handleApiError = (error: ApiErrorResponse) => dispatch(
+        toggleErrorDialog({
+            visibility: true,
+            description: error?.data?.Error,
+        }),
+    );
+
     /**
      * On getting the success response from the api, we are resetting the text area,
      * and also storing the response in a state array.
@@ -140,12 +147,7 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => dispatch(
-            toggleErrorDialog({
-                visibility: true,
-                description: error?.data?.Error,
-            }),
-        ),
+        handleError: () => handleApiError(error)
     });
 
     /**
@@ -155,25 +157,14 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => dispatch(
-            toggleErrorDialog({
-                visibility: true,
-                description: error?.data?.Error,
-            }),
-        ),
+        handleError: () => handleApiError(error),
     });
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => dispatch(
-            toggleErrorDialog({
-                visibility: true,
-                title: '',
-                description: imageGenerationError?.data?.Error,
-            }),
-        ),
+        handleError: () => handleApiError(imageGenerationError),
     });
 
     /**

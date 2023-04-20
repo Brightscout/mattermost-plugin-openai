@@ -59,6 +59,13 @@ export const App = () => {
         payload,
     ) as UseApiResponse<ImageGenerationResponseShape>;
 
+    const handleApiError = (error: ApiErrorResponse) => dispatch(
+        toggleErrorDialog({
+            visibility: true,
+            description: error?.data?.Error,
+        }),
+    );
+
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload,
@@ -74,13 +81,7 @@ export const App = () => {
         },
         handleError: () => {
             dispatch(popLastChat());
-
-            dispatch(
-                toggleErrorDialog({
-                    visibility: true,
-                    description: getImageFromTextError?.data?.Error,
-                }),
-            );
+            handleApiError(getImageFromTextError)
         },
         services: 'usePluginApi',
     });
@@ -151,13 +152,7 @@ export const App = () => {
         },
         handleError: () => {
             dispatch(popLastChat());
-
-            dispatch(
-                toggleErrorDialog({
-                    visibility: true,
-                    description: chatCompletionError?.data?.Error,
-                }),
-            );
+            handleApiError(chatCompletionError)
         },
     });
 

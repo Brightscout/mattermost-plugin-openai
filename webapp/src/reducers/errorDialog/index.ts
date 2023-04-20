@@ -16,7 +16,6 @@ export const errorDialogSlice = createSlice({
             state.description = action.payload.description;
         },
     },
-
 });
 
 export const {toggleErrorDialog} = errorDialogSlice.actions;
