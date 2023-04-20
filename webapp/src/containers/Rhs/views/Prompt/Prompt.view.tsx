@@ -132,10 +132,10 @@ export const Prompt = () => {
         chatStartRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
     };
 
-    const handleApiError = (error: ApiErrorResponse) => dispatch(
+    const handleApiError = (apiError: ApiErrorResponse) => dispatch(
         toggleErrorDialog({
             visibility: true,
-            description: error?.data?.Error,
+            description: apiError?.data?.Error,
         }),
     );
 
@@ -147,7 +147,7 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => handleApiError(error)
+        handleError: () => handleApiError(error),
     });
 
     /**

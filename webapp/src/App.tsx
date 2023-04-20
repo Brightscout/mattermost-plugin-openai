@@ -81,7 +81,7 @@ export const App = () => {
         },
         handleError: () => {
             dispatch(popLastChat());
-            handleApiError(getImageFromTextError)
+            handleApiError(getImageFromTextError);
         },
         services: 'usePluginApi',
     });
@@ -152,7 +152,7 @@ export const App = () => {
         },
         handleError: () => {
             dispatch(popLastChat());
-            handleApiError(chatCompletionError)
+            handleApiError(chatCompletionError);
         },
     });
 
