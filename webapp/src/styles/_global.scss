@@ -4,3 +4,32 @@
 .image-overlay-text {
     color: #ffffff;
 }
+
+.open-ai-error-dialog {
+    h2 {
+        margin-top: 0;
+    }
+
+    &.fade {
+        opacity: 1;
+        transition: opacity 0.15s linear;
+
+        &:not(.show) {
+            opacity: 0;
+        }
+    }
+
+    &.show .modal-dialog {
+        transform: none;
+    }
+
+    .mm-input {
+        legend {
+            border-bottom: none;
+        }
+    
+        input {
+            box-shadow: none;
+        }
+    }
+}

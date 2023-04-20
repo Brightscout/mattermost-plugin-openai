@@ -47,3 +47,9 @@ type ThreadSummarizationState = {
     postId: string;
     isDialogOpen: boolean;
 };
+
+type ErrorDialogState = {
+    visibility: boolean;
+    title?: string;
+    description?: string
+}

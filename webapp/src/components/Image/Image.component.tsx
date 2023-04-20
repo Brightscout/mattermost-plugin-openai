@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Skeleton, Spinner, Tooltip} from '@brightscout/mattermost-ui-library';
 import {saveAs} from 'file-saver';
 
@@ -11,6 +11,9 @@ import {GlobalState} from 'mattermost-redux/types/store';
 import {DOWNLOAD_ICON, POST_CHANNEL_ICON} from 'constants/icons';
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
 import {IMAGE_GENERATIONS, DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER} from 'constants/common';
+
+// Reducers
+import {toggleErrorDialog} from 'reducers/errorDialog';
 
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
@@ -46,6 +49,8 @@ import {
 export const Image = ({createdAt, src, alt, size = '100%', isImageLoadingError, handleSetIsImageLoadingError}: ImageProps) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDownloadInProgress, setIsDownloadInProgress] = useState(false);
+
+    const dispatch = useDispatch();
     const {makeApiRequestWithCompletionStatus} = usePluginApi();
 
     const currentChannelId = useSelector((state: GlobalState) => getCurrentChannelId(state));
@@ -84,6 +89,12 @@ export const Image = ({createdAt, src, alt, size = '100%', isImageLoadingError, 
         services: API_SERVICE.pluginApiService,
         payload,
         handleSuccess: () => setIsDownloadInProgress(false),
+        handleError: () => dispatch(
+            toggleErrorDialog({
+                visibility: true,
+                title: 'Error occurred while posting the image.',
+            }),
+        ),
     });
 
     /**

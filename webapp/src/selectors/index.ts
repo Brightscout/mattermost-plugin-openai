@@ -9,3 +9,5 @@ export const getPromptChatSlice = (state: ReduxState): PromptChatState => getPlu
 export const getApiRequestCompletionState = (state: ReduxState): ApiRequestCompletionState => getPluginState(state).apiRequestCompletionSlice;
 
 export const getIsSidebarOpen = (state: ReduxState) => state.views.rhs.isSidebarOpen;
+
+export const getErrorDialogState = (state: ReduxState): ErrorDialogState => getPluginState(state).errorDialogSlice;

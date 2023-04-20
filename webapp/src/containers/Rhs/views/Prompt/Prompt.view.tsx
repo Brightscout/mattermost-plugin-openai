@@ -13,6 +13,9 @@ import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 // Actions
 import {addChats, setChatPromptPayload} from 'reducers/PromptChat.reducer';
 
+// Reducers
+import {toggleErrorDialog} from 'reducers/errorDialog';
+
 // Selectors
 import {getPromptChatSlice} from 'selectors';
 
@@ -137,6 +140,12 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => setPromptValue(''),
+        handleError: () => dispatch(
+            toggleErrorDialog({
+                visibility: true,
+                description: error?.data?.Error,
+            }),
+        ),
     });
 
     /**
@@ -146,12 +155,25 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
+        handleError: () => dispatch(
+            toggleErrorDialog({
+                visibility: true,
+                description: error?.data?.Error,
+            }),
+        ),
     });
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
+        handleError: () => dispatch(
+            toggleErrorDialog({
+                visibility: true,
+                title: '',
+                description: imageGenerationError?.data?.Error,
+            }),
+        ),
     });
 
     /**
