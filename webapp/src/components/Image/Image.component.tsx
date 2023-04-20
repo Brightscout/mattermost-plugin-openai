@@ -10,7 +10,7 @@ import {GlobalState} from 'mattermost-redux/types/store';
 // Constants
 import {DOWNLOAD_ICON, POST_CHANNEL_ICON} from 'constants/icons';
 import {API_SERVICE, API_SERVICE_CONFIG} from 'constants/apiServiceConfig';
-import {IMAGE_GENERATIONS, DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER} from 'constants/common';
+import {IMAGE_GENERATIONS, IMAGE_EXPIRY_DURATION_IN_MILLISECONDS_WITH_BUFFER} from 'constants/common';
 
 // Hooks
 import usePluginApi from 'hooks/usePluginApi';
@@ -94,7 +94,7 @@ export const Image = ({createdAt, src, alt, size = '100%', isImageLoadingError, 
      *
      * @returns boolean, if the image is expired
      */
-    const isImageExpired = () => ((parseInt(createdAt ?? '0', 10) * 1000) + DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER) < new Date().getTime();
+    const isImageExpired = () => ((parseInt(createdAt ?? '0', 10) * 1000) + IMAGE_EXPIRY_DURATION_IN_MILLISECONDS_WITH_BUFFER) < new Date().getTime();
 
     const getBrokenImageUrl = () => `${getPluginApiBaseUrl().pluginUrl}/public/assets/broken-image.png`;
 

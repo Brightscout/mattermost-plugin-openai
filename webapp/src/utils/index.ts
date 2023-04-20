@@ -14,7 +14,7 @@ import {
     IMAGE_RESOLUTIONS,
     IMAGE_RESOLUTION_PLACEHOLDERS,
     REGEX,
-    DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER,
+    IMAGE_EXPIRY_DURATION_IN_MILLISECONDS_WITH_BUFFER,
 } from 'constants/common';
 import {
     ChatCompletionApiConfigs,
@@ -271,7 +271,7 @@ export const getLastValue = (completeString: string, splitBy = ' ') => {
  */
 export const getImageExpiryTime = (createdAtTimestamp: string) => {
     // we are converting "createdAt" into milliseconds and adding the duration for expiry with buffer.
-    const date = new Date((parseInt(createdAtTimestamp, 10) * 1000) + DURATION_FOR_IMAGE_EXPIRY_IN_MILLISECONDS_WITH_BUFFER);
+    const date = new Date((parseInt(createdAtTimestamp, 10) * 1000) + IMAGE_EXPIRY_DURATION_IN_MILLISECONDS_WITH_BUFFER);
 
     let hours = date.getHours();
     let minutes: number | string = date.getMinutes();
