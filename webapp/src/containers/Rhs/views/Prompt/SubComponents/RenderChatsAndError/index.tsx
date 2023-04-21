@@ -20,7 +20,7 @@ export const RenderChatsAndError = ({errorMessage, chats}:{errorMessage: string,
             {chats.
                 map(({id, content, role, isSummary, isImage}) => (
                         <React.Fragment key={id}>
-                                <ChatCard chat={parseChatWithTemplateIfSummary({isSummary, content})} isUser={role === CHAT_API_ROLES.user} isImage={isImage} />
+                                <ChatCard createdAt={id} chat={parseChatWithTemplateIfSummary({isSummary, content})} isUser={role === CHAT_API_ROLES.user} isImage={isImage} />
                         </React.Fragment>
                     )).
                 reverse()}

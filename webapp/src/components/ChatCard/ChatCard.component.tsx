@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {PostCard} from '@brightscout/mattermost-ui-library';
 
@@ -10,7 +10,7 @@ import {GlobalState} from 'mattermost-redux/types/store';
 import {Image} from 'components/Image';
 
 // Utils
-import {getProfileImgUrl} from 'utils';
+import {getProfileImgUrl, getImageExpiryTime} from 'utils';
 
 // Constants
 import {IMAGE_GENERATIONS, openAiBotName, openAISvgUri} from 'constants/common';
@@ -31,16 +31,19 @@ import {StyledGroupImageContainer} from './ChatCard.styles';
  * ```
  */
 export const ChatCard = ({
+    createdAt = '0',
     isUser,
     chat,
     isImage = false,
 }: {
+    createdAt?: string;
     isUser: boolean;
     chat: string;
     isImage?: boolean;
 }) => {
     const {Avatar} = window.Components;
     const PostUtils = window.PostUtils;
+    const [isImageLoadingError, setIsImageLoadingError] = useState(false);
 
     const currentUser = useSelector((reduxState: GlobalState) => getCurrentUser(reduxState));
     const userAvatarUrl = isUser ? getProfileImgUrl({userId: currentUser.id}) : openAISvgUri;
@@ -54,16 +57,23 @@ export const ChatCard = ({
             postMessage={
                 isImage ? (
                     <>
-                        {PostUtils.messageHtmlToComponent(
-                            PostUtils.formatText(IMAGE_GENERATIONS.expiryInfo({plural: true})),
-                        )}
+                        {
+                            isImageLoadingError ? PostUtils.messageHtmlToComponent(
+                                PostUtils.formatText(IMAGE_GENERATIONS.errorLoadingImages),
+                            ) : PostUtils.messageHtmlToComponent(
+                                PostUtils.formatText(IMAGE_GENERATIONS.expiryInfo({plural: true, expiryTime: getImageExpiryTime(createdAt)})),
+                            )
+                        }
                         <StyledGroupImageContainer>
                             {chat.split(' ').map((url) => (
                                 <Image
+                                    createdAt={createdAt}
                                     key={url}
                                     size='100%'
                                     src={url}
                                     alt={IMAGE_GENERATIONS.altTextForGeneratedImages}
+                                    isImageLoadingError={isImageLoadingError}
+                                    handleSetIsImageLoadingError={setIsImageLoadingError}
                                 />
                             ))}
                         </StyledGroupImageContainer>
