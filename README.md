@@ -13,7 +13,7 @@ See the [LICENSE](./LICENSE) file for license rights and limitations.
 
 ## Overview
 
-This plugin integrates the services of OpenAI in Mattermost. For a stable production release, please download the latest version from the [Github Releases](https://github.com/Brightscout/mattermost-plugin-openai/releases) and follow the instructions to [install](#installation) and [configure](#configuration) the plugin.
+This plugin integrates the services of OpenAI in Mattermost. For a stable production release, please download the latest version from the [Github Releases](https://github.com/Brightscout/mattermost-plugin-openai/releases) and follow the instructions to [install](#installation) and [setup](./docs/plugin_setup.md) the plugin.
 
 ## Features
 
@@ -41,6 +41,6 @@ This plugin contains the following features:
 
 ## Setup
 
-  - [Developer setup](./docs/developer_docs.md)
-  - [OpenAI API key setup](./docs/openAI_api_key_setup.md)
+  - [Developer Setup](./docs/developer_docs.md)
+  - [OpenAI API Key Setup](./docs/openAI_api_key_setup.md)
   - [Plugin Setup](./docs/plugin_setup.md)
