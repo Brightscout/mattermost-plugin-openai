@@ -9,6 +9,9 @@ import {GlobalState} from 'mattermost-redux/types/store';
 
 import {DisplayMessage} from 'components/DisplayMessage';
 
+// Reducers
+import {toggleErrorDialog} from 'reducers/errorDialog';
+
 // Selectors
 import {getPostSummarizationState} from 'selectors';
 
@@ -61,7 +64,7 @@ export const ThreadSummaryDialog = () => {
 
     const getThreadApiPayload = {postId};
 
-    const {isLoading: isThreadLoading, data: threadData} = getMattermostApiState(
+    const {isLoading: isThreadLoading, data: threadData, error: threadError} = getMattermostApiState(
         API_SERVICE_CONFIG.getThreadFromPostId.serviceName,
         getThreadApiPayload,
     ) as UseApiResponse<PostThreadResponseShape>;
@@ -121,6 +124,12 @@ export const ThreadSummaryDialog = () => {
         handleSuccess: () => {
             recursiveSummarizeHandler();
         },
+        handleError: () => dispatch(
+            toggleErrorDialog({
+                visibility: true,
+                description: threadError?.data?.Error,
+            }),
+        ),
     });
 
     /**

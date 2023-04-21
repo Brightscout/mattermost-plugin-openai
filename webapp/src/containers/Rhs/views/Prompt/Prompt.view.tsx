@@ -13,6 +13,9 @@ import useApiRequestCompletionState from 'hooks/useApiRequestCompletionState';
 // Actions
 import {addChats, setChatPromptPayload} from 'reducers/PromptChat.reducer';
 
+// Reducers
+import {toggleErrorDialog} from 'reducers/errorDialog';
+
 // Selectors
 import {getPromptChatSlice} from 'selectors';
 
@@ -129,6 +132,13 @@ export const Prompt = () => {
         chatStartRef.current?.scrollIntoView({behavior: 'smooth', block: 'end'});
     };
 
+    const handleApiError = (apiError: ApiErrorResponse) => dispatch(
+        toggleErrorDialog({
+            visibility: true,
+            description: apiError?.data?.Error,
+        }),
+    );
+
     /**
      * On getting the success response from the api, we are resetting the text area,
      * and also storing the response in a state array.
@@ -137,6 +147,7 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => setPromptValue(''),
+        handleError: handleApiError,
     });
 
     /**
@@ -146,12 +157,14 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
+        handleError: handleApiError,
     });
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
+        handleError: handleApiError,
     });
 
     /**

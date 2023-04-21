@@ -6,6 +6,7 @@ import {GlobalState} from 'mattermost-redux/types/store';
 import {App} from 'App';
 import {PostMenuItem} from 'components/PostMenuItem';
 import {ChannelHeaderButton} from 'components/ChannelHeaderButton';
+import ErrorDialog from 'components/ErrorDialog';
 
 // Containers
 import Rhs from 'containers/Rhs';
@@ -26,6 +27,7 @@ export default class Plugin {
         store: Store<GlobalState, Action<Record<string, unknown>>>,
     ) {
         registry.registerRootComponent(App);
+        registry.registerRootComponent(ErrorDialog);
         registry.registerReducer(reducers);
         const {showRHSPlugin} = registry.registerRightHandSidebarComponent(
             Rhs,

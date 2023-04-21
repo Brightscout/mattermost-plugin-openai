@@ -11,6 +11,7 @@ import {
     setIsChatSummarized,
     setChatPromptPayload,
 } from 'reducers/PromptChat.reducer';
+import {toggleErrorDialog} from 'reducers/errorDialog';
 
 // Selectors
 import {getPromptChatSlice, getPostSummarizationState} from 'selectors';
@@ -48,15 +49,22 @@ export const App = () => {
     const {isDialogOpen} = getPostSummarizationState(state);
 
     // Get OpenAI API states
-    const {data: chatCompletionResponse} = getApiState(
+    const {data: chatCompletionResponse, error: chatCompletionError} = getApiState(
         API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
     ) as UseApiResponse<ChatCompletionResponseShape>;
 
-    const {data: getImageFromTextResponse} = getApiState(
+    const {data: getImageFromTextResponse, error: getImageFromTextError} = getApiState(
         API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload,
     ) as UseApiResponse<ImageGenerationResponseShape>;
+
+    const handleApiError = (error: ApiErrorResponse) => dispatch(
+        toggleErrorDialog({
+            visibility: true,
+            description: error?.data?.Error,
+        }),
+    );
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
@@ -73,6 +81,7 @@ export const App = () => {
         },
         handleError: () => {
             dispatch(popLastChat());
+            handleApiError(getImageFromTextError);
         },
         services: 'usePluginApi',
     });
@@ -141,7 +150,10 @@ export const App = () => {
                 }
             }
         },
-        handleError: () => dispatch(popLastChat()),
+        handleError: () => {
+            dispatch(popLastChat());
+            handleApiError(chatCompletionError);
+        },
     });
 
     /**
