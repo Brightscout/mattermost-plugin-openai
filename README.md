@@ -42,5 +42,5 @@ This plugin contains the following features:
 ## Setup
 
   - [Developer Setup](./docs/developer_docs.md)
-  - [OpenAI API Key Setup](./docs/openAI_api_key_setup.md)
+  - [OpenAI API Key Setup For Plugin](./docs/openAI_api_key_setup.md)
   - [Plugin Setup](./docs/plugin_setup.md)
