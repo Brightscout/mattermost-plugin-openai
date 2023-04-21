@@ -44,3 +44,5 @@ This plugin contains the following features:
   - [Developer Setup](./docs/developer_docs.md)
   - [OpenAI API Key Setup For Plugin](./docs/openAI_api_key_setup.md)
   - [Plugin Setup](./docs/plugin_setup.md)
+
+Made with &#9829; by [Brightscout](https://www.brightscout.com)
