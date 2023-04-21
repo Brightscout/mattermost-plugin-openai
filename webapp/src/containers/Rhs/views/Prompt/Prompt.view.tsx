@@ -147,7 +147,7 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => handleApiError(error),
+        handleError: handleApiError,
     });
 
     /**
@@ -157,14 +157,14 @@ export const Prompt = () => {
         serviceName: API_SERVICE_CONFIG.getChatCompletion.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => handleApiError(error),
+        handleError: handleApiError,
     });
 
     useApiRequestCompletionState({
         serviceName: API_SERVICE_CONFIG.getImageFromText.serviceName,
         payload: chatCompletionsPayload,
         handleSuccess: () => setPromptValue(''),
-        handleError: () => handleApiError(imageGenerationError),
+        handleError: handleApiError,
     });
 
     /**
