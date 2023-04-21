@@ -19,7 +19,7 @@ This plugin integrates the services of OpenAI in Mattermost. For a stable produc
 ## Features
 
 This plugin contains the following features:
-- Chat with OpenAI in RHS: You can chat with OpenAI by typing texts in the input field present in RHS.
+- Chat with OpenAI in RHS: You can interact with OpenAI by texting via the input field present in RHS.
   ![image](https://user-images.githubusercontent.com/72438220/233341561-419b57ff-0737-4f87-9b79-738fd0926e7f.png)
 
 - Generate images from text prompts in RHS: You can generate images using the slash command below in RHS.
@@ -35,7 +35,7 @@ This plugin contains the following features:
 
 1. Go to the [releases page of this GitHub repository](https://github.com/Brightscout/mattermost-plugin-openai/releases) and download the latest release for your Mattermost server.
   
-    **Note:**: The minimum supported Mattermost server for this plugin to run is v7.8.2
+    **Note:**: The minimum supported version of the Mattermost server for this plugin to run is v7.8.2.
 
 2. Upload this file to the Mattermost **System Console > Plugins > Management** page to install the plugin. To learn more about how to upload a plugin, [see the documentation](https://docs.mattermost.com/administration/plugins.html#plugin-uploads).
 3. Enable the plugin from **System Console > Plugins > OpenAI**.
