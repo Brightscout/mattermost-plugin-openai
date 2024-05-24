@@ -1,3 +1,7 @@
+# Disclaimer
+
+**This Plugin was an initial prototype for the [Mattermost AI Copilot plugin](https://github.com/mattermost/mattermost-plugin-ai), which is in a different repository. This repository remains as a reference but is not maintained, nor will it receive further development. To utilize the latest AI integration within Mattermost, check out the [AI copilot plugin](https://github.com/mattermost/mattermost-plugin-ai).**
+
 # Mattermost OpenAI Plugin
 ## Table of Contents
 - [License](#license)
